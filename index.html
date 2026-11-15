@@ -708,6 +708,14 @@ async function buildXlsx(R){
  const buf=await wb.xlsx.writeBuffer();
  save("site-quantities.xlsx",buf instanceof ArrayBuffer?buf:buf.buffer.slice(buf.byteOffset,buf.byteOffset+buf.byteLength));}
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+{const b=document.createElement("div");b.style.cssText="display:flex;gap:8px;margin-top:12px";
+ b.innerHTML='<button class="btn" id="bkp" type="button">Backup all projects</button><button class="btn" id="rst" type="button">Restore</button><input id="rstf" type="file" accept=".json,application/json" hidden>';
+ $("pjp").append(b);
+ $("bkp").addEventListener("click",()=>save("site-projects-backup.json",JSON.stringify({PR,rates})));
+ $("rst").addEventListener("click",()=>$("rstf").click());
+ $("rstf").addEventListener("change",async e=>{const fl=e.target.files[0];if(!fl)return;
+  try{const d=JSON.parse(await fl.text());if(d.PR&&d.PR.list){PR=d.PR;rates=d.rates||{};saveP();renderProj();$("xs").textContent="Projects restored.";}}
+  catch(x){$("xs").textContent="That file could not be read.";}e.target.value="";});}
 calcFn();renderProj();
 const BRK=()=>$("type").value==="brick"?[...document.querySelectorAll("#brk .out div")].map(x=>[x.children[0].textContent,x.children[1].textContent]):null;
 function report(){
