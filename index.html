@@ -138,7 +138,10 @@ nav button[aria-selected="true"]{border-bottom-color:#f2b705}
 <div><label for="qty">Number of elements</label><input id="qty" type="number" inputmode="decimal" min="1" value="1"></div>
 <div><label for="waste">Wastage (%)</label><input id="waste" type="number" inputmode="decimal" min="0" value="5"></div>
 </div>
-<label class="chk" id="soffitWrap"><input type="checkbox" id="soffit"> Include soffit (suspended slab)</label>
+<div id="soffitWrap"><label class="chk"><input type="checkbox" id="soffit"> Include soffit (bottom face)</label>
+<label class="chk"><input type="checkbox" id="sides" checked> Include side faces</label>
+<div class="grid" id="sideDims"><div><label for="sl">Side face length (<span class="u">m</span>)</label><input id="sl" type="number" inputmode="decimal" min="0" placeholder="full perimeter"></div>
+<div><label for="sh">Side face height (<span class="u">m</span>)</label><input id="sh" type="number" inputmode="decimal" min="0" placeholder="slab thickness"></div></div></div>
 <div class="out">
 <div><span>Concrete (net)</span><b id="vNet"></b></div>
 <div class="big"><span>Concrete with wastage</span><b id="vGross"></b></div>
@@ -250,6 +253,8 @@ const A=x=>IMP?f(x*M2)+" ft²":f(x)+" m²";
 const Ln=m=>IMP?f(m/FT,1)+" ft":f(m,1)+" m";
 const Wt=k=>IMP?f(k*KG,0)+" lb":f(k)+" kg";
 const RL=r=>n(r.l)*(IMP?FT:1);const CUR={};
+const slabForm=d=>{const k=IMP?FT:1;let a=$("soffit").checked?d.l*d.w:0;
+ if($("sides").checked){const L=n($("sl").value)*k||2*(d.l+d.w),Hh=n($("sh").value)*k||d.h;a+=L*Hh;}return a;};
 function calc(s){let i=0;const ws=()=>{while(s[i]===" ")i++;};
  const num=()=>{ws();if(s[i]==="("){i++;const v=add();ws();if(s[i]!==")")throw 0;i++;return v;}
   if(s[i]==="-"){i++;return -num();}if(s[i]==="+"){i++;return num();}
@@ -273,7 +278,7 @@ const TYPES={
  stair:{dims:[["Flight width (m)","sw"],["Tread / going (m)","tr"],["Riser height (m)","ri"],["Number of steps","ns"],["Waist thickness (m)","th"]],vol:d=>d.sw*(Math.hypot(d.ns*d.tr,d.ns*d.ri)*d.th+d.ns*d.tr*d.ri/2)}
 };
 const AREA={
- slab:(d,s)=>2*(d.l+d.w)*d.h+(s?d.l*d.w:0),
+ slab:d=>slabForm(d),
  footing:d=>2*(d.l+d.w)*d.h,
  beam:d=>d.l*(d.w+2*d.h),
  wall:d=>2*d.l*d.h,
@@ -301,10 +306,10 @@ function calcEl(){
  $("vNet").textContent=V(v);
  $("vGross").textContent=V(lastGross);
  $("fArea").textContent=A(AREA[t](d,$("soffit").checked)*q);
- const bk=t==="brick";CUR.el=bk?null:{conc:lastGross,form:AREA[t](d,$("soffit").checked)*q};$("brk").hidden=!bk;$("vNet").closest(".out").hidden=bk;if(bk)calcBrick(d,q,w);
+ $("sideDims").hidden=!$("sides").checked;const bk=t==="brick";CUR.el=bk?null:{conc:lastGross,form:AREA[t](d,$("soffit").checked)*q};$("brk").hidden=!bk;$("vNet").closest(".out").hidden=bk;if(bk)calcBrick(d,q,w);
 }
 ["type"].forEach(id=>$(id).addEventListener("change",buildDims));
-["qty","waste","soffit"].forEach(id=>$(id).addEventListener("input",calcEl));
+["qty","waste","soffit","sides","sl","sh"].forEach(id=>$(id).addEventListener("input",calcEl));
 
 const DIAS=[6,8,10,12,14,16,18,20,22,25,28,32,36,40,50];
 let rows=[{d:12,n:"",l:""},{d:8,n:"",l:""}];
@@ -373,6 +378,7 @@ $("unit").addEventListener("change",()=>{
  for(const k in vals)if(k!=="ns"&&vals[k]!=="")vals[k]=+(vals[k]*c).toFixed(3);
  rows.forEach(r=>{if(r.l!=="")r.l=+(r.l*c).toFixed(3);});
  $("mv").value=+(n($("mv").value)*(IMP?M3:1/M3)).toFixed(3);
+ ["sl","sh"].forEach(id=>{if($(id).value!=="")$(id).value=+(n($(id).value)*c).toFixed(3);});
  $("mvl").textContent="Concrete volume ("+(IMP?"yd³":"m³")+")";
  buildDims();drawRows();calcMx();calcFn();});
 
@@ -500,10 +506,10 @@ $("pjClose").addEventListener("click",()=>{$("pjs").hidden=true;});
 let editing=null,MC={};
 const PL=["pl","ph","po","pf","pt","ps"],FL=["fL","fW","tl","tw","tj","fx"],BR=["bl","bw","bh","bj","bt","bo","bs"],MXI=["mix","cc","cs","ca","wc"];
 const snapFn=k=>({kind:k,u:IMP,v:(k==="pl"?PL:FL).map(id=>$(id).value)});
-const snapEl=()=>({kind:"el",u:IMP,type:$("type").value,vals:{...vals},qty:$("qty").value,waste:$("waste").value,soffit:$("soffit").checked,b:BR.map(id=>$(id).value),rows:JSON.parse(JSON.stringify(rows)),incR:$("incR").checked,incM:$("incM").checked,mx:MXI.map(id=>$(id).value)});
+const snapEl=()=>({kind:"el",u:IMP,type:$("type").value,vals:{...vals},qty:$("qty").value,waste:$("waste").value,soffit:$("soffit").checked,sides:$("sides").checked,sl:$("sl").value,sh:$("sh").value,b:BR.map(id=>$(id).value),rows:JSON.parse(JSON.stringify(rows)),incR:$("incR").checked,incM:$("incM").checked,mx:MXI.map(id=>$(id).value)});
 function loadSnap(s){
  if(!!s.u!==IMP){$("unit").value=s.u?"ft":"m";$("unit").dispatchEvent(new Event("change"));}
- if(s.kind==="el"){$("type").value=s.type;vals={...s.vals};buildDims();$("qty").value=s.qty;$("waste").value=s.waste;$("soffit").checked=s.soffit;
+ if(s.kind==="el"){$("type").value=s.type;vals={...s.vals};buildDims();$("qty").value=s.qty;$("waste").value=s.waste;$("soffit").checked=s.soffit;$("sides").checked=s.sides!==false;$("sl").value=s.sl||"";$("sh").value=s.sh||"";
   BR.forEach((id,i)=>$(id).value=s.b[i]);rows=JSON.parse(JSON.stringify(s.rows));drawRows();
   MXI.forEach((id,i)=>$(id).value=s.mx[i]);$("cust").hidden=$("mix").value!=="custom";calcMx();
   $("incR").checked=s.incR;$("incM").checked=s.incM;calcEl();}
