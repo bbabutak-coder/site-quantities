@@ -1,4 +1,4 @@
-const V = "siteq-v3"; // change this number whenever you upload a new index.html
+const V = "siteq-v4"; // change this number whenever you upload a new index.html
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon-180.png", "./icon-192.png", "./icon-512.png"];
 const CDN = [
   "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js",
