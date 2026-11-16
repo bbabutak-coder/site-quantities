@@ -107,7 +107,7 @@ nav button[aria-selected="true"]{border-bottom-color:#f2b705}
 <option value="footing">Footing</option>
 <option value="beam">Beam</option>
 <option value="wall">Concrete wall</option>
-<option value="brick">Brick wall</option>
+<option value="brick">Brick / HCB wall</option>
 <option value="col">Rectangular column</option>
 <option value="round">Round column</option>
 <option value="stair">Staircase</option>
@@ -116,23 +116,32 @@ nav button[aria-selected="true"]{border-bottom-color:#f2b705}
 <div class="grid" id="dims"></div>
 <div id="brk" hidden>
 <div class="grid">
-<div><label for="bl">Brick length (mm)</label><input id="bl" type="number" inputmode="decimal" value="230"></div>
-<div><label for="bw">Brick width (mm)</label><input id="bw" type="number" inputmode="decimal" value="110"></div>
-<div><label for="bh">Brick height (mm)</label><input id="bh" type="number" inputmode="decimal" value="75"></div>
-<div><label for="bj">Mortar joint (mm)</label><input id="bj" type="number" inputmode="decimal" value="10"></div>
-<div class="full"><label for="bt">Wall thickness</label><select id="bt"><option value="1">Half brick (one brick width)</option><option value="2">One brick (two brick widths)</option></select></div>
+<div class="full"><label for="bPreset">Standard Unit Preset</label>
+<select id="bPreset">
+<option value="230,110,75,1">Standard Brick (230×110×75 mm)</option>
+<option value="250,120,60,1">Ethiopian Clay Brick (250×120×60 mm)</option>
+<option value="400,200,200,1" selected>HCB 20 cm (400×200×200 mm)</option>
+<option value="400,150,200,1">HCB 15 cm (400×150×200 mm)</option>
+<option value="400,100,200,1">HCB 10 cm (400×100×200 mm)</option>
+<option value="custom">Custom size</option>
+</select></div>
+<div><label for="bl">Unit length (mm)</label><input id="bl" type="number" inputmode="decimal" value="400"></div>
+<div><label for="bw">Unit width (mm)</label><input id="bw" type="number" inputmode="decimal" value="200"></div>
+<div><label for="bh">Unit height (mm)</label><input id="bh" type="number" inputmode="decimal" value="200"></div>
+<div><label for="bj">Mortar joint (mm)</label><input id="bj" type="number" inputmode="decimal" value="15"></div>
+<div class="full"><label for="bt">Wall thickness</label><select id="bt"><option value="1" selected>Single layer (one unit width)</option><option value="2">Double layer (two unit widths)</option></select></div>
 <div><label for="bo" id="bol">Openings (m²)</label><input id="bo" type="number" inputmode="decimal" value="0"></div>
 <div><label for="bs">Mortar 1 : sand</label><input id="bs" type="number" inputmode="decimal" value="5"></div>
 </div>
 <div class="out">
 <div><span>Wall area (net of openings)</span><b id="bA"></b></div>
-<div><span>Bricks (net)</span><b id="bN"></b></div>
-<div class="big"><span>Bricks with wastage</span><b id="bG"></b></div>
+<div><span>Blocks / Bricks (net)</span><b id="bN"></b></div>
+<div class="big"><span>Blocks / Bricks with wastage</span><b id="bG"></b></div>
 <div><span>Mortar (wet volume)</span><b id="bM"></b></div>
 <div class="big"><span>Mortar cement</span><b id="bC"></b></div>
 <div class="big"><span>Mortar sand</span><b id="bS"></b></div>
 </div>
-<p class="note">Bricks per area = 1 ÷ ((length + joint) × (height + joint)), doubled for a one-brick wall. Mortar = wall volume − brick volume, × 1.27 for dry volume, cement 1440 kg/m³. Brick and joint sizes are in mm. Wastage % below applies to bricks and mortar.</p>
+<p class="note">Units per area = 1 ÷ ((length + joint) × (height + joint)), doubled for a double-layer wall. Mortar = wall volume − unit volume (for hollow blocks, mortar is factored by 0.35 for bed/head joints only), × 1.27 for dry volume, cement 1440 kg/m³. Sizes in mm. Wastage % below applies to units and mortar.</p>
 </div>
 <div class="grid">
 <div><label for="qty">Number of elements</label><input id="qty" type="number" inputmode="decimal" min="1" value="1"></div>
@@ -172,10 +181,10 @@ nav button[aria-selected="true"]{border-bottom-color:#f2b705}
 <div class="full"><label for="mv" id="mvl">Concrete volume (m³)</label><input id="mv" type="number" inputmode="decimal" min="0" value="0"></div>
 <div class="full"><label for="mix">Mix ratio (cement : sand : aggregate)</label>
 <select id="mix">
-<option value="1,1,2">M25 – 1 : 1 : 2</option>
-<option value="1,1.5,3">M20 – 1 : 1.5 : 3</option>
-<option value="1,2,4" selected>M15 – 1 : 2 : 4</option>
-<option value="1,3,6">M10 – 1 : 3 : 6</option>
+<option value="1,1.5,3">C30 – 1 : 1.5 : 3</option>
+<option value="1,2,3">C25 – 1 : 2 : 3</option>
+<option value="1,2,4" selected>C20 – 1 : 2 : 4</option>
+<option value="1,3,6">C15 – 1 : 3 : 6</option>
 <option value="custom">Custom ratio</option>
 </select></div>
 </div>
@@ -239,7 +248,7 @@ nav button[aria-selected="true"]{border-bottom-color:#f2b705}
 </div>
 <div id="pList"></div>
 <div class="sumwrap"><table class="sum" id="pTab"></table></div>
-<div class="grid"><div><label for="cur">Currency symbol</label><input id="cur" value="$"></div><div><label>&nbsp;</label><button class="btn" id="pClr" type="button">Delete project</button></div></div>
+<div class="grid"><div><label for="cur">Currency symbol</label><input id="cur" value="ETB "></div><div><label>&nbsp;</label><button class="btn" id="pClr" type="button">Delete project</button></div></div>
 <p class="note">The first rate you type for a material, in any item or in the table below, becomes the project rate and every item follows it. Typing a different rate in another item changes only that item (amber box). Clear an amber box to follow the project rate again. Quantities are metric.</p>
 </section>
 </main>
@@ -269,7 +278,7 @@ function calc(s){let i=0;const ws=()=>{while(s[i]===" ")i++;};
  const add=()=>{let v=mul();for(;;){ws();if(s[i]==="+"){i++;v+=mul();}else if(s[i]==="-"){i++;v-=mul();}else return v;}};
  const r=add();ws();if(i<s.length)throw 0;return r;}
 const Q=v=>{v=String(v==null?"":v).trim();let r;
- if(v[0]==="="){try{r=calc(v.slice(1).replace(/[x\u00d7]/gi,"*").replace(/,/g,"."));}catch(e){return 0;}}else r=parseFloat(v);
+ if(v[0]==="="){try{r=calc(v.slice(1).replace(/[x×]/gi,"*").replace(/,/g,"."));}catch(e){return 0;}}else r=parseFloat(v);
  return isFinite(r)&&r>0?Math.ceil(r-1e-9):0;};
 const f=(x,d=2)=>x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});
 const TYPES={
@@ -388,17 +397,34 @@ $("unit").addEventListener("change",()=>{
  $("mvl").textContent="Concrete volume ("+(IMP?"yd³":"m³")+")";
  buildDims();drawRows();calcMx();calcFn();});
 
+$("bPreset").addEventListener("change",()=>{
+ const v=$("bPreset").value;
+ if(v!=="custom"){
+  const [l,w,h,ly]=v.split(",");
+  $("bl").value=l;$("bw").value=w;$("bh").value=h;$("bt").value=ly;
+  $("bj").value=Number(l)>=300?15:10;
+ }
+ calcEl();
+});
+
 function calcBrick(d,q,w){
  const bl=n($("bl").value),bw=n($("bw").value),bh=n($("bh").value),j=n($("bj").value),ly=+$("bt").value,s=n($("bs").value)||5;
  $("bol").textContent="Openings ("+(IMP?"ft²":"m²")+")";
  const area=Math.max(0,d.l*d.h-n($("bo").value)/(IMP?M2:1))*q;
  const fc=(bl+j)*(bh+j),N=fc>0?area*ly*1e6/fc:0;
- const th=(ly===2?2*bw+j:bw)/1000,wet=Math.max(0,area*th-N*bl*bw*bh/1e9),dry=wet*1.27*(1+w/100);
+ const th=(ly===2?2*bw+j:bw)/1000;
+ const isHcb=bl>=350&&bh>=180;
+ const rawWet=Math.max(0,area*th-N*bl*bw*bh/1e9);
+ const wet=isHcb?area*th*0.085:rawWet;
+ const dry=wet*1.27*(1+w/100);
  $("bA").textContent=A(area);$("bN").textContent=Math.ceil(N).toLocaleString();
  $("bG").textContent=Math.ceil(N*(1+w/100)).toLocaleString();$("bM").textContent=V(wet);
  $("bC").textContent=f(dry/(1+s)*1440/50,1)+" bags ("+f(dry/(1+s)*1440,0)+" kg)";
  $("bS").textContent=V(dry*s/(1+s),2);CUR.el={brick:Math.ceil(N*(1+w/100)),cement:dry/(1+s)*1440/50,sand:dry*s/(1+s)};}
-["bl","bw","bh","bj","bt","bo","bs"].forEach(id=>$(id).addEventListener("input",calcEl));
+["bl","bw","bh","bj","bt","bo","bs"].forEach(id=>$(id).addEventListener("input",()=>{
+ if(["bl","bw","bh"].includes(id))$("bPreset").value="custom";
+ calcEl();
+}));
 function calcFn(){
  document.querySelectorAll(".u").forEach(e=>e.textContent=LU());
  document.querySelectorAll(".ua").forEach(e=>e.textContent=IMP?"ft²":"m²");
@@ -414,7 +440,7 @@ function calcFn(){
  CUR.fl={floor:fa,tile:G};}
 ["pl","ph","po","pf","pt","ps","fL","fW","tl","tw","tj","fx"].forEach(id=>$(id).addEventListener("input",calcFn));
 
-const MAT=[["conc","Concrete","m³"],["form","Formwork","m²"],["steel","Reinforcement","kg"],["brick","Bricks","nos"],["cement","Cement","bags"],["sand","Sand","m³"],["agg","Aggregate","m³"],["water","Water","L"],["plas","Plastering","m²"],["floor","Floor area","m²"],["tile","Tiles","nos"]];
+const MAT=[["conc","Concrete","m³"],["form","Formwork","m²"],["steel","Reinforcement","kg"],["brick","Blocks / Bricks","nos"],["cement","Cement","bags"],["sand","Sand","m³"],["agg","Aggregate","m³"],["water","Water","L"],["plas","Plastering","m²"],["floor","Floor area","m²"],["tile","Tiles","nos"]];
 const LS={get(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let proj=LS.get("sq_proj",[]),rates=LS.get("sq_rates",{}),PT={};
 const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
@@ -445,7 +471,7 @@ function projRows(){
   ...[...document.querySelectorAll("#pTab tbody tr")].map(tr=>[tr.cells[0].textContent,tr.cells[1].textContent,tr.querySelector("input").value,tr.cells[3].textContent]),
   ["Total","","",$("pTot")?$("pTot").textContent:""]];}
 proj=[];
-const CAT={slab:"Slab",footing:"Footing",beam:"Beam",wall:"Wall",brick:"BrickWall",col:"Column",round:"Column",stair:"Stair",landing:"Landing"};
+const CAT={slab:"Slab",footing:"Footing",beam:"Beam",wall:"Wall",brick:"MasonryWall",col:"Column",round:"Column",stair:"Stair",landing:"Landing"};
 let PR=LS.get("sq_projects",null);
 if(!PR||!PR.list||!PR.list.length)PR={cur:"p1",list:[{id:"p1",name:"Project 1",items:[]}]};
 const saveP=()=>LS.set("sq_projects",PR);
@@ -510,13 +536,13 @@ $("pItems").addEventListener("click",e=>{const b=e.target.closest("[data-del]");
 $("pjBtn").addEventListener("click",()=>{$("pjs").hidden=false;});
 $("pjClose").addEventListener("click",()=>{$("pjs").hidden=true;});
 let editing=null,MC={};
-const PL=["pl","ph","po","pf","pt","ps"],FL=["fL","fW","tl","tw","tj","fx"],BR=["bl","bw","bh","bj","bt","bo","bs"],MXI=["mix","cc","cs","ca","wc"];
+const PL=["pl","ph","po","pf","pt","ps"],FL=["fL","fW","tl","tw","tj","fx"],BR=["bl","bw","bh","bj","bt","bo","bs","bPreset"],MXI=["mix","cc","cs","ca","wc"];
 const snapFn=k=>({kind:k,u:IMP,v:(k==="pl"?PL:FL).map(id=>$(id).value)});
 const snapEl=()=>({kind:"el",u:IMP,type:$("type").value,vals:{...vals},qty:$("qty").value,waste:$("waste").value,soffit:$("soffit").checked,sides:$("sides").checked,sl:$("sl").value,sh:$("sh").value,bBot:$("bBot").checked,bSide:$("bSide").checked,bK:$("bK").value,bT:$("bT").value,b:BR.map(id=>$(id).value),rows:JSON.parse(JSON.stringify(rows)),incR:$("incR").checked,incM:$("incM").checked,mx:MXI.map(id=>$(id).value)});
 function loadSnap(s){
  if(!!s.u!==IMP){$("unit").value=s.u?"ft":"m";$("unit").dispatchEvent(new Event("change"));}
  if(s.kind==="el"){$("type").value=s.type;vals={...s.vals};buildDims();$("qty").value=s.qty;$("waste").value=s.waste;$("soffit").checked=s.soffit;$("sides").checked=s.sides!==false;$("sl").value=s.sl||"";$("sh").value=s.sh||"";$("bBot").checked=s.bBot!==false;$("bSide").checked=s.bSide!==false;$("bK").value=s.bK||"0";$("bT").value=s.bT||"";
-  BR.forEach((id,i)=>$(id).value=s.b[i]);rows=JSON.parse(JSON.stringify(s.rows));drawRows();
+  BR.forEach((id,i)=>{if(s.b[i]!==undefined)$(id).value=s.b[i];});rows=JSON.parse(JSON.stringify(s.rows));drawRows();
   MXI.forEach((id,i)=>$(id).value=s.mx[i]);$("cust").hidden=$("mix").value!=="custom";calcMx();
   $("incR").checked=s.incR;$("incM").checked=s.incM;calcEl();}
  else{(s.kind==="pl"?PL:FL).forEach((id,i)=>$(id).value=s.v[i]);calcFn();}
