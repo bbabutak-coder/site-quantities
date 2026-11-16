@@ -1,9 +1,9 @@
-const V = "siteq-v7"; // change this number whenever you upload a new index.html
+const V = "siteq-v9";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon-180.png", "./icon-192.png", "./icon-512.png"];
 const CDN = [
   "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"
+  "https://cdnjs.cloudflare.com/exceljs/4.4.0/exceljs.min.js"
 ];
 self.addEventListener("install", e => {
   e.waitUntil((async () => {
