@@ -22,9 +22,10 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-ap
 main{max-width:560px;margin:0 auto;padding:16px 14px 40px}
 h1{font-size:1.35rem;margin:4px 0 2px;letter-spacing:-.01em}
 .sub{color:var(--muted);font-size:.9rem;margin:0 0 14px}
-nav{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:14px}
-nav button{flex:1;padding:10px 4px;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--muted);font:inherit;font-weight:600;cursor:pointer}
-nav button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:14px;overflow-x:auto}
+nav button{flex:1 0 auto;padding:10px 10px;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--muted);font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}
+nav button svg{width:16px;height:16px;vertical-align:-3px;margin-right:6px}
+nav button[aria-selected="true"]{color:var(--ink);border-bottom-color:#f2b705}
 nav button:focus-visible,input:focus-visible,select:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px}
 .panel[hidden]{display:none}
@@ -38,7 +39,7 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 .out div{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
 .out b{font-variant-numeric:tabular-nums}
 .big{font-size:1.15rem}
-.row{display:grid;grid-template-columns:1.1fr 1fr 1fr auto;gap:6px;align-items:end;margin-top:8px}
+.row{display:grid;grid-template-columns:1.2fr 0.9fr 1.1fr 1.1fr auto;gap:6px;align-items:end;margin-top:8px}
 .row .w{font-size:.8rem;color:var(--muted);grid-column:1/-1;margin-top:-2px}
 .btn{padding:10px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:4px;font:inherit;cursor:pointer}
 .btn.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600;margin-top:10px}
@@ -65,11 +66,11 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 #pvp .sum th,#pvp .sum td{color:#111;border-color:#ddd}
 #pjp{background:var(--surface);color:var(--ink)}#pjp .btn{margin-top:12px}
 main{padding-bottom:84px}
-#pjBtn{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:40;max-width:62vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:10px 16px;border-radius:999px;border:0;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.3);cursor:pointer}.ch{margin:16px 0 4px;font-size:1rem}
+#pjBtn{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:40;max-width:62vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:10px 16px;border-radius:999px;border:0;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.3);cursor:pointer}
+.ch{margin:16px 0 4px;font-size:1rem}
 #pvp,#pjp{flex:1;overflow:auto;background:#fff;color:#111;margin-top:8px;padding:16px;border-radius:4px;font-size:.85rem;max-width:560px;width:100%;align-self:center}
 #pvp h2{margin:0 0 6px;font-size:1.1rem}#pvp h3{margin:12px 0 4px;font-size:.95rem}
 .pvr{display:flex;gap:8px;padding:2px 0;border-bottom:1px solid #ddd}.pvr span{flex:1;min-width:0;overflow-wrap:anywhere}.pv2 span:first-child{flex:0 0 42%}
-nav{overflow-x:auto}nav button{flex:1 0 auto;padding:10px 10px;white-space:nowrap}
 .pi{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--line)}
 #rOff p{margin:8px 0 0;font-size:.9rem}
 #rOff span{color:var(--muted)}
@@ -78,12 +79,15 @@ nav{overflow-x:auto}nav button{flex:1 0 auto;padding:10px 10px;white-space:nowra
 .brand h1{color:#fff;margin:0;font-size:1.3rem;font-weight:800;letter-spacing:-.01em}.brand span{display:block;font-size:.85rem;color:#b9c3cd}.brand .by{color:#f2b705;font-weight:600}
 .logo{width:42px;height:42px;flex:none}
 .stripe{height:7px;margin:0 -14px 14px;background:repeating-linear-gradient(135deg,#f2b705 0 10px,#1f2a36 10px 20px)}
-nav button svg{width:16px;height:16px;vertical-align:-3px;margin-right:6px}
-nav button[aria-selected="true"]{border-bottom-color:#f2b705}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px;cursor:pointer;transition:border-color .2s}
+.card:hover{border-color:var(--accent)}
+.card h3{margin:0 0 4px;font-size:0.95rem;color:var(--accent)}
+.card p{margin:0;font-size:0.8rem;color:var(--muted)}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/exceljs/4.4.0/exceljs.min.js"></script>
 </head>
 <body>
 <main>
@@ -93,14 +97,34 @@ nav button[aria-selected="true"]{border-bottom-color:#f2b705}
 <p class="note" id="xs" style="margin:0 0 10px"></p>
 <button class="btn" id="edCx" type="button" hidden style="margin-bottom:10px">Cancel edit</button>
 <nav role="tablist">
-<button role="tab" aria-selected="true" data-t="el"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>Concrete &amp; formwork</button>
+<button role="tab" aria-selected="true" data-t="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
+<button role="tab" aria-selected="false" data-t="el"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>Concrete &amp; formwork</button>
 <button role="tab" aria-selected="false" data-t="rb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/><path d="M7 5v4M13 5v4M10 10v4M16 10v4M7 15v4M13 15v4"/></svg>Rebar</button>
 <button role="tab" aria-selected="false" data-t="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>Mix</button>
 <button role="tab" aria-selected="false" data-t="fn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Finishes</button>
 <button role="tab" aria-selected="false" data-t="pj"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1 1-1.5 2.5-1.5s2.5.6 2.5 1.7-1 1.5-2.5 1.8-2.5.7-2.5 1.8S10.5 16 12 16s2.5-.5 2.5-1.5"/></svg>Cost</button>
 </nav>
 
-<section class="panel" id="el">
+<section class="panel" id="home">
+<h2>Welcome to Site Quantities</h2>
+<p class="sub">Your professional offline architectural &amp; structural estimation suite.</p>
+<div class="out" style="margin-top:0">
+<div><span>Active Project</span><b id="homeProjName">Project 1</b></div>
+<div><span>Total Work Items</span><b id="homeItemCount">0 items</b></div>
+<div><span>Estimated Project Cost</span><b id="homeTotalCost">ETB 0.00</b></div>
+</div>
+<h3 class="ch">Quick Navigation</h3>
+<div class="card-grid">
+<div class="card" data-nav="el"><h3>Concrete &amp; Formwork</h3><p>Slabs, footings, beams, columns, walls &amp; masonry blocks.</p></div>
+<div class="card" data-nav="rb"><h3>Rebar &amp; Bar Schedule</h3><p>Bar bending schedule with custom marks &amp; 12m stock optimization.</p></div>
+<div class="card" data-nav="mx"><h3>Concrete Mix</h3><p>C30, C25, C20, C15 ratios, cement bags, sand &amp; aggregate volumes.</p></div>
+<div class="card" data-nav="fn"><h3>Finishes</h3><p>Plastering mortar and flooring tile estimations with wastage.</p></div>
+<div class="card" data-nav="pj"><h3>Cost &amp; BOQ</h3><p>Project rates, bills of quantities, Excel &amp; landscape PDF export.</p></div>
+</div>
+<p class="note" style="margin-top:16px">All calculations run locally on your device with complete offline support. Use the Cost tab or export buttons for professional client reporting.</p>
+</section>
+
+<section class="panel" id="el" hidden>
 <label for="type">Element type</label>
 <select id="type">
 <option value="slab">Slab</option>
@@ -327,12 +351,13 @@ function calcEl(){
 ["qty","waste","soffit","sides","sl","sh","bBot","bSide","bK","bT"].forEach(id=>$(id).addEventListener("input",calcEl));
 
 const DIAS=[6,8,10,12,14,16,18,20,22,25,28,32,36,40,50];
-let rows=[{d:12,n:"",l:""},{d:8,n:"",l:""}];
+let rows=[{mk:"Top bar",d:12,n:"",l:""},{mk:"Stirrup",d:8,n:"",l:""}];
 function drawRows(){
  $("rows").innerHTML=rows.map((r,i)=>`<div class="row" data-i="${i}">
+ <div><label>Mark / Desc</label><input data-f="mk" type="text" placeholder="e.g. Top bar" value="${esc(r.mk||"")}"></div>
  <div><label>Dia (mm)</label><select data-f="d">${DIAS.map(x=>`<option${x==r.d?" selected":""}>${x}</option>`).join("")}</select></div>
  <div><label>No. of bars</label><input data-f="n" type="text" inputmode="text" autocapitalize="off" autocorrect="off" placeholder="or =1/0.15" value="${esc(r.n)}"></div>
- <div><label>Length each (${LU()})</label><input data-f="l" type="number" inputmode="decimal" min="0" value="${r.l}"></div>
+ <div><label>Length (${LU()})</label><input data-f="l" type="number" inputmode="decimal" min="0" value="${r.l}"></div>
  <button class="btn" data-del="${i}" type="button" aria-label="Remove row">✕</button>
  <div class="w" id="w${i}"></div></div>`).join("");
  $("rows").querySelectorAll("[data-f]").forEach(el=>el.addEventListener("input",e=>{
@@ -355,7 +380,7 @@ function calcRb(){
  const ds=Object.keys(g).map(Number).sort((a,b)=>a-b);
  let tb=0,ow=0;const OFF={};
  const pack=a=>{let full=0;const pc=[],bins=[];
-  a.forEach(([l,c])=>{const k=Math.floor(l/12+1e-9),r=l-k*12;full+=k*c;if(r>1e-9)for(let i=0;i<c;i++)pc.push(r);});
+  a.forEach(([l,c])=>{const k=Math.floor(l/12+1e-9),r=l-12*k;full+=k*c;if(r>1e-9)for(let i=0;i<c;i++)pc.push(r);});
   pc.sort((x,y)=>y-x);
   pc.forEach(p=>{const i=bins.findIndex(r=>r>=p-1e-9);if(i<0)bins.push(12-p);else bins[i]-=p;});
   pack.last=bins;return full+bins.length;};
@@ -368,7 +393,7 @@ function calcRb(){
   return ks.length?`<p><b>Ø${d} mm</b>: ${ks.map(k=>`${c[k]} × ${Ln(+k)}`).join(", ")}<br><span>${tip(+ks[0])}</span></p>`:"";}).join("");
  $("rOff").innerHTML=oh?`<div class="out"><b>Single offcut length and reuse</b>${oh}</div>`:"";
 }
-$("addRow").addEventListener("click",()=>{rows.push({d:12,n:"",l:""});drawRows();});
+$("addRow").addEventListener("click",()=>{rows.push({mk:"",d:12,n:"",l:""});drawRows();});
 
 function calcMx(){
  const v=n($("mv").value)/(IMP?M3:1),cu=$("mix").value==="custom",[c,s,a]=cu?[n($("cc").value),n($("cs").value),n($("ca").value)]:$("mix").value.split(",").map(Number),sum=(c+s+a)||1,dry=v*1.54;
@@ -386,7 +411,13 @@ $("pull").addEventListener("click",()=>{$("mv").value=(IMP?lastGross*M3:lastGros
 
 document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{
  document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x===b));
- ["el","rb","mx","fn","pj"].forEach(id=>$(id).hidden=id!==b.dataset.t);
+ ["home","el","rb","mx","fn","pj"].forEach(id=>$(id).hidden=id!==b.dataset.t);
+}));
+document.querySelectorAll(".card[data-nav]").forEach(c=>c.addEventListener("click",()=>{
+ const t=c.dataset.nav;
+ document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x.dataset.t===t));
+ ["home","el","rb","mx","fn","pj"].forEach(id=>$(id).hidden=id!==t);
+ window.scrollTo({top:0,behavior:"smooth"});
 }));
 $("unit").addEventListener("change",()=>{
  const c=$("unit").value==="ft"?1/FT:FT;IMP=$("unit").value==="ft";
@@ -447,15 +478,19 @@ const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[
 function addP(name,m){
  if(!m||!Object.values(m).some(v=>v>0)){$("xs").textContent="Nothing to add yet. Enter the dimensions first.";return;}
  proj.push({n:name,m:{...m}});LS.set("sq_proj",proj);renderProj();$("xs").textContent="Added to project: "+name;}
-function costs(){let tot=0;const c=$("cur").value;
+function costs(){
+ let tot=0;const c=$("cur").value;
  document.querySelectorAll("[data-c]").forEach(td=>{const k=td.dataset.c,v=(PT[k]||0)*n(rates[k]);tot+=v;td.textContent=c+f(v);});
- const e=$("pTot");if(e)e.textContent=c+f(tot);}
+ const e=$("pTot");if(e)e.textContent=c+f(tot);
+ if($("homeTotalCost"))$("homeTotalCost").textContent=c+f(tot);
+}
 function renderProj(){
  $("pList").innerHTML=proj.length?proj.map((p,i)=>`<div class="pi"><span>${esc(p.n)}</span><button class="btn" data-pd="${i}" type="button" aria-label="Remove">✕</button></div>`).join(""):'<p class="note">No items yet. Use Add to project on any tab.</p>';
  const T={};proj.forEach(p=>{for(const k in p.m)T[k]=(T[k]||0)+p.m[k];});PT=T;
  const rs=MAT.filter(([k])=>T[k]>0);
  $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Quantity</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],k==="brick"||k==="tile"?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Total</td><td id="pTot"></td></tr></tfoot>`:"";
- costs();}
+ costs();
+}
 $("pList").addEventListener("click",e=>{const b=e.target.closest("[data-pd]");if(b){proj.splice(+b.dataset.pd,1);LS.set("sq_proj",proj);renderProj();}});
 $("pTab").addEventListener("input",e=>{const k=e.target.dataset.r;if(k){rates[k]=e.target.value;saveP();costs();}});
 $("cur").addEventListener("input",costs);
@@ -489,11 +524,16 @@ function renderItems(){
  $("pList").innerHTML=p.items.length?cats.map(cat=>{let sub=0;
   const h=p.items.filter(i=>i.cat===cat).map(it=>{const ic=itemCost(it);sub+=ic;
    return `<div class="it"><div class="pi"><b>${esc(it.code)}</b><span>${esc(it.d||"")}</span></div>${MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>`<div class="pvr"><span>${l}</span><span>${f(it.m[k],k==="brick"||k==="tile"?0:2)} ${u}</span><span><input class="ri${it.r&&it.r[k]!==undefined&&it.r[k]!==""?" ov":""}" type="number" inputmode="decimal" min="0" data-ic="${esc(it.code)}" data-k="${k}" value="${it.r&&it.r[k]!==undefined?it.r[k]:""}" placeholder="${rates[k]||"rate"}" style="width:64px;padding:4px" aria-label="Rate for ${l}"></span><span>${rt(it,k)?c+f(it.m[k]*rt(it,k)):""}</span></div>`).join("")}<div class="pvr"><b>Cost of ${esc(it.code)}</b><b>${c}${f(ic)}</b></div></div>`;}).join("");
-  return `<h3 class="ch">${esc(cat)} - ${c}${f(sub)}</h3>${h}`;}).join(""):'<p class="note">No work items yet. Calculate an element, then use Save to project.</p>';}
+  return `<h3 class="ch">${esc(cat)} - ${c}${f(sub)}</h3>${h}`;}).join(""):'<p class="note">No work items yet. Calculate an element, then use Save to project.</p>';
+ if($("homeProjName"))$("homeProjName").textContent=p.name;
+ if($("homeItemCount"))$("homeItemCount").textContent=p.items.length+" items";
+}
 function costs(){
  let tot=0;const c=$("cur").value;
  document.querySelectorAll("[data-c]").forEach(td=>{const k=td.dataset.c,v=(PT[k]||0)*n(rates[k]);tot+=v;td.textContent=c+f(v);});
- const e=$("pTot");if(e)e.textContent=c+f(tot);renderItems();}
+ const e=$("pTot");if(e)e.textContent=c+f(tot);
+ if($("homeTotalCost"))$("homeTotalCost").textContent=c+f(tot);
+ renderItems();}
 function renderProj(){
  const cp=curP();if(!cp.rates)cp.rates=PR.mig?{}:{...rates};PR.mig=1;rates=cp.rates;saveP();
  $("prSel").innerHTML=PR.list.map(p=>`<option value="${p.id}"${p.id===PR.cur?" selected":""}>${esc(p.name)}</option>`).join("");
@@ -503,7 +543,7 @@ function renderProj(){
  $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Total qty</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],k==="brick"||k==="tile"?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Project total</td><td id="pTot"></td></tr></tfoot>`:"";
  costs();updAdd();renderPI();}
 function renderPI(){const p=curP();$("pjBtn").textContent="Project: "+p.name;
- $("pItems").innerHTML=p.items.length?p.items.map(it=>`<div class="pi"><span><b>${esc(it.code)}</b> ${esc(it.d||"")}</span><button class="btn" data-del="${esc(it.code)}" type="button" aria-label="Remove ${esc(it.code)}">✕</button></div>`).join(""):'<p class="note">No work items yet.</p>';}
+ $("pItems").innerHTML=p.items.length?p.items.map(it=>`<div class="pi"><span><b>${esc(it.code)}</b> ${esc(it.d||"")}</span><span><button class="btn" data-ed="${esc(it.code)}" type="button">Edit</button> <button class="btn" data-del="${esc(it.code)}" type="button" aria-label="Remove ${esc(it.code)}">✕</button></span></div>`).join(""):'<p class="note">No work items yet.</p>';}
 $("pList").addEventListener("click",e=>{const b=e.target.closest("[data-del]");if(b){const p=curP();p.items=p.items.filter(i=>i.code!==b.dataset.del);saveP();renderProj();}});
 $("prSel").addEventListener("change",()=>{PR.cur=$("prSel").value;saveP();renderProj();});
 $("prNew").addEventListener("click",()=>{const id="p"+Date.now();PR.list.push({id,name:"Project "+(PR.list.length+1),items:[],rates:{...rates}});PR.cur=id;saveP();renderProj();});
@@ -564,7 +604,9 @@ function costs(){
  const c=$("cur").value;let tot=0;MC={};
  curP().items.forEach(it=>{for(const k in it.m)MC[k]=(MC[k]||0)+it.m[k]*rt(it,k);});
  document.querySelectorAll("[data-c]").forEach(td=>{const v=MC[td.dataset.c]||0;tot+=v;td.textContent=c+f(v);});
- const e=$("pTot");if(e)e.textContent=c+f(tot);renderItems();}
+ const e=$("pTot");if(e)e.textContent=c+f(tot);
+ if($("homeTotalCost"))$("homeTotalCost").textContent=c+f(tot);
+ renderItems();}
 function projRows(){
  const p=curP();if(!p.items.length)return[];
  const R=[[""],["Project: "+p.name+" (currency "+$("cur").value+")"],["Material","Quantity","Rate","Cost"]];let tot=0;
@@ -600,11 +642,12 @@ function schedRows(){
  const tr=(label,S)=>{const x=[label,"","",f(S[0],0),f(S[1],2),f(S[2],2),S[3],f(S[4],2),f(S[5],2)];x.b=1;return x;};
  const hdr=()=>{const h=HD.slice();h.b=1;return h;};
  secs.forEach(sc=>{
-  const rr=sc.r.map(r=>({d:+r.d,l:n(r.l)*sc.k,q:Math.ceil(Q(r.n))})).filter(x=>x.l>0&&x.q>0);
+  const rr=sc.r.map(r=>({mk:r.mk||"",d:+r.d,l:n(r.l)*sc.k,q:Math.ceil(Q(r.n))})).filter(x=>x.l>0&&x.q>0);
   if(!rr.length)return;
   R.push([sc.t],hdr());const S=[0,0,0,0,0,0];
   rr.forEach((x,i)=>{const c=barCalc(x.d,x.l,x.q),v=[x.q,c.tot,c.kg,c.bars,c.waste,c.ow];
-   R.push(["B"+(i+1),x.d,f(x.l,2),x.q,f(c.tot,2),f(c.kg,2),c.bars,f(c.waste,2),f(c.ow,2)]);
+   const markName=x.mk&&x.mk.trim()!==""?x.mk.trim():"B"+(i+1);
+   R.push([markName,x.d,f(x.l,2),x.q,f(c.tot,2),f(c.kg,2),c.bars,f(c.waste,2),f(c.ow,2)]);
    v.forEach((a,j)=>{S[j]+=a;GT[j]+=a;});(G[x.d]=G[x.d]||[0,0,0,0,0,0]).forEach((_,j)=>G[x.d][j]+=v[j]);});
   R.push(tr("Total",S));});
  if(R.length===1)return[];
@@ -641,7 +684,7 @@ function tbl(head,al,rows,foot){
  return `<div style="overflow-x:auto"><table class="rt"><thead><tr>${head.map((x,i)=>`<th class="${al[i]}">${esc(x)}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>tr(r,r.b?"tot":"")).join("")}${foot?tr(foot,"tot"):""}</tbody></table></div>`;}
 function docHtml(){
  const R=rpt();if(!R)return null;const m=meta();
- return `<div class="rhead"><div><div class="rt1">Bill of Quantities</div><div class="rt2">${esc(R.name)}</div></div><div class="rm">${esc(R.date)}${m.site?"<br>"+esc(m.site):""}${m.by?"<br>Prepared by "+esc(m.by):""}<br>Currency ${esc(R.cur)}, metric units</div></div>
+ return `<div class="rhead"><div><div class="rt1">Bill of Quantities</div><div class="rt2">${esc(R.name)}</div></div><div class="rm">${esc(R.date)}${m.site?"<br>"+esc(R.site):""}${m.by?"<br>Prepared by "+esc(R.by):""}<br>Currency ${esc(R.cur)}, metric units</div></div>
 <h3>1. Summary of work items</h3>${tbl(H1,A1,R.sum,["Project total","","","","",R.grand])}
 <h3>2. Detailed quantities and cost</h3>${R.det.map(d=>`<h4>${esc(d.t)}</h4>`+tbl(H2,A2,d.lines,["Item total","","","",d.cost])).join("")}
 <h3>3. Total material quantities</h3>${tbl(H2,A2,R.mats,["Project total","","","",R.grand])}
@@ -689,7 +732,7 @@ function makePdf(){const R=rpt();if(!R){makePdfOld();return;}
 function schedNum(){
  const secs=[];curP().items.forEach(it=>{const s=it.s;if(s&&s.kind==="el"&&s.incR&&it.m.steel>0)secs.push({t:it.code+(it.d?" - "+it.d:""),r:s.rows,k:s.u?FT:1});});
  if(!secs.length)secs.push({t:"Current Rebar tab",r:rows,k:IMP?FT:1});
- const out=[];secs.forEach(sc=>{const rr=sc.r.map(r=>({d:+r.d,l:n(r.l)*sc.k,q:Q(r.n)})).filter(x=>x.l>0&&x.q>0);
+ const out=[];secs.forEach(sc=>{const rr=sc.r.map(r=>({mk:r.mk||"",d:+r.d,l:n(r.l)*sc.k,q:Q(r.n)})).filter(x=>x.l>0&&x.q>0);
   if(rr.length)out.push({t:sc.t,rows:rr.map(x=>({...x,c:barCalc(x.d,x.l,x.q)}))});});return out;}
 async function buildXlsx(R){
  const wb=new ExcelJS.Workbook(),m=meta(),cur=R.cur;wb.creator="Site Quantities";wb.created=new Date();
@@ -736,7 +779,7 @@ async function buildXlsx(R){
   const FM=[0,F0,F2,F0,F2,F2,F0,F2,F2],D={},GT=[0,0,0,0,0,0];
   G.forEach(g=>{wsB.mergeCells(r,1,r,9);const t=wsB.getCell(r,1);t.value=g.t;t.font={bold:true,size:11};t.fill=fill(LT);r++;
    hdr(wsB,r,HD,1);r++;const a=r,S=[0,0,0,0,0,0];
-   g.rows.forEach((x,i)=>{const c=x.c;put(wsB,r,["B"+(i+1),x.d,x.l,x.q,{formula:`C${r}*D${r}`,result:c.tot},{formula:`E${r}*B${r}^2/162.2`,result:c.kg},c.bars,{formula:`G${r}*12-E${r}`,result:c.waste},{formula:`G${r}*12*B${r}^2/162.2`,result:c.ow}],FM);
+   g.rows.forEach((x,i)=>{const c=x.c;put(wsB,r,[x.mk&&x.mk.trim()!==""?x.mk.trim():"B"+(i+1),x.d,x.l,x.q,{formula:`C${r}*D${r}`,result:c.tot},{formula:`E${r}*B${r}^2/162.2`,result:c.kg},c.bars,{formula:`G${r}*12-E${r}`,result:c.waste},{formula:`G${r}*12*B${r}^2/162.2`,result:c.ow}],FM);
     const v=[x.q,c.tot,c.kg,c.bars,c.waste,c.ow];v.forEach((y,j)=>{S[j]+=y;GT[j]+=y;});(D[x.d]=D[x.d]||[0,0,0,0,0,0]).forEach((_,j)=>D[x.d][j]+=v[j]);r++;});
    put(wsB,r,["Total","","",...["D","E","F","G","H","I"].map((L,j)=>({formula:`SUM(${L}${a}:${L}${r-1})`,result:S[j]}))],FM,{b:1,f:LT});r+=2;});
   wsB.mergeCells(r,1,r,9);const t=wsB.getCell(r,1);t.value="Summary by diameter";t.font={bold:true,size:11};t.fill=fill(LT);r++;
@@ -759,7 +802,7 @@ const BRK=()=>$("type").value==="brick"?[...document.querySelectorAll("#brk .out
 function report(){
  const t=$("type"),R=[["Site quantities"],["Concrete & formwork"],["Element",t.options[t.selectedIndex].text]];
  $("dims").querySelectorAll("input").forEach(i=>R.push([i.previousElementSibling.textContent,i.value]));
- R.push(["Number of elements",$("qty").value],["Wastage %",$("waste").value],...(BRK()||[["Concrete (net)",$("vNet").textContent],["Concrete with wastage",$("vGross").textContent],["Formwork area",$("fArea").textContent]]),[""],["Rebar"],["Diameter","Length","Weight","12 m bars","Offcut waste","Order weight"]);
+ R.push(["Number of elements",$("qty").value],["Wastage %",$("waste").value],...(BRK()||[["Concrete (net)",$("vNet").textContent],["Concrete with wastage",$("vGross").textContent],["Formwork area",$("fArea").textContent]]),[""],["Rebar"],["Mark","Diameter","Length","Weight","12 m bars","Offcut waste","Order weight"]);
  document.querySelectorAll("#rSum tbody tr,#rSum tfoot tr").forEach(tr=>R.push([...tr.cells].map(c=>c.textContent)));
  document.querySelectorAll("#rOff p").forEach(p=>R.push(["Offcut",p.innerText]));
  R.push([""],["Mix"],["Concrete volume",$("mv").value+" "+(IMP?"yd³":"m³")],["Mix ratio",$("mix").options[$("mix").selectedIndex].text],["Water-cement ratio",$("wc").value],["Cement",$("mC").textContent],["Sand",$("mS").textContent],["Aggregate",$("mA").textContent],["Water",$("mW").textContent]);
