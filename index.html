@@ -600,6 +600,58 @@ function projRows(){
   MAT.filter(([k])=>it.m[k]>0).forEach(([k,l,u])=>{const q=it.m[k];R.push([l,f(q,2)+" "+u,rt(it,k)||"",f(q*rt(it,k))]);});
   const ic=itemCost(it);tot+=ic;R.push(["Cost of "+it.code,"","",f(ic)]);});
  R.push(["Project total","","",f(tot)]);return R;}
+
+// --- Fixed Event Listeners for Project Creation, Selection, and Renaming ---
+$("prSel").addEventListener("change", e => {
+  PR.cur = e.target.value;
+  saveP();
+  renderProj();
+});
+
+$("prNew").addEventListener("click", () => {
+  const name = prompt("Enter new project name:", "Project " + (PR.list.length + 1));
+  if(!name) return;
+  const id = "p" + Date.now();
+  PR.list.push({ id, name, items: [] });
+  PR.cur = id;
+  saveP();
+  renderProj();
+  $("xs").textContent = "Created new project: " + name;
+});
+
+$("prRen").addEventListener("click", () => {
+  const name = $("prName").value.trim();
+  if(!name) return;
+  const cp = curP();
+  cp.name = name;
+  saveP();
+  renderProj();
+  $("xs").textContent = "Project renamed to " + name;
+});
+
+$("prName").addEventListener("change", () => {
+  const name = $("prName").value.trim();
+  if(!name) return;
+  const cp = curP();
+  cp.name = name;
+  saveP();
+  renderProj();
+});
+
+$("pClr").addEventListener("click", () => {
+  if(PR.list.length <= 1) {
+    alert("You must keep at least one project.");
+    return;
+  }
+  if(confirm("Are you sure you want to delete this project?")) {
+    PR.list = PR.list.filter(p => p.id !== PR.cur);
+    PR.cur = PR.list[0].id;
+    saveP();
+    renderProj();
+    $("xs").textContent = "Project deleted.";
+  }
+});
+
 const autoSet={};
 $("pList").addEventListener("input",e=>{const i=e.target;if(!i.classList.contains("ri"))return;
  const it=curP().items.find(x=>x.code===i.dataset.ic);if(!it)return;
