@@ -366,7 +366,7 @@ const TYPES={
 };
 const AREA={
  excav:d=>0,
- lean:d=>2*(d.l+d.w)*d.h,
+ lean:d=>0,
  slab:d=>slabForm(d),
  footing:d=>2*(d.l+d.w)*d.h,
  trap:d=>{const dl=Math.abs(d.l-d.l2)/2,dw=Math.abs(d.w-d.w2)/2;const s1=Math.hypot(d.h,dw),s2=Math.hypot(d.h,dl);return(d.l+d.l2)*s1+(d.w+d.w2)*s2;},
@@ -408,7 +408,7 @@ function calcEl(){
   $("eNet").textContent=V(net);$("eBlk").textContent=V(bulked);$("eBck").textContent=V(backfill);$("eCrt").textContent=V(cartaway);
   CUR.el={excav:net,backfill:backfill,cartaway:cartaway};
  }else if(ln){
-  CUR.el={lean:lastGross,form:AREA[t](d,$("soffit").checked)*q};
+  CUR.el={lean:lastGross};;
  }else{
   CUR.el={conc:lastGross,form:AREA[t](d,$("soffit").checked)*q};
  }
