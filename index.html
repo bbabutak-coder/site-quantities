@@ -55,15 +55,24 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 #pv .bar,#pjs .bar{display:flex;gap:8px;justify-content:flex-end}
 #pList .pvr{border-color:var(--line)}.it{margin:6px 0 14px}
 .ri.ov{border-color:#f2b705;box-shadow:inset 0 0 0 1px #f2b705}
-.rhead{display:flex;justify-content:space-between;gap:12px;border-bottom:4px solid #f2b705;padding-bottom:8px;margin-bottom:10px}
-.rt1{font-size:1.15rem;font-weight:800}.rt2{font-size:.95rem}.rm{font-size:.78rem;text-align:right;color:#444}
-.rt{width:100%;border-collapse:collapse;font-size:.78rem;margin:4px 0 12px}
-.rt th{background:#1f2a36;color:#fff;padding:5px 6px;font-weight:600}
-.rt td{padding:4px 6px;border-bottom:1px solid #ddd}
-.rt .l{text-align:left}.rt .r{text-align:right}
-.rt tr.tot td{font-weight:700;background:#f1eee6}
-#pvp h4{margin:10px 0 2px;font-size:.85rem}
+.rhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;background:#1f2a36;color:#fff;padding:14px 16px;border-radius:6px 6px 0 0;border-bottom:4px solid #f2b705;margin-bottom:12px}
+.rt1{font-size:1.25rem;font-weight:800;letter-spacing:-.01em;color:#fff}.rt2{font-size:.92rem;color:#f2b705;font-weight:600;margin-top:2px}.rm{font-size:.76rem;text-align:right;color:#d0d7de;line-height:1.5}
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 14px}
+.kpi-card{background:#f7f6f3;border:1px solid #e2dfd7;border-top:3px solid #1f2a36;border-radius:4px;padding:8px 10px}
+.kpi-card.gold{border-top-color:#f2b705;background:#fdfaf0}
+.kpi-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:#5d646c;font-weight:700}
+.kpi-val{font-size:.95rem;font-weight:800;color:#1f2a36;margin-top:2px;font-variant-numeric:tabular-nums}
+.rt{width:100%;border-collapse:collapse;font-size:.78rem;margin:4px 0 14px;border:1px solid #d8d5ce}
+.rt th{background:#1f2a36;color:#fff;padding:6px 8px;font-weight:600;letter-spacing:.02em;border-bottom:2px solid #f2b705}
+.rt td{padding:5px 8px;border-bottom:1px solid #e6e3dc}
+.rt tbody tr:nth-child(even):not(.tot){background:#faf9f6}
+.rt .l{text-align:left}.rt .r{text-align:right;font-variant-numeric:tabular-nums}
+.rt tr.tot td{font-weight:700;background:#f3efe4;border-top:1.5px solid #1f2a36;border-bottom:2px solid #1f2a36;color:#1f2a36}
+#pvp h3{margin:16px 0 6px;font-size:.95rem;color:#1f2a36;border-left:3.5px solid #f2b705;padding-left:8px;text-transform:uppercase;letter-spacing:.03em}
+#pvp h4{margin:10px 0 3px;font-size:.84rem;color:#1f4e79;font-weight:700}
 #pvp .sum th,#pvp .sum td{color:#111;border-color:#ddd}
+.signoff{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px;padding-top:12px;border-top:1px dashed #c9c6bf;font-size:.76rem;color:#444}
+.signbox{border-top:1px solid #888;margin-top:24px;padding-top:4px}
 #pjp{background:var(--surface);color:var(--ink)}#pjp .btn{margin-top:12px}
 main{padding-bottom:84px}
 #pjBtn{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:40;max-width:62vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:10px 16px;border-radius:999px;border:0;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.3);cursor:pointer}
@@ -85,9 +94,9 @@ main{padding-bottom:84px}
 .card h3{margin:0 0 4px;font-size:0.95rem;color:var(--accent)}
 .card p{margin:0;font-size:0.8rem;color:var(--muted)}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/exceljs/4.4.0/exceljs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 </head>
 <body>
 <main>
@@ -127,8 +136,11 @@ main{padding-bottom:84px}
 <section class="panel" id="el" hidden>
 <label for="type">Element type</label>
 <select id="type">
+<option value="excav">Excavation (Pit / Trench)</option>
+<option value="lean">Lean Concrete / Blinding (C5)</option>
 <option value="slab">Slab</option>
-<option value="footing">Footing</option>
+<option value="footing">Pad Footing (Rectangular)</option>
+<option value="trap">Trapezoidal / Sloped Footing</option>
 <option value="beam">Beam</option>
 <option value="wall">Concrete wall</option>
 <option value="brick">Brick / HCB wall</option>
@@ -166,6 +178,19 @@ main{padding-bottom:84px}
 <div class="big"><span>Mortar sand</span><b id="bS"></b></div>
 </div>
 <p class="note">Units per area = 1 ÷ ((length + joint) × (height + joint)), doubled for a double-layer wall. Mortar = wall volume − unit volume (for hollow blocks, mortar is factored by 0.35 for bed/head joints only), × 1.27 for dry volume, cement 1440 kg/m³. Sizes in mm. Wastage % below applies to units and mortar.</p>
+</div>
+<div id="exc" hidden>
+<div class="grid">
+<div><label for="exB">Bulking factor (%)</label><input id="exB" type="number" inputmode="decimal" min="0" value="25"></div>
+<div><label for="exR">Backfill ratio (% of net vol)</label><input id="exR" type="number" inputmode="decimal" min="0" max="100" value="70"></div>
+</div>
+<div class="out">
+<div><span>Net Pit / Trench Excavation</span><b id="eNet"></b></div>
+<div><span>Bulked Excavation Volume</span><b id="eBlk"></b></div>
+<div><span>Backfill Volume</span><b id="eBck"></b></div>
+<div class="big"><span>Cart-Away Surplus (Bulked)</span><b id="eCrt"></b></div>
+</div>
+<p class="note">Bulked excavation = Net × (1 + Bulking%). Backfill = Net × Backfill%. Cart-away surplus = (Net − Backfill) × (1 + Bulking%).</p>
 </div>
 <div class="grid">
 <div><label for="qty">Number of elements</label><input id="qty" type="number" inputmode="decimal" min="1" value="1"></div>
@@ -243,6 +268,16 @@ main{padding-bottom:84px}
 <div class="big"><span>Cement</span><b id="fC"></b></div>
 <div class="big"><span>Sand</span><b id="fS"></b></div>
 </div>
+<div class="grid">
+<div><label for="plLvl">Building Story / Zone</label><select id="plLvl"><option value="Substructure">Substructure</option>
+<option value="Ground Floor" selected>Ground Floor</option>
+<option value="First Floor">First Floor</option>
+<option value="Second Floor">Second Floor</option>
+<option value="Third Floor">Third Floor</option>
+<option value="Roof Level">Roof Level</option>
+<option value="Custom">Custom floor / zone...</option></select></div>
+<div id="plCustWrap" hidden><label for="plCust">Custom Level / Zone</label><input id="plCust" type="text" placeholder="e.g. Mezzanine"></div>
+</div>
 <button class="btn main" id="addPl" type="button">Add plastering to project</button>
 <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
 <b>Flooring tiles</b>
@@ -258,6 +293,16 @@ main{padding-bottom:84px}
 <div><span>Floor area</span><b id="gA"></b></div>
 <div><span>Tiles (net)</span><b id="gN"></b></div>
 <div class="big"><span>Tiles with wastage</span><b id="gG"></b></div>
+</div>
+<div class="grid">
+<div><label for="flLvl">Building Story / Zone</label><select id="flLvl"><option value="Substructure">Substructure</option>
+<option value="Ground Floor" selected>Ground Floor</option>
+<option value="First Floor">First Floor</option>
+<option value="Second Floor">Second Floor</option>
+<option value="Third Floor">Third Floor</option>
+<option value="Roof Level">Roof Level</option>
+<option value="Custom">Custom floor / zone...</option></select></div>
+<div id="flCustWrap" hidden><label for="flCust">Custom Level / Zone</label><input id="flCust" type="text" placeholder="e.g. Basement 1"></div>
 </div>
 <button class="btn main" id="addFl" type="button">Add flooring to project</button>
 <p class="note">Plaster mortar dry volume = 1.3 × wet volume, cement 1440 kg/m³. Tiles = floor area ÷ (tile + joint) face area. Tile and joint sizes are in mm.</p>
@@ -306,8 +351,11 @@ const Q=v=>{v=String(v==null?"":v).trim();let r;
  return isFinite(r)&&r>0?Math.ceil(r-1e-9):0;};
 const f=(x,d=2)=>x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});
 const TYPES={
+ excav:{dims:[["Pit / Trench Length (m)","l"],["Width (m)","w"],["Excavation Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
+ lean:{dims:[["Length (m)","l"],["Width (m)","w"],["Blinding Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
  slab:{dims:[["Length (m)","l"],["Width (m)","w"],["Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
  footing:{dims:[["Length (m)","l"],["Width (m)","w"],["Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
+ trap:{dims:[["Bottom Length L1 (m)","l"],["Bottom Width W1 (m)","w"],["Top Length L2 (m)","l2"],["Top Width W2 (m)","w2"],["Total Depth h (m)","h"]],vol:d=>{const a1=d.l*d.w,a2=d.l2*d.w2;return(d.h/3)*(a1+a2+Math.sqrt(a1*a2));}},
  beam:{dims:[["Length (m)","l"],["Width (m)","w"],["Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
  wall:{dims:[["Length (m)","l"],["Thickness (m)","w"],["Height (m)","h"]],vol:d=>d.l*d.w*d.h},
  col:{dims:[["Width (m)","l"],["Depth (m)","w"],["Height (m)","h"]],vol:d=>d.l*d.w*d.h},
@@ -317,8 +365,11 @@ const TYPES={
  stair:{dims:[["Flight width (m)","sw"],["Tread / going (m)","tr"],["Riser height (m)","ri"],["Number of steps","ns"],["Waist thickness (m)","th"]],vol:d=>d.sw*(Math.hypot(d.ns*d.tr,d.ns*d.ri)*d.th+d.ns*d.tr*d.ri/2)}
 };
 const AREA={
+ excav:d=>0,
+ lean:d=>2*(d.l+d.w)*d.h,
  slab:d=>slabForm(d),
  footing:d=>2*(d.l+d.w)*d.h,
+ trap:d=>{const dl=Math.abs(d.l-d.l2)/2,dw=Math.abs(d.w-d.w2)/2;const s1=Math.hypot(d.h,dw),s2=Math.hypot(d.h,dl);return(d.l+d.l2)*s1+(d.w+d.w2)*s2;},
  beam:d=>beamForm(d),
  wall:d=>2*d.l*d.h,
  col:d=>2*(d.l+d.w)*d.h,
@@ -330,8 +381,10 @@ const AREA={
 let vals={};
 function buildDims(){
  const t=$("type").value;
+ if(t==="lean"&&!vals.h)vals.h=IMP?"0.164":"0.05";
  $("dims").innerHTML=TYPES[t].dims.map(([lab,k],i)=>`<div><label for="d_${k}">${lab.replace("(m)","("+LU()+")")}</label><input id="d_${k}" data-k="${k}" type="number" inputmode="decimal" min="0" value="${vals[k]||""}"></div>`).join("");
  $("soffitWrap").hidden=t!=="slab";
+ const lv=$("elLvl");if(lv&&!editing){lv.value=(t==="excav"||t==="lean"||t==="footing"||t==="trap")?"Substructure":"Ground Floor";if($("elCustWrap"))$("elCustWrap").hidden=true;}
  $("dims").querySelectorAll("input").forEach(i=>i.addEventListener("input",calcEl));
  calcEl();
 }
@@ -345,10 +398,23 @@ function calcEl(){
  $("vNet").textContent=V(v);
  $("vGross").textContent=V(lastGross);
  $("fArea").textContent=A(AREA[t](d,$("soffit").checked)*q);
- $("sideDims").hidden=!$("sides").checked;$("beamWrap").hidden=t!=="beam";$("bSideDims").hidden=!$("bSide").checked;const bk=t==="brick";CUR.el=bk?null:{conc:lastGross,form:AREA[t](d,$("soffit").checked)*q};$("brk").hidden=!bk;$("vNet").closest(".out").hidden=bk;if(bk)calcBrick(d,q,w);
+ $("sideDims").hidden=!$("sides").checked;$("beamWrap").hidden=t!=="beam";$("bSideDims").hidden=!$("bSide").checked;
+ const bk=t==="brick",ex=t==="excav",ln=t==="lean";
+ $("brk").hidden=!bk;$("exc").hidden=!ex;$("vNet").closest(".out").hidden=bk||ex;
+ if(bk){CUR.el=null;calcBrick(d,q,w);}
+ else if(ex){
+  const bf=n($("exB").value)/100,br=Math.min(1,n($("exR").value)/100);
+  const net=v,bulked=net*(1+bf),backfill=net*br,cartaway=Math.max(0,net-backfill)*(1+bf);
+  $("eNet").textContent=V(net);$("eBlk").textContent=V(bulked);$("eBck").textContent=V(backfill);$("eCrt").textContent=V(cartaway);
+  CUR.el={excav:net,backfill:backfill,cartaway:cartaway};
+ }else if(ln){
+  CUR.el={lean:lastGross,form:AREA[t](d,$("soffit").checked)*q};
+ }else{
+  CUR.el={conc:lastGross,form:AREA[t](d,$("soffit").checked)*q};
+ }
 }
 ["type"].forEach(id=>$(id).addEventListener("change",buildDims));
-["qty","waste","soffit","sides","sl","sh","bBot","bSide","bK","bT"].forEach(id=>$(id).addEventListener("input",calcEl));
+["qty","waste","soffit","sides","sl","sh","bBot","bSide","bK","bT","exB","exR"].forEach(id=>$(id).addEventListener("input",calcEl));
 
 const DIAS=[6,8,10,12,14,16,18,20,22,25,28,32,36,40,50];
 let rows=[{mk:"Top bar",d:12,n:"",l:""},{mk:"Stirrup",d:8,n:"",l:""}];
@@ -471,7 +537,7 @@ function calcFn(){
  CUR.fl={floor:fa,tile:G};}
 ["pl","ph","po","pf","pt","ps","fL","fW","tl","tw","tj","fx"].forEach(id=>$(id).addEventListener("input",calcFn));
 
-const MAT=[["conc","Concrete","m³"],["form","Formwork","m²"],["steel","Reinforcement","kg"],["brick","Blocks / Bricks","nos"],["cement","Cement","bags"],["sand","Sand","m³"],["agg","Aggregate","m³"],["water","Water","L"],["plas","Plastering","m²"],["floor","Floor area","m²"],["tile","Tiles","nos"]];
+const MAT=[["excav","Excavation (Pit/Trench)","m³"],["backfill","Backfill & Compaction","m³"],["cartaway","Cart-Away Surplus","m³"],["lean","Lean Concrete (C5)","m³"],["conc","Structural Concrete","m³"],["form","Formwork","m²"],["steel","Reinforcement","kg"],["brick","Blocks / Bricks","nos"],["cement","Cement","bags"],["sand","Sand","m³"],["agg","Aggregate","m³"],["water","Water","L"],["plas","Plastering","m²"],["floor","Floor area","m²"],["tile","Tiles","nos"]];
 const LS={get(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let proj=LS.get("sq_proj",[]),rates=LS.get("sq_rates",{}),PT={};
 const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
@@ -498,15 +564,20 @@ $("pClr").addEventListener("click",()=>{if(proj.length&&confirm("Remove all proj
 [].forEach(([id,nm,get])=>{
  const b=document.createElement("button");b.type="button";b.className="btn main";b.textContent="Add to project";
  b.addEventListener("click",()=>addP(nm(),get()));$(id).appendChild(b);});
-$("addPl").addEventListener("click",()=>addItem("Plaster","",CUR.pl,snapFn("pl")));
-$("addFl").addEventListener("click",()=>addItem("Floor","",CUR.fl,snapFn("fl")));
+$("addPl").addEventListener("click",()=>addItem("Plaster","",CUR.pl,snapFn("pl"),getLvl("plLvl","plCust")));
+$("addFl").addEventListener("click",()=>addItem("Floor","",CUR.fl,snapFn("fl"),getLvl("flLvl","flCust")));
 function projRows(){
  if(!proj.length)return[];
  return[[""],["Project items"],...proj.map(p=>[p.n]),["Project totals (metric)"],["Material","Quantity","Rate","Cost"],
   ...[...document.querySelectorAll("#pTab tbody tr")].map(tr=>[tr.cells[0].textContent,tr.cells[1].textContent,tr.querySelector("input").value,tr.cells[3].textContent]),
   ["Total","","",$("pTot")?$("pTot").textContent:""]];}
 proj=[];
-const CAT={slab:"Slab",footing:"Footing",beam:"Beam",wall:"Wall",brick:"MasonryWall",col:"Column",round:"Column",stair:"Stair",landing:"Landing"};
+const CAT={excav:"Excavation",lean:"LeanConcrete",slab:"Slab",footing:"Footing",trap:"TrapezoidalFooting",beam:"Beam",wall:"Wall",brick:"MasonryWall",col:"Column",round:"Column",stair:"Stair",landing:"Landing"};
+const STORY_ORDER=["Substructure","Ground Floor","First Floor","Second Floor","Third Floor","Roof Level"];
+const storyRank=st=>{const idx=STORY_ORDER.indexOf(st||"Ground Floor");return idx>=0?idx:99;};
+const getLvl=(selId,custId)=>{const v=$(selId).value;return v==="Custom"?($(custId).value.trim()||"Custom Level"):v;};
+const setLvl=(selId,custId,wrapId,val)=>{const v=val||"Ground Floor";if(STORY_ORDER.includes(v)){$(selId).value=v;$(wrapId).hidden=true;}else{$(selId).value="Custom";$(custId).value=v;$(wrapId).hidden=false;}};
+[["plLvl","plCust","plCustWrap"],["flLvl","flCust","flCustWrap"]].forEach(([s,c,w])=>$(s).addEventListener("change",()=>{$(w).hidden=$(s).value!=="Custom";}));
 let PR=LS.get("sq_projects",null);
 if(!PR||!PR.list||!PR.list.length)PR={cur:"p1",list:[{id:"p1",name:"Project 1",items:[]}]};
 const saveP=()=>LS.set("sq_projects",PR);
@@ -520,11 +591,19 @@ function addItem(cat,desc,m){
  const code=nextCode(cat),p=curP();p.items.push({code,cat,d:desc,m:{...m}});saveP();renderProj();$("xs").textContent="Saved "+code+" to "+p.name;}
 function updAdd(){const b=$("addEl");if(b)b.textContent="Save as "+nextCode(CAT[$("type").value])+" to "+curP().name;}
 function renderItems(){
- const p=curP(),c=$("cur").value,cats=[...new Set(p.items.map(i=>i.cat))];
- $("pList").innerHTML=p.items.length?cats.map(cat=>{let sub=0;
-  const h=p.items.filter(i=>i.cat===cat).map(it=>{const ic=itemCost(it);sub+=ic;
-   return `<div class="it"><div class="pi"><b>${esc(it.code)}</b><span>${esc(it.d||"")}</span></div>${MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>`<div class="pvr"><span>${l}</span><span>${f(it.m[k],k==="brick"||k==="tile"?0:2)} ${u}</span><span><input class="ri${it.r&&it.r[k]!==undefined&&it.r[k]!==""?" ov":""}" type="number" inputmode="decimal" min="0" data-ic="${esc(it.code)}" data-k="${k}" value="${it.r&&it.r[k]!==undefined?it.r[k]:""}" placeholder="${rates[k]||"rate"}" style="width:64px;padding:4px" aria-label="Rate for ${l}"></span><span>${rt(it,k)?c+f(it.m[k]*rt(it,k)):""}</span></div>`).join("")}<div class="pvr"><b>Cost of ${esc(it.code)}</b><b>${c}${f(ic)}</b></div></div>`;}).join("");
-  return `<h3 class="ch">${esc(cat)} - ${c}${f(sub)}</h3>${h}`;}).join(""):'<p class="note">No work items yet. Calculate an element, then use Save to project.</p>';
+ const p=curP(),c=$("cur").value;
+ const stories=[...new Set(p.items.map(i=>i.lvl||"Ground Floor"))].sort((a,b)=>storyRank(a)-storyRank(b)||a.localeCompare(b));
+ $("pList").innerHTML=p.items.length?stories.map(lvl=>{
+  const lvlItems=p.items.filter(i=>(i.lvl||"Ground Floor")===lvl);
+  const lvlTot=lvlItems.reduce((a,it)=>a+itemCost(it),0);
+  const cats=[...new Set(lvlItems.map(i=>i.cat))];
+  const catHtml=cats.map(cat=>{let sub=0;
+   const h=lvlItems.filter(i=>i.cat===cat).map(it=>{const ic=itemCost(it);sub+=ic;
+    return `<div class="it"><div class="pi"><b>${esc(it.code)}</b><span>${esc(it.d||"")}</span></div>${MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>`<div class="pvr"><span>${l}</span><span>${f(it.m[k],k==="brick"||k==="tile"?0:2)} ${u}</span><span><input class="ri${it.r&&it.r[k]!==undefined&&it.r[k]!==""?" ov":""}" type="number" inputmode="decimal" min="0" data-ic="${esc(it.code)}" data-k="${k}" value="${it.r&&it.r[k]!==undefined?it.r[k]:""}" placeholder="${rates[k]||"rate"}" style="width:64px;padding:4px" aria-label="Rate for ${l}"></span><span>${rt(it,k)?c+f(it.m[k]*rt(it,k)):""}</span></div>`).join("")}<div class="pvr"><b>Cost of ${esc(it.code)}</b><b>${c}${f(ic)}</b></div></div>`;}).join("");
+   return `<h4 style="margin:10px 0 4px;color:var(--accent)">${esc(cat)} — ${c}${f(sub)}</h4>${h}`;
+  }).join("");
+  return `<div style="border-top:2px solid var(--line);margin-top:14px;padding-top:6px"><h3 class="ch" style="margin-top:4px">${esc(lvl)} (Subtotal: ${c}${f(lvlTot)})</h3>${catHtml}</div>`;
+ }).join(""):'<p class="note">No work items yet. Calculate an element, then use Save to project.</p>';
  if($("homeProjName"))$("homeProjName").textContent=p.name;
  if($("homeItemCount"))$("homeItemCount").textContent=p.items.length+" items";
 }
@@ -555,13 +634,23 @@ $("pClr").addEventListener("click",()=>{const b=$("pClr");
  if(!PR.list.length)PR.list=[{id:"p"+Date.now(),name:"Project 1",items:[]}];
  PR.cur=PR.list[0].id;saveP();renderProj();});
 {const sb=document.createElement("div");
- sb.innerHTML='<div class="grid"><div class="full"><label for="idesc">Work item note (optional)</label><input id="idesc" type="text" placeholder="e.g. Roof slab"></div></div><label class="chk"><input type="checkbox" id="incR" checked> Include rebar from the Rebar tab</label><label class="chk"><input type="checkbox" id="incM" checked> Include mix (ratio from the Mix tab, for this concrete volume)</label><button class="btn main" id="addEl" type="button"></button>';
- $("el").appendChild(sb);}
+ sb.innerHTML=`<div class="grid"><div><label for="elLvl">Building Story / Zone</label><select id="elLvl"><option value="Substructure">Substructure</option>
+<option value="Ground Floor" selected>Ground Floor</option>
+<option value="First Floor">First Floor</option>
+<option value="Second Floor">Second Floor</option>
+<option value="Third Floor">Third Floor</option>
+<option value="Roof Level">Roof Level</option>
+<option value="Custom">Custom floor / zone...</option></select></div><div id="elCustWrap" hidden><label for="elCust">Custom Level / Zone</label><input id="elCust" type="text" placeholder="e.g. Mezzanine"></div><div class="full"><label for="idesc">Work item note (optional)</label><input id="idesc" type="text" placeholder="e.g. Pad footing F1 or Roof slab"></div></div><label class="chk"><input type="checkbox" id="incR" checked> Include rebar from the Rebar tab</label><label class="chk"><input type="checkbox" id="incM" checked> Include mix (ratio from the Mix tab, for this concrete volume)</label><button class="btn main" id="addEl" type="button"></button>`;
+ $("el").appendChild(sb);
+ $("elLvl").addEventListener("change",()=>{$("elCustWrap").hidden=$("elLvl").value!=="Custom";});}
 $("addEl").addEventListener("click",()=>{
  const t=$("type").value;let m=CUR.el?{...CUR.el}:null;
- if(m){if($("incR").checked&&CUR.rb&&CUR.rb.steel>0)m.steel=CUR.rb.steel;
-  if($("incM").checked&&t!=="brick"&&m.conc>0)Object.assign(m,mixFor(m.conc));}
- addItem(CAT[t],$("idesc").value.trim(),m,snapEl());$("idesc").value="";});
+ if(m){
+  const vol=m.conc||m.lean||0;
+  if($("incR").checked&&t!=="excav"&&t!=="lean"&&CUR.rb&&CUR.rb.steel>0)m.steel=CUR.rb.steel;
+  if($("incM").checked&&t!=="brick"&&t!=="excav"&&vol>0)Object.assign(m,mixFor(vol));
+ }
+ addItem(CAT[t],$("idesc").value.trim(),m,snapEl(),getLvl("elLvl","elCust"));$("idesc").value="";});
 $("type").addEventListener("change",updAdd);
 function projRows(){
  const p=curP();if(!p.items.length)return[];
@@ -577,23 +666,24 @@ $("pjBtn").addEventListener("click",()=>{$("pjs").hidden=false;});
 $("pjClose").addEventListener("click",()=>{$("pjs").hidden=true;});
 let editing=null,MC={};
 const PL=["pl","ph","po","pf","pt","ps"],FL=["fL","fW","tl","tw","tj","fx"],BR=["bl","bw","bh","bj","bt","bo","bs","bPreset"],MXI=["mix","cc","cs","ca","wc"];
-const snapFn=k=>({kind:k,u:IMP,v:(k==="pl"?PL:FL).map(id=>$(id).value)});
-const snapEl=()=>({kind:"el",u:IMP,type:$("type").value,vals:{...vals},qty:$("qty").value,waste:$("waste").value,soffit:$("soffit").checked,sides:$("sides").checked,sl:$("sl").value,sh:$("sh").value,bBot:$("bBot").checked,bSide:$("bSide").checked,bK:$("bK").value,bT:$("bT").value,b:BR.map(id=>$(id).value),rows:JSON.parse(JSON.stringify(rows)),incR:$("incR").checked,incM:$("incM").checked,mx:MXI.map(id=>$(id).value)});
+const snapFn=k=>({kind:k,u:IMP,lvl:getLvl(k+"Lvl",k+"Cust"),v:(k==="pl"?PL:FL).map(id=>$(id).value)});
+const snapEl=()=>({kind:"el",u:IMP,lvl:getLvl("elLvl","elCust"),type:$("type").value,vals:{...vals},qty:$("qty").value,waste:$("waste").value,soffit:$("soffit").checked,sides:$("sides").checked,sl:$("sl").value,sh:$("sh").value,bBot:$("bBot").checked,bSide:$("bSide").checked,bK:$("bK").value,bT:$("bT").value,exB:$("exB").value,exR:$("exR").value,b:BR.map(id=>$(id).value),rows:JSON.parse(JSON.stringify(rows)),incR:$("incR").checked,incM:$("incM").checked,mx:MXI.map(id=>$(id).value)});
 function loadSnap(s){
  if(!!s.u!==IMP){$("unit").value=s.u?"ft":"m";$("unit").dispatchEvent(new Event("change"));}
- if(s.kind==="el"){$("type").value=s.type;vals={...s.vals};buildDims();$("qty").value=s.qty;$("waste").value=s.waste;$("soffit").checked=s.soffit;$("sides").checked=s.sides!==false;$("sl").value=s.sl||"";$("sh").value=s.sh||"";$("bBot").checked=s.bBot!==false;$("bSide").checked=s.bSide!==false;$("bK").value=s.bK||"0";$("bT").value=s.bT||"";
+ if(s.kind==="el"){$("type").value=s.type;vals={...s.vals};buildDims();$("qty").value=s.qty;$("waste").value=s.waste;$("soffit").checked=s.soffit;$("sides").checked=s.sides!==false;$("sl").value=s.sl||"";$("sh").value=s.sh||"";$("bBot").checked=s.bBot!==false;$("bSide").checked=s.bSide!==false;$("bK").value=s.bK||"0";$("bT").value=s.bT||"";if(s.exB!==undefined)$("exB").value=s.exB;if(s.exR!==undefined)$("exR").value=s.exR;
+  setLvl("elLvl","elCust","elCustWrap",s.lvl);
   BR.forEach((id,i)=>{if(s.b[i]!==undefined)$(id).value=s.b[i];});rows=JSON.parse(JSON.stringify(s.rows));drawRows();
   MXI.forEach((id,i)=>$(id).value=s.mx[i]);$("cust").hidden=$("mix").value!=="custom";calcMx();
   $("incR").checked=s.incR;$("incM").checked=s.incM;calcEl();}
- else{(s.kind==="pl"?PL:FL).forEach((id,i)=>$(id).value=s.v[i]);calcFn();}
+ else{(s.kind==="pl"?PL:FL).forEach((id,i)=>$(id).value=s.v[i]);setLvl(s.kind+"Lvl",s.kind+"Cust",s.kind+"CustWrap",s.lvl);calcFn();}
  document.querySelector(`nav button[data-t="${s.kind==="el"?"el":"fn"}"]`).click();}
-function addItem(cat,desc,m,s){
+function addItem(cat,desc,m,s,lvl){
  if(!m||!Object.values(m).some(v=>v>0)){$("xs").textContent="Nothing to save yet. Enter the dimensions first.";return;}
- const p=curP();
+ const p=curP(),story=lvl||"Ground Floor";
  if(editing&&s&&editing.kind===s.kind){const it=p.items.find(i=>i.code===editing.code);
-  if(it){if(it.cat!==cat){it.cat=cat;it.code=nextCode(cat);}it.d=desc;it.m={...m};it.s=s;saveP();
-   $("xs").textContent="Updated "+it.code;editing=null;$("edCx").hidden=true;renderProj();return;}}
- const code=nextCode(cat);p.items.push({code,cat,d:desc,m:{...m},s});saveP();renderProj();$("xs").textContent="Saved "+code+" to "+p.name;}
+  if(it){if(it.cat!==cat){it.cat=cat;it.code=nextCode(cat);}it.d=desc;it.lvl=story;it.m={...m};it.s=s;saveP();
+   $("xs").textContent="Updated "+it.code+" ("+story+")";editing=null;$("edCx").hidden=true;renderProj();return;}}
+ const code=nextCode(cat);p.items.push({code,cat,lvl:story,d:desc,m:{...m},s});saveP();renderProj();$("xs").textContent="Saved "+code+" ("+story+") to "+p.name;}
 function updAdd(){
  const e=editing,P=curP().name,set=(id,kind,idle)=>{const b=$(id);if(b)b.textContent=e&&e.kind===kind?"Update "+e.code:idle;};
  set("addEl","el","Save as "+nextCode(CAT[$("type").value])+" to "+P);
@@ -635,7 +725,7 @@ function barCalc(d,l,q){
  return{tot,kg:tot*w,bars,waste:bars*12-tot,ow:bars*12*w};}
 function schedRows(){
  const secs=[];
- curP().items.forEach(it=>{const s=it.s;if(s&&s.kind==="el"&&s.incR&&it.m.steel>0)secs.push({t:it.code+(it.d?" - "+it.d:""),r:s.rows,k:s.u?FT:1});});
+ curP().items.forEach(it=>{const s=it.s;if(s&&s.kind==="el"&&s.incR&&it.m.steel>0)secs.push({t:`[${it.lvl||"Ground Floor"}] ${it.code}${it.d?" - "+it.d:""}`,r:s.rows,k:s.u?FT:1});});
  if(!secs.length)secs.push({t:"Current Rebar tab",r:rows,k:IMP?FT:1});
  const HD=["Mark","Dia (mm)","Cut length (m)","Qty","Total length (m)","Weight (kg)","12 m bars","Waste (m)","Order wt (kg)"];
  const R=[["Bar bending schedule (metric, 12 m stock bars)"]],G={},GT=[0,0,0,0,0,0];
@@ -669,125 +759,240 @@ const meta=()=>({by:$("pmBy").value.trim(),site:$("pmSite").value.trim()});
 {const m=LS.get("sq_meta",{});$("pmBy").value=m.by||"";$("pmSite").value=m.site||"";
  ["pmBy","pmSite"].forEach(id=>$(id).addEventListener("input",()=>{LS.set("sq_meta",meta());const D=docHtml();if(D)$("pvp").innerHTML=D;}));}
 const QD=k=>k==="brick"||k==="tile"?0:2;
-const H1=["Code","Description","Concrete (m³)","Formwork (m²)","Steel (kg)","Cost"],A1="llrrrr",H2=["Material","Unit","Quantity","Rate","Amount"],A2="llrrr",A3="lrrrrrrrr";
+const H1=["Code","Story / Zone","Description","Concrete (m³)","Formwork (m²)","Steel (kg)","Cost"],A1="lllrrrr",H2=["Material","Unit","Quantity","Rate","Amount"],A2="llrrr",A3="lrrrrrrrr",H4=["Story / Level","Element Type","Items","Cost"],A4="llrr";
 function rpt(){
- const p=curP(),items=p.items.slice().sort((a,b)=>a.cat.localeCompare(b.cat));
- if(!items.length)return null;let grand=0;const sum=[],det=[];
- items.forEach(it=>{const ic=itemCost(it);grand+=ic;
-  sum.push([it.code,it.d||"",it.m.conc?f(it.m.conc,2):"-",it.m.form?f(it.m.form,2):"-",it.m.steel?f(it.m.steel,1):"-",f(ic)]);
-  det.push({t:it.code+(it.d?" - "+it.d:""),lines:MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>[l,u,f(it.m[k],QD(k)),rt(it,k)?f(rt(it,k)):"-",f(it.m[k]*rt(it,k))]),cost:f(ic)});});
+ const p=curP(),items=p.items.slice().sort((a,b)=>storyRank(a.lvl)-storyRank(b.lvl)||(a.lvl||"").localeCompare(b.lvl||"")||a.cat.localeCompare(b.cat));
+ if(!items.length)return null;let grand=0,tConc=0,tForm=0,tSteel=0;const sum=[],det=[],byStoryCat=[];
+ const stories=[...new Set(items.map(i=>i.lvl||"Ground Floor"))];
+ stories.forEach(lvl=>{
+  const sItems=items.filter(i=>(i.lvl||"Ground Floor")===lvl);
+  let sCost=0,sConc=0,sForm=0,sSteel=0;
+  const cats=[...new Set(sItems.map(i=>i.cat))];
+  cats.forEach(cat=>{
+   const cItems=sItems.filter(i=>i.cat===cat);
+   const cCost=cItems.reduce((a,it)=>a+itemCost(it),0);
+   byStoryCat.push([lvl,cat,String(cItems.length),f(cCost)]);
+  });
+  sItems.forEach(it=>{const ic=itemCost(it),cVol=(it.m.conc||0)+(it.m.lean||0);grand+=ic;sCost+=ic;tConc+=cVol;sConc+=cVol;tForm+=(it.m.form||0);sForm+=(it.m.form||0);tSteel+=(it.m.steel||0);sSteel+=(it.m.steel||0);
+   sum.push([it.code,lvl,it.d||"-",cVol?f(cVol,2):"-",it.m.form?f(it.m.form,2):"-",it.m.steel?f(it.m.steel,1):"-",f(ic)]);
+   det.push({t:`[${lvl}] ${it.code}${it.d?" — "+it.d:""}`,lines:MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>[l,u,f(it.m[k],QD(k)),rt(it,k)?f(rt(it,k)):"-",f(it.m[k]*rt(it,k))]),cost:f(ic)});});
+  const subRow=[`Subtotal — ${lvl}`,"","",sConc?f(sConc,2):"-",sForm?f(sForm,2):"-",sSteel?f(sSteel,1):"-",f(sCost)];subRow.b=1;sum.push(subRow);
+  const scTot=[`Story Total — ${lvl}`,"",String(sItems.length),f(sCost)];scTot.b=1;byStoryCat.push(scTot);
+ });
  const mats=MAT.filter(([k])=>PT[k]>0).map(([k,l,u])=>[l,u,f(PT[k],QD(k)),rates[k]?f(n(rates[k])):"-",f(MC[k]||0)]);
- return{name:p.name,cur:$("cur").value,sum,det,mats,grand:f(grand),S:schedRows(),date:new Date().toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"})};}
+ return{name:p.name,cur:$("cur").value,sum,byStoryCat,det,mats,tConc:f(tConc,2),tForm:f(tForm,2),tSteel:f(tSteel,1),grand:f(grand),grandNum:grand,S:schedRows(),date:new Date().toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"})};}
 function schedGroups(S){const g=[];S.slice(1).forEach(r=>{if(r.length===1)g.push({t:r[0],h:null,r:[]});else if(r[0]==="Mark")g[g.length-1].h=r;else g[g.length-1].r.push(r);});return g;}
 function tbl(head,al,rows,foot){
  const tr=(r,c)=>`<tr${c?` class="${c}"`:""}>${r.map((x,i)=>`<td class="${al[i]}">${esc(x)}</td>`).join("")}</tr>`;
  return `<div style="overflow-x:auto"><table class="rt"><thead><tr>${head.map((x,i)=>`<th class="${al[i]}">${esc(x)}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>tr(r,r.b?"tot":"")).join("")}${foot?tr(foot,"tot"):""}</tbody></table></div>`;}
 function docHtml(){
  const R=rpt();if(!R)return null;const m=meta();
- return `<div class="rhead"><div><div class="rt1">Bill of Quantities</div><div class="rt2">${esc(R.name)}</div></div><div class="rm">${esc(R.date)}${m.site?"<br>"+esc(R.site):""}${m.by?"<br>Prepared by "+esc(R.by):""}<br>Currency ${esc(R.cur)}, metric units</div></div>
-<h3>1. Summary of work items</h3>${tbl(H1,A1,R.sum,["Project total","","","","",R.grand])}
-<h3>2. Detailed quantities and cost</h3>${R.det.map(d=>`<h4>${esc(d.t)}</h4>`+tbl(H2,A2,d.lines,["Item total","","","",d.cost])).join("")}
-<h3>3. Total material quantities</h3>${tbl(H2,A2,R.mats,["Project total","","","",R.grand])}
-${R.S.length?"<h3>4. Bar bending schedule</h3>"+schedGroups(R.S).map(g=>`<h4>${esc(g.t)}</h4>`+tbl(g.h,A3,g.r)).join(""):""}`;}
+ return `<div class="rhead"><div><div class="rt1">BILL OF QUANTITIES</div><div class="rt2">${esc(R.name)}</div></div><div class="rm"><b>Date:</b> ${esc(R.date)}${m.site?"<br><b>Project / Client:</b> "+esc(m.site):""}${m.by?"<br><b>Prepared by:</b> "+esc(m.by):""}<br><b>Currency:</b> ${esc(R.cur)} · Metric</div></div>
+<div class="kpi-strip">
+ <div class="kpi-card"><div class="kpi-lbl">Concrete (incl. C5)</div><div class="kpi-val">${R.tConc} m³</div></div>
+ <div class="kpi-card"><div class="kpi-lbl">Formwork</div><div class="kpi-val">${R.tForm} m²</div></div>
+ <div class="kpi-card"><div class="kpi-lbl">Reinforcement</div><div class="kpi-val">${R.tSteel} kg</div></div>
+ <div class="kpi-card gold"><div class="kpi-lbl">Grand Total</div><div class="kpi-val">${esc(R.cur)}${R.grand}</div></div>
+</div>
+<h3>1. Cost Summary by Story / Level &amp; Element Type</h3>${tbl(H4,A4,R.byStoryCat,["GRAND TOTAL","","",R.cur+R.grand])}
+<h3>2. Work Breakdown by Floor / Level</h3>${tbl(H1,A1,R.sum,["GRAND TOTAL","","",R.tConc,R.tForm,R.tSteel,R.cur+R.grand])}
+<h3>3. Detailed Quantities &amp; Cost Breakdown</h3>${R.det.map(d=>`<h4>${esc(d.t)}</h4>`+tbl(H2,A2,d.lines,["Item Subtotal","","","",R.cur+d.cost])).join("")}
+<h3>4. Consolidated Material Schedule</h3>${tbl(H2,A2,R.mats,["TOTAL MATERIAL COST","","","",R.cur+R.grand])}
+${R.S.length?"<h3>5. Bar Bending Schedule (12 m Stock)</h3>"+schedGroups(R.S).map(g=>`<h4>${esc(g.t)}</h4>`+tbl(g.h,A3,g.r)).join(""):""}
+<div class="signoff"><div><b>Prepared &amp; Checked By</b><div class="signbox">${esc(m.by||"Engineer / Quantity Surveyor")} · Date: ${esc(R.date)}</div></div><div><b>Approved By (Client / Consultant)</b><div class="signbox">${esc(m.site||"Authorized Signature & Stamp")}</div></div></div>`;}
 function pdfTable(doc,y,cols,head,rows,al){
- const x0=14,rh=6,W=cols.reduce((a,b)=>a+b,0),ph=()=>doc.internal.pageSize.getHeight(),ls=()=>doc.internal.pageSize.getWidth()>250;
+ const x0=14,rh=6.5,W=cols.reduce((a,b)=>a+b,0),ph=()=>doc.internal.pageSize.getHeight(),ls=()=>doc.internal.pageSize.getWidth()>250;
  const np=()=>{doc.addPage("a4",ls()?"landscape":"portrait");y=32;};
- const put=(t,x,w,i,yy)=>{t=String(t);doc.setFontSize(8.5);while(t.length>1&&doc.getTextWidth(t)>w-3)t=t.slice(0,-1);
-  if(al[i]==="r")doc.text(t,x+w-1.5,yy+4.2,{align:"right"});else doc.text(t,x+1.5,yy+4.2);};
- const hd=()=>{doc.setFillColor(31,42,54);doc.rect(x0,y,W,rh,"F");doc.setTextColor(255);doc.setFont(undefined,"bold");
-  let x=x0;head.forEach((t,i)=>{put(t,x,cols[i],i,y);x+=cols[i];});doc.setTextColor(0);y+=rh;};
- if(y+rh*2>ph()-16)np();hd();
- rows.forEach(r=>{if(y+rh>ph()-16){np();hd();}
-  if(r.b){doc.setFillColor(241,238,230);doc.rect(x0,y,W,rh,"F");}
-  doc.setFont(undefined,r.b?"bold":"normal");let x=x0;r.forEach((t,i)=>{put(t,x,cols[i],i,y);x+=cols[i];});
-  doc.setDrawColor(221,221,221);doc.setLineWidth(0.2);doc.line(x0,y+rh,x0+W,y+rh);y+=rh;});
- return y+4;}
+ const put=(t,x,w,i,yy)=>{t=String(t);doc.setFontSize(8.3);while(t.length>1&&doc.getTextWidth(t)>w-3.5)t=t.slice(0,-1);
+  if(al[i]==="r")doc.text(t,x+w-2,yy+4.5,{align:"right"});else doc.text(t,x+2,yy+4.5);};
+ const hd=()=>{doc.setFillColor(31,42,54);doc.rect(x0,y,W,rh+0.6,"F");
+  doc.setFillColor(242,183,5);doc.rect(x0,y+rh+0.6,W,0.7,"F");
+  doc.setTextColor(255);doc.setFont(undefined,"bold");
+  let x=x0;head.forEach((t,i)=>{put(t,x,cols[i],i,y+0.2);x+=cols[i];});doc.setTextColor(0);y+=rh+1.3;};
+ if(y+rh*2.5>ph()-18)np();hd();
+ rows.forEach((r,idx)=>{if(y+rh>ph()-18){np();hd();}
+  if(r.b){doc.setFillColor(243,239,228);doc.rect(x0,y,W,rh,"F");doc.setDrawColor(31,42,54);doc.setLineWidth(0.35);doc.line(x0,y,x0+W,y);doc.line(x0,y+rh,x0+W,y+rh);}
+  else if(idx%2===1){doc.setFillColor(250,249,246);doc.rect(x0,y,W,rh,"F");}
+  doc.setFont(undefined,r.b?"bold":"normal");doc.setTextColor(r.b?31:25,r.b?42:28,r.b?54:32);
+  let x=x0;r.forEach((t,i)=>{put(t,x,cols[i],i,y);x+=cols[i];});
+  if(!r.b){doc.setDrawColor(230,227,220);doc.setLineWidth(0.18);doc.line(x0,y+rh,x0+W,y+rh);}
+  y+=rh;});
+ doc.setTextColor(0);return y+4.5;}
 function buildPdf(R){
  const doc=new window.jspdf.jsPDF(),m=meta(),ft=a=>{a.b=1;return a;};
- const brk=(y,need)=>{if(y+need>doc.internal.pageSize.getHeight()-16){doc.addPage("a4",doc.internal.pageSize.getWidth()>250?"landscape":"portrait");return 32;}return y;};
- let y=36;doc.setTextColor(0);doc.setFont(undefined,"bold");doc.setFontSize(18);doc.text(R.name,14,y);y+=8;
- doc.setFontSize(9.5);
- [["Date",R.date],["Site / client",m.site],["Prepared by",m.by],["Currency",R.cur],["Units","Metric: m, m², m³, kg"]].forEach(([k,v])=>{if(v){doc.setFont(undefined,"bold");doc.text(k,14,y);doc.setFont(undefined,"normal");doc.text(String(v),44,y);y+=5.5;}});
- const H=t=>{y=brk(y+4,16);doc.setFont(undefined,"bold");doc.setFontSize(11);doc.setTextColor(31,42,54);doc.text(t,14,y);doc.setTextColor(0);y+=3;};
- H("1. Summary of work items");y=pdfTable(doc,y,[20,52,26,26,26,32],H1,[...R.sum,ft(["Project total","","","","",R.grand])],A1);
- H("2. Detailed quantities and cost");
- R.det.forEach(d=>{y=brk(y,28);doc.setFont(undefined,"bold");doc.setFontSize(9.5);doc.text(d.t,14,y+4);y+=5;y=pdfTable(doc,y,[62,20,32,32,36],H2,[...d.lines,ft(["Item total","","","",d.cost])],A2);});
- H("3. Total material quantities");y=pdfTable(doc,y,[62,20,32,32,36],H2,[...R.mats,ft(["Project total","","","",R.grand])],A2);
- if(R.S.length){doc.addPage("a4","landscape");y=34;doc.setFont(undefined,"bold");doc.setFontSize(13);doc.setTextColor(31,42,54);doc.text("4. Bar bending schedule (metric, 12 m stock bars)",14,y);doc.setTextColor(0);y+=4;
-  schedGroups(R.S).forEach(g=>{y=brk(y,26);doc.setFont(undefined,"bold");doc.setFontSize(10);doc.text(g.t,14,y+4);y+=5;y=pdfTable(doc,y,[22,22,32,24,36,32,30,32,39],g.h,g.r,A3);});}
+ const brk=(y,need)=>{if(y+need>doc.internal.pageSize.getHeight()-18){doc.addPage("a4",doc.internal.pageSize.getWidth()>250?"landscape":"portrait");return 32;}return y;};
+ let y=32;
+ // Executive metadata & KPI summary box
+ doc.setFillColor(247,246,243);doc.setDrawColor(218,214,206);doc.setLineWidth(0.3);
+ doc.roundedRect(14,y,182,24,2,2,"FD");
+ doc.setFillColor(242,183,5);doc.rect(14,y,2.2,24,"F");
+ doc.setTextColor(31,42,54);doc.setFont(undefined,"bold");doc.setFontSize(13.5);
+ doc.text(R.name,20,y+7.5);
+ doc.setFontSize(8.5);doc.setFont(undefined,"normal");doc.setTextColor(85,92,100);
+ const line1=["Date: "+R.date,m.site?"Client / Site: "+m.site:"",m.by?"Prepared by: "+m.by:""].filter(Boolean).join("   |   ");
+ doc.text(line1,20,y+13.5);
+ doc.setFont(undefined,"bold");doc.setTextColor(31,42,54);
+ doc.text(`Currency: ${R.cur}   ·   Concrete: ${R.tConc} m³   ·   Formwork: ${R.tForm} m²   ·   Steel: ${R.tSteel} kg   ·   Total: ${R.cur}${R.grand}`,20,y+19.8);
+ y+=30;
+ const H=t=>{y=brk(y+3,18);
+  doc.setFillColor(242,183,5);doc.rect(14,y-3.6,2.2,4.8,"F");
+  doc.setFont(undefined,"bold");doc.setFontSize(10.5);doc.setTextColor(31,42,54);
+  doc.text(t.toUpperCase(),18.5,y);doc.setTextColor(0);y+=2.8;};
+ H("1. Cost Summary by Story / Level & Element Type");
+ y=pdfTable(doc,y,[56,64,22,40],H4,[...R.byStoryCat,ft(["GRAND TOTAL","","",R.cur+R.grand])],A4);
+ H("2. Work Breakdown by Floor / Level");
+ y=pdfTable(doc,y,[22,28,44,21,21,20,26],H1,[...R.sum,ft(["GRAND TOTAL","","",R.tConc,R.tForm,R.tSteel,R.cur+R.grand])],A1);
+ H("3. Detailed Quantities & Cost Breakdown");
+ R.det.forEach(d=>{y=brk(y,28);doc.setFont(undefined,"bold");doc.setFontSize(9.2);doc.setTextColor(31,78,121);doc.text(d.t,14,y+4);doc.setTextColor(0);y+=5.2;y=pdfTable(doc,y,[62,20,32,32,36],H2,[...d.lines,ft(["Item Subtotal","","","",R.cur+d.cost])],A2);});
+ H("4. Consolidated Material Schedule");
+ y=pdfTable(doc,y,[62,20,32,32,36],H2,[...R.mats,ft(["TOTAL MATERIAL COST","","","",R.cur+R.grand])],A2);
+ // Sign-off block
+ y=brk(y+4,24);
+ doc.setDrawColor(190,190,190);doc.setLineWidth(0.25);doc.line(14,y,196,y);y+=6;
+ doc.setFontSize(8.5);doc.setFont(undefined,"bold");doc.setTextColor(31,42,54);
+ doc.text("Prepared & Checked By:",14,y);doc.text("Approved By (Client / Consultant):",110,y);
+ y+=11;doc.setDrawColor(120,120,120);doc.line(14,y,92,y);doc.line(110,y,196,y);
+ y+=4;doc.setFont(undefined,"normal");doc.setFontSize(8);doc.setTextColor(90,95,100);
+ doc.text((m.by||"Quantity Surveyor / Engineer")+"  ·  "+R.date,14,y);
+ doc.text(m.site||"Authorized Signature & Stamp",110,y);
+
+ if(R.S.length){doc.addPage("a4","landscape");y=32;
+  doc.setFillColor(242,183,5);doc.rect(14,y-4,2.5,5.5,"F");
+  doc.setFont(undefined,"bold");doc.setFontSize(12);doc.setTextColor(31,42,54);
+  doc.text("4. BAR BENDING SCHEDULE (METRIC, 12 M STOCK BARS)",19,y);doc.setTextColor(0);y+=4;
+  schedGroups(R.S).forEach(g=>{y=brk(y,26);doc.setFont(undefined,"bold");doc.setFontSize(9.5);doc.setTextColor(31,78,121);doc.text(g.t,14,y+4);doc.setTextColor(0);y+=5.2;y=pdfTable(doc,y,[22,22,32,24,36,32,30,32,39],g.h,g.r,A3);});}
+
  const N=doc.getNumberOfPages();
  for(let i=1;i<=N;i++){doc.setPage(i);const w=doc.internal.pageSize.getWidth(),hh=doc.internal.pageSize.getHeight();
-  doc.setFillColor(31,42,54);doc.rect(0,0,w,22,"F");
-  doc.setFillColor(242,183,5);doc.roundedRect(14,5,12,12,2,2,"F");
-  doc.setDrawColor(31,42,54);doc.setLineWidth(0.8);doc.rect(16.6,7.6,6.8,6.8);doc.setFillColor(31,42,54);
-  [[17.2,8.2],[22.8,8.2],[17.2,13.8],[22.8,13.8]].forEach(([a,b])=>doc.circle(a,b,0.8,"F"));
-  doc.setTextColor(255);doc.setFont(undefined,"bold");doc.setFontSize(13);doc.text("Bill of Quantities",30,12);
-  doc.setFont(undefined,"normal");doc.setFontSize(8.5);doc.text(R.name,30,17.5);doc.text("Site Quantities",w-14,12,{align:"right"});
-  for(let x=0;x<w;x+=10){doc.setFillColor(242,183,5);doc.rect(x,22,5,2.2,"F");doc.setFillColor(31,42,54);doc.rect(x+5,22,5,2.2,"F");}
-  doc.setTextColor(110);doc.setFontSize(7.5);doc.setDrawColor(200);doc.setLineWidth(0.2);doc.line(14,hh-12,w-14,hh-12);
-  doc.text("Computed quantities are estimates. Verify against drawings and specifications.",14,hh-7.5);doc.text("Page "+i+" of "+N,w-14,hh-7.5,{align:"right"});}
- doc.setTextColor(0);save("site-quantities.pdf",doc.output("arraybuffer"));}
-function makePdf(){const R=rpt();if(!R){makePdfOld();return;}
- if(!window.jspdf){$("xs").textContent="PDF export did not load.";return;}buildPdf(R);}
+  doc.setFillColor(31,42,54);doc.rect(0,0,w,21,"F");
+  doc.setFillColor(242,183,5);doc.roundedRect(14,4.5,12,12,2,2,"F");
+  doc.setDrawColor(31,42,54);doc.setLineWidth(0.85);doc.rect(16.6,7.1,6.8,6.8);doc.setFillColor(31,42,54);
+  [[17.2,7.7],[22.8,7.7],[17.2,13.3],[22.8,13.3]].forEach(([a,b])=>doc.circle(a,b,0.8,"F"));
+  doc.setTextColor(255);doc.setFont(undefined,"bold");doc.setFontSize(13.5);doc.text("BILL OF QUANTITIES",30,11.5);
+  doc.setFont(undefined,"normal");doc.setFontSize(8.5);doc.setTextColor(242,183,5);doc.text(R.name,30,16.8);
+  doc.setTextColor(255);doc.setFont(undefined,"bold");doc.setFontSize(9.5);doc.text("Site Quantities",w-14,11.2,{align:"right"});
+  doc.setFont(undefined,"normal");doc.setFontSize(7.5);doc.setTextColor(185,195,205);doc.text("By Biruk Belayneh",w-14,16.2,{align:"right"});
+  // Clean gold accent rule under header
+  doc.setFillColor(242,183,5);doc.rect(0,21,w,1.8,"F");
+  // Footer
+  doc.setTextColor(115,120,125);doc.setFontSize(7.5);doc.setDrawColor(210,210,210);doc.setLineWidth(0.25);doc.line(14,hh-12,w-14,hh-12);
+  doc.text("Quantities are computed engineering estimates. Verify against approved structural & architectural drawings.",14,hh-7.5);
+  doc.setFont(undefined,"bold");doc.text("Page "+i+" of "+N,w-14,hh-7.5,{align:"right"});}
+ doc.setTextColor(0);
+ const slug=(R.name||"site-quantities").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"site-quantities";
+ save(slug+"-BOQ.pdf",doc.output("arraybuffer"));}
+async function makePdf(){
+ if(!window.jspdf){
+  await loadScript(["https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js","https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js","https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"]);
+ }
+ const R=rpt();if(!R){makePdfOld();return;}
+ if(!window.jspdf){$("xs").textContent="PDF export did not load. Check internet connection once to cache it.";return;}buildPdf(R);}
 function schedNum(){
- const secs=[];curP().items.forEach(it=>{const s=it.s;if(s&&s.kind==="el"&&s.incR&&it.m.steel>0)secs.push({t:it.code+(it.d?" - "+it.d:""),r:s.rows,k:s.u?FT:1});});
+ const secs=[];curP().items.forEach(it=>{const s=it.s;if(s&&s.kind==="el"&&s.incR&&it.m.steel>0)secs.push({t:`[${it.lvl||"Ground Floor"}] ${it.code}${it.d?" - "+it.d:""}`,r:s.rows,k:s.u?FT:1});});
  if(!secs.length)secs.push({t:"Current Rebar tab",r:rows,k:IMP?FT:1});
  const out=[];secs.forEach(sc=>{const rr=sc.r.map(r=>({mk:r.mk||"",d:+r.d,l:n(r.l)*sc.k,q:Q(r.n)})).filter(x=>x.l>0&&x.q>0);
   if(rr.length)out.push({t:sc.t,rows:rr.map(x=>({...x,c:barCalc(x.d,x.l,x.q)}))});});return out;}
 async function buildXlsx(R){
- const wb=new ExcelJS.Workbook(),m=meta(),cur=R.cur;wb.creator="Site Quantities";wb.created=new Date();
- const items=curP().items.slice().sort((a,b)=>a.cat.localeCompare(b.cat)).map(it=>({code:it.code,d:it.d||"",m:it.m,lines:MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>({k,l,u,q:it.m[k],r:rt(it,k)}))}));
- const fill=c=>({type:"pattern",pattern:"solid",fgColor:{argb:c}}),th={style:"thin",color:{argb:"FFD9D9D9"}},bd={top:th,left:th,bottom:th,right:th};
- const F2="#,##0.00",F0="#,##0",DK="FF1F2A36",AM="FFF2B705",LT="FFF1EEE6";
- const band=(ws,cols,title,sub)=>{ws.mergeCells(1,1,1,cols);let c=ws.getCell(1,1);c.value=title;c.font={bold:true,size:16,color:{argb:"FFFFFFFF"}};c.fill=fill(DK);c.alignment={vertical:"middle",indent:1};ws.getRow(1).height=30;
-  ws.mergeCells(2,1,2,cols);c=ws.getCell(2,1);c.value=sub;c.font={size:10,bold:true,color:{argb:DK}};c.fill=fill(AM);c.alignment={indent:1};};
- const hdr=(ws,r,arr,left)=>{arr.forEach((t,i)=>{const c=ws.getCell(r,i+1);c.value=t;c.font={bold:true,color:{argb:"FFFFFFFF"}};c.fill=fill(DK);c.border=bd;c.alignment={horizontal:i<left?"left":"right",vertical:"middle",wrapText:true};});ws.getRow(r).height=22;};
- const put=(ws,r,vals,fm,o={})=>{vals.forEach((v,i)=>{const c=ws.getCell(r,i+1);c.value=v;c.border=bd;if(fm[i])c.numFmt=fm[i];if(o.b)c.font={bold:true};if(o.f)c.fill=fill(o.f);if(typeof v==="number"||(v&&v.formula))c.alignment={horizontal:"right"};});};
- const setup=(ws,land)=>{ws.pageSetup={paperSize:9,orientation:land?"landscape":"portrait",fitToPage:true,fitToWidth:1,fitToHeight:0,margins:{left:.4,right:.4,top:.6,bottom:.6,header:.3,footer:.3}};
-  ws.headerFooter={oddFooter:"&L&8Computed quantities are estimates. Verify against drawings and specifications.&R&8Page &P of &N"};ws.views=[{showGridLines:false}];};
- const wsS=wb.addWorksheet("Summary"),wsD=wb.addWorksheet("Detailed BOQ"),wsM=wb.addWorksheet("Material totals");
- [wsS,wsD,wsM].forEach(w=>setup(w,false));
- // Detailed
- wsD.columns=[{width:34},{width:10},{width:16},{width:16},{width:18}];band(wsD,5,"Detailed quantities and cost",R.name);
+ const wb=new ExcelJS.Workbook(),m=meta(),cur=R.cur;wb.creator="Site Quantities — By Biruk Belayneh";wb.created=new Date();
+ const items=curP().items.slice().sort((a,b)=>storyRank(a.lvl)-storyRank(b.lvl)||(a.lvl||"").localeCompare(b.lvl||"")||a.cat.localeCompare(b.cat)).map(it=>({code:it.code,cat:it.cat,lvl:it.lvl||"Ground Floor",d:it.d||"",m:it.m,lines:MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>({k,l,u,q:it.m[k],r:rt(it,k)}))}));
+ const fill=c=>({type:"pattern",pattern:"solid",fgColor:{argb:c}});
+ const th={style:"thin",color:{argb:"FFD8D5CE"}},medDk={style:"medium",color:{argb:"FF1F2A36"}},dblDk={style:"double",color:{argb:"FF1F2A36"}};
+ const bd={top:th,left:th,bottom:th,right:th},totBd={top:medDk,left:th,bottom:dblDk,right:th};
+ const F2="#,##0.00",F0="#,##0",FC=`"${cur.replace(/"/g,"")}"#,##0.00`,DK="FF1F2A36",NV="FF1F4E79",AM="FFF2B705",LT="FFF3EFE4",ZB="FFFAF9F6",GD="FFFDF3D0";
+ const band=(ws,cols,title,sub)=>{
+  ws.mergeCells(1,1,1,cols);let c=ws.getCell(1,1);c.value=title.toUpperCase();c.font={name:"Calibri",bold:true,size:15,color:{argb:"FFFFFFFF"}};c.fill=fill(DK);c.alignment={vertical:"middle",indent:1};ws.getRow(1).height=30;
+  ws.mergeCells(2,1,2,cols);c=ws.getCell(2,1);c.value=sub+"   |   Site Quantities";c.font={name:"Calibri",size:10,bold:true,color:{argb:DK}};c.fill=fill(AM);c.alignment={vertical:"middle",indent:1};ws.getRow(2).height=20;};
+ const hdr=(ws,r,arr,left)=>{arr.forEach((t,i)=>{const c=ws.getCell(r,i+1);c.value=t;c.font={name:"Calibri",bold:true,size:10.5,color:{argb:"FFFFFFFF"}};c.fill=fill(DK);c.border=bd;c.alignment={horizontal:i<left?"left":"right",vertical:"middle",wrapText:true};});ws.getRow(r).height=24;};
+ const put=(ws,r,vals,fm,o={})=>{
+  ws.getRow(r).height=o.tot?22:19;
+  vals.forEach((v,i)=>{const c=ws.getCell(r,i+1);c.value=v;c.border=o.tot?totBd:bd;
+   if(fm[i])c.numFmt=fm[i];
+   c.font={name:"Calibri",size:10,bold:!!o.b,color:{argb:o.color||"FF1F2328"}};
+   if(o.f)c.fill=fill(o.f);
+   const isNum=typeof v==="number"||(v&&typeof v==="object"&&v.formula);
+   c.alignment={horizontal:isNum?"right":"left",vertical:"middle"};});};
+ const setup=(ws,land,freezeRow)=>{
+  ws.pageSetup={paperSize:9,orientation:land?"landscape":"portrait",fitToPage:true,fitToWidth:1,fitToHeight:0,margins:{left:.45,right:.45,top:.6,bottom:.6,header:.3,footer:.3}};
+  ws.headerFooter={oddFooter:"&L&8Quantities are computed estimates. Verify against drawings & specifications.&R&8Page &P of &N"};
+  ws.views=[{showGridLines:false,state:freezeRow?"frozen":"normal",ySplit:freezeRow||0}];};
+
+ const wsS=wb.addWorksheet("Executive Summary",{properties:{tabColor:{argb:AM}}});
+ const wsD=wb.addWorksheet("Detailed BOQ",{properties:{tabColor:{argb:NV}}});
+ const wsM=wb.addWorksheet("Material Schedule",{properties:{tabColor:{argb:DK}}});
+ setup(wsS,false,0);setup(wsD,false,2);setup(wsM,false,4);
+
+ // 1. Detailed BOQ
+ wsD.columns=[{width:34},{width:12},{width:16},{width:18},{width:20}];
+ band(wsD,5,"Detailed Quantities & Cost Breakdown",R.name);
  let r=4;const tot={};
- items.forEach(it=>{for(let c=1;c<=5;c++){const x=wsD.getCell(r,c);x.fill=fill(LT);x.border=bd;}
-  const t=wsD.getCell(r,1);t.value=it.code+(it.d?" - "+it.d:"");t.font={bold:true,size:11};r++;
-  hdr(wsD,r,["Material","Unit","Quantity","Rate ("+cur+")","Amount ("+cur+")"],2);r++;const a=r;let s=0;
-  it.lines.forEach(x=>{const amt=x.q*x.r;s+=amt;put(wsD,r,[x.l,x.u,x.q,x.r,{formula:`C${r}*D${r}`,result:amt}],[0,0,x.k==="brick"||x.k==="tile"?F0:F2,F2,F2]);r++;});
-  put(wsD,r,["Item total","","","",{formula:`SUM(E${a}:E${r-1})`,result:s}],[0,0,0,0,F2],{b:1,f:LT});tot[it.code]={row:r,v:s};r+=2;});
+ items.forEach(it=>{
+  wsD.mergeCells(r,1,r,5);
+  for(let c=1;c<=5;c++){const x=wsD.getCell(r,c);x.fill=fill(LT);x.border={top:medDk,left:th,bottom:th,right:th};}
+  const t=wsD.getCell(r,1);t.value=`[${it.lvl}] ${it.code}${it.d?" — "+it.d:""}`;t.font={name:"Calibri",bold:true,size:11,color:{argb:NV}};t.alignment={vertical:"middle",indent:1};wsD.getRow(r).height=22;r++;
+  hdr(wsD,r,["Material / Work Description","Unit","Quantity","Unit Rate","Total Amount"],2);r++;const a=r;let s=0;
+  it.lines.forEach((x,idx)=>{const amt=x.q*x.r;s+=amt;put(wsD,r,[x.l,x.u,x.q,x.r,{formula:`C${r}*D${r}`,result:amt}],[0,0,x.k==="brick"||x.k==="tile"?F0:F2,FC,FC],{f:idx%2===1?ZB:null});r++;});
+  put(wsD,r,["Subtotal — "+it.code,"","","",{formula:`SUM(E${a}:E${r-1})`,result:s}],[0,0,0,0,FC],{b:1,f:LT,tot:1,color:DK});tot[it.code]={row:r,v:s};r+=2;});
  const gv=Object.values(tot).reduce((a,x)=>a+x.v,0);
- put(wsD,r,["Project total","","","",{formula:Object.values(tot).map(x=>"E"+x.row).join("+")||"0",result:gv}],[0,0,0,0,F2],{b:1,f:"FFFBE8A6"});
- // Summary
- wsS.columns=[{width:16},{width:34},{width:16},{width:16},{width:14},{width:18}];band(wsS,6,"Bill of Quantities",R.name);
- r=4;[["Date",R.date],["Site / client",m.site],["Prepared by",m.by],["Currency",cur],["Units","Metric: m, m², m³, kg"]].forEach(([k,v])=>{if(v){wsS.getCell(r,1).value=k;wsS.getCell(r,1).font={bold:true};wsS.getCell(r,2).value=v;r++;}});
- r++;wsS.getCell(r,1).value="Summary of work items";wsS.getCell(r,1).font={bold:true,size:12};r++;
- hdr(wsS,r,["Code","Description","Concrete (m³)","Formwork (m²)","Steel (kg)","Cost ("+cur+")"],2);r++;const s0=r;
- items.forEach(it=>{put(wsS,r,[it.code,it.d,it.m.conc||0,it.m.form||0,it.m.steel||0,{formula:`'Detailed BOQ'!E${tot[it.code].row}`,result:tot[it.code].v}],[0,0,F2,F2,F2,F2]);r++;});
- const sm=k=>items.reduce((a,x)=>a+(x.m[k]||0),0),col=c=>({formula:`SUM(${c}${s0}:${c}${r-1})`});
- put(wsS,r,["Project total","",{...col("C"),result:sm("conc")},{...col("D"),result:sm("form")},{...col("E"),result:sm("steel")},{...col("F"),result:gv}],[0,0,F2,F2,F2,F2],{b:1,f:"FFFBE8A6"});
- // Materials
- wsM.columns=[{width:30},{width:10},{width:18},{width:16},{width:18}];band(wsM,5,"Total material quantities",R.name);
- hdr(wsM,4,["Material","Unit","Total quantity","Average rate ("+cur+")","Cost ("+cur+")"],2);r=5;const m0=r;
- MAT.filter(([k])=>PT[k]>0).forEach(([k,l,u])=>{const c=MC[k]||0;put(wsM,r,[l,u,PT[k],PT[k]?c/PT[k]:0,c],[0,0,k==="brick"||k==="tile"?F0:F2,F2,F2]);r++;});
- put(wsM,r,["Project total","","","",{formula:`SUM(E${m0}:E${r-1})`,result:gv}],[0,0,0,0,F2],{b:1,f:"FFFBE8A6"});
- // Bar schedule
+ put(wsD,r,["GRAND PROJECT TOTAL","","","",{formula:Object.values(tot).map(x=>"E"+x.row).join("+")||"0",result:gv}],[0,0,0,0,FC],{b:1,f:GD,tot:1,color:DK});
+
+ // 2. Executive Summary (Grouped by Building Story / Level & Element Type)
+ wsS.columns=[{width:16},{width:22},{width:32},{width:16},{width:16},{width:16},{width:20}];
+ band(wsS,7,"Bill of Quantities — Executive Summary",R.name);
+ r=4;
+ const metaPairs=[["Date Issued",R.date],["Client / Site",m.site||"-"],["Prepared By",m.by||"-"],["Currency",cur.trim()],["Measurement System","Metric (m, m², m³, kg)"]];
+ metaPairs.forEach(([k,v])=>{
+  wsS.getRow(r).height=18;
+  const c1=wsS.getCell(r,1);c1.value=k;c1.font={name:"Calibri",bold:true,size:10,color:{argb:DK}};c1.fill=fill(ZB);c1.border=bd;
+  wsS.mergeCells(r,2,r,7);
+  for(let col=2;col<=7;col++){const cx=wsS.getCell(r,col);cx.fill=fill("FFFFFFFF");cx.border=bd;}
+  const c2=wsS.getCell(r,2);c2.value=v;c2.font={name:"Calibri",size:10,color:{argb:"FF1F2328"}};
+  r++;});
+ r++;
+ wsS.getCell(r,1).value="WORK BREAKDOWN BY BUILDING STORY / LEVEL & ELEMENT";wsS.getCell(r,1).font={name:"Calibri",bold:true,size:11.5,color:{argb:NV}};wsS.getRow(r).height=22;r++;
+ hdr(wsS,r,["Item Code","Story / Level","Work Description","Concrete (m³)","Formwork (m²)","Steel (kg)","Total Cost"],3);r++;
+ const stRows=[],stories=[...new Set(items.map(i=>i.lvl))];
+ stories.forEach(lvl=>{
+  const sItems=items.filter(i=>i.lvl===lvl);const a=r;
+  sItems.forEach((it,idx)=>{const cVol=(it.m.conc||0)+(it.m.lean||0);put(wsS,r,[it.code,lvl,it.d||it.cat,cVol,it.m.form||0,it.m.steel||0,{formula:`'Detailed BOQ'!E${tot[it.code].row}`,result:tot[it.code].v}],[0,0,0,F2,F2,F2,FC],{f:idx%2===1?ZB:null});r++;});
+  const subC=sItems.reduce((x,i)=>x+(i.m.conc||0)+(i.m.lean||0),0),subF=sItems.reduce((x,i)=>x+(i.m.form||0),0),subS=sItems.reduce((x,i)=>x+(i.m.steel||0),0),subV=sItems.reduce((x,i)=>x+tot[i.code].v,0);
+  put(wsS,r,["Subtotal",lvl,"",{formula:`SUM(D${a}:D${r-1})`,result:subC},{formula:`SUM(E${a}:E${r-1})`,result:subF},{formula:`SUM(F${a}:F${r-1})`,result:subS},{formula:`SUM(G${a}:G${r-1})`,result:subV}],[0,0,0,F2,F2,F2,FC],{b:1,f:LT,tot:1,color:DK});
+  stRows.push(r);r++;
+ });
+ const sumRefs=col=>({formula:stRows.map(rr=>col+rr).join("+")||"0"});
+ const smConc=items.reduce((a,x)=>a+(x.m.conc||0)+(x.m.lean||0),0),smForm=items.reduce((a,x)=>a+(x.m.form||0),0),smSteel=items.reduce((a,x)=>a+(x.m.steel||0),0);
+ put(wsS,r,["GRAND TOTAL","","",{...sumRefs("D"),result:smConc},{...sumRefs("E"),result:smForm},{...sumRefs("F"),result:smSteel},{...sumRefs("G"),result:gv}],[0,0,0,F2,F2,F2,FC],{b:1,f:GD,tot:1,color:DK});
+ r+=3;
+ wsS.getCell(r,1).value="Prepared By: ___________________________";wsS.getCell(r,1).font={name:"Calibri",bold:true,size:10,color:{argb:DK}};
+ wsS.getCell(r,4).value="Approved By: ___________________________";wsS.getCell(r,4).font={name:"Calibri",bold:true,size:10,color:{argb:DK}};
+
+ // 3. Consolidated Material Schedule
+ wsM.columns=[{width:32},{width:12},{width:18},{width:18},{width:20}];
+ band(wsM,5,"Consolidated Material Quantities & Cost",R.name);
+ hdr(wsM,4,["Material","Unit","Total Quantity","Effective Rate","Total Cost"],2);r=5;const m0=r;
+ MAT.filter(([k])=>PT[k]>0).forEach(([k,l,u],idx)=>{const c=MC[k]||0;put(wsM,r,[l,u,PT[k],PT[k]?c/PT[k]:0,c],[0,0,k==="brick"||k==="tile"?F0:F2,FC,FC],{f:idx%2===1?ZB:null});r++;});
+ put(wsM,r,["TOTAL MATERIAL COST","","","",{formula:`SUM(E${m0}:E${r-1})`,result:gv}],[0,0,0,0,FC],{b:1,f:GD,tot:1,color:DK});
+
+ // 4. Bar Bending Schedule
  const G=schedNum();
- if(G.length){const wsB=wb.addWorksheet("Bar schedule");setup(wsB,true);
-  wsB.columns=[{width:14},{width:10},{width:16},{width:10},{width:18},{width:14},{width:12},{width:14},{width:16}];
-  band(wsB,9,"Bar bending schedule (metric, 12 m stock bars)",R.name);r=4;
-  const HD=["Mark","Dia (mm)","Cut length (m)","Qty","Total length (m)","Weight (kg)","12 m bars","Waste (m)","Order weight (kg)"];
+ if(G.length){const wsB=wb.addWorksheet("Bar Schedule",{properties:{tabColor:{argb:NV}}});setup(wsB,true,2);
+  wsB.columns=[{width:14},{width:11},{width:16},{width:10},{width:18},{width:15},{width:13},{width:14},{width:18}];
+  band(wsB,9,"Bar Bending Schedule (Metric — 12 m Stock Bars)",R.name);r=4;
+  const HD=["Bar Mark","Dia (mm)","Cut Length (m)","Qty","Total Length (m)","Net Weight (kg)","12 m Bars","Waste (m)","Order Weight (kg)"];
   const FM=[0,F0,F2,F0,F2,F2,F0,F2,F2],D={},GT=[0,0,0,0,0,0];
-  G.forEach(g=>{wsB.mergeCells(r,1,r,9);const t=wsB.getCell(r,1);t.value=g.t;t.font={bold:true,size:11};t.fill=fill(LT);r++;
+  G.forEach(g=>{wsB.mergeCells(r,1,r,9);for(let c=1;c<=9;c++){wsB.getCell(r,c).fill=fill(LT);wsB.getCell(r,c).border={top:medDk,left:th,bottom:th,right:th};}
+   const t=wsB.getCell(r,1);t.value=g.t;t.font={name:"Calibri",bold:true,size:11,color:{argb:NV}};t.alignment={vertical:"middle",indent:1};wsB.getRow(r).height=22;r++;
    hdr(wsB,r,HD,1);r++;const a=r,S=[0,0,0,0,0,0];
-   g.rows.forEach((x,i)=>{const c=x.c;put(wsB,r,[x.mk&&x.mk.trim()!==""?x.mk.trim():"B"+(i+1),x.d,x.l,x.q,{formula:`C${r}*D${r}`,result:c.tot},{formula:`E${r}*B${r}^2/162.2`,result:c.kg},c.bars,{formula:`G${r}*12-E${r}`,result:c.waste},{formula:`G${r}*12*B${r}^2/162.2`,result:c.ow}],FM);
+   g.rows.forEach((x,i)=>{const c=x.c;put(wsB,r,[x.mk&&x.mk.trim()!==""?x.mk.trim():"B"+(i+1),x.d,x.l,x.q,{formula:`C${r}*D${r}`,result:c.tot},{formula:`E${r}*B${r}^2/162.2`,result:c.kg},c.bars,{formula:`G${r}*12-E${r}`,result:c.waste},{formula:`G${r}*12*B${r}^2/162.2`,result:c.ow}],FM,{f:i%2===1?ZB:null});
     const v=[x.q,c.tot,c.kg,c.bars,c.waste,c.ow];v.forEach((y,j)=>{S[j]+=y;GT[j]+=y;});(D[x.d]=D[x.d]||[0,0,0,0,0,0]).forEach((_,j)=>D[x.d][j]+=v[j]);r++;});
-   put(wsB,r,["Total","","",...["D","E","F","G","H","I"].map((L,j)=>({formula:`SUM(${L}${a}:${L}${r-1})`,result:S[j]}))],FM,{b:1,f:LT});r+=2;});
-  wsB.mergeCells(r,1,r,9);const t=wsB.getCell(r,1);t.value="Summary by diameter";t.font={bold:true,size:11};t.fill=fill(LT);r++;
-  hdr(wsB,r,["Diameter","","","Qty","Total length (m)","Weight (kg)","12 m bars","Waste (m)","Order weight (kg)"],1);r++;
-  Object.keys(D).map(Number).sort((a,b)=>a-b).forEach(d=>{put(wsB,r,["Dia "+d+" mm","","",...D[d]],FM);r++;});
-  put(wsB,r,["Grand total","","",...GT],FM,{b:1,f:"FFFBE8A6"});}
+   put(wsB,r,["Element Subtotal","","",...["D","E","F","G","H","I"].map((L,j)=>({formula:`SUM(${L}${a}:${L}${r-1})`,result:S[j]}))],FM,{b:1,f:LT,tot:1,color:DK});r+=2;});
+  wsB.mergeCells(r,1,r,9);for(let c=1;c<=9;c++){wsB.getCell(r,c).fill=fill(LT);wsB.getCell(r,c).border={top:medDk,left:th,bottom:th,right:th};}
+  const t=wsB.getCell(r,1);t.value="SUMMARY BY BAR DIAMETER";t.font={name:"Calibri",bold:true,size:11,color:{argb:NV}};t.alignment={vertical:"middle",indent:1};wsB.getRow(r).height=22;r++;
+  hdr(wsB,r,["Diameter","","","Total Qty","Total Length (m)","Net Weight (kg)","12 m Bars","Waste (m)","Order Weight (kg)"],1);r++;
+  Object.keys(D).map(Number).sort((a,b)=>a-b).forEach((d,idx)=>{put(wsB,r,["Ø "+d+" mm","","",...D[d]],FM,{f:idx%2===1?ZB:null});r++;});
+  put(wsB,r,["GRAND TOTAL","","",...GT],FM,{b:1,f:GD,tot:1,color:DK});}
  const buf=await wb.xlsx.writeBuffer();
- save("site-quantities.xlsx",buf instanceof ArrayBuffer?buf:buf.buffer.slice(buf.byteOffset,buf.byteOffset+buf.byteLength));}
+ const slug=(R.name||"site-quantities").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"site-quantities";
+ save(slug+"-BOQ.xlsx",buf instanceof ArrayBuffer?buf:buf.buffer.slice(buf.byteOffset,buf.byteOffset+buf.byteLength));}
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 {const b=document.createElement("div");b.style.cssText="display:flex;gap:8px;margin-top:12px";
  b.innerHTML='<button class="btn" id="bkp" type="button">Backup all projects</button><button class="btn" id="rst" type="button">Restore</button><input id="rstf" type="file" accept=".json,application/json" hidden>';
@@ -818,12 +1023,59 @@ async function save(name,data){
  catch(e){if(e&&e.name==="AbortError")return;}
  try{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();}
  catch(e){st.textContent="Could not save the file on this device.";}}
-$("xl").addEventListener("click",()=>{
- const R0=rpt();if(R0&&window.ExcelJS){buildXlsx(R0).catch(()=>{$("xs").textContent="Could not create the Excel file.";});return;}
- if(!window.XLSX){$("xs").textContent="Excel export did not load.";return;}
- const ws=XLSX.utils.aoa_to_sheet(report());ws["!cols"]=[{wch:26},{wch:22},{wch:14},{wch:12},{wch:14},{wch:14}];
- const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Quantities");const sr=schedRows();if(sr.length){const ss=XLSX.utils.aoa_to_sheet(sr);ss["!cols"]=[{wch:12},{wch:10},{wch:14},{wch:8},{wch:16},{wch:12},{wch:10},{wch:10},{wch:14}];XLSX.utils.book_append_sheet(wb,ss,"Bar schedule");}
- save("site-quantities.xlsx",XLSX.write(wb,{bookType:"xlsx",type:"array"}));});
+function loadScript(urls){
+ return new Promise(async resolve=>{
+  for(const u of urls){
+   try{
+    await new Promise((res,rej)=>{const s=document.createElement("script");s.src=u;s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+    resolve(true);return;
+   }catch(e){}
+  }
+  resolve(false);
+ });
+}
+function exportOfflineXls(){
+ const sheets=[{name:"Quantities",rows:report()}];
+ const sr=schedRows();if(sr.length)sheets.push({name:"Bar schedule",rows:sr});
+ const styles=`<Styles>
+  <Style ss:ID="Default" ss:Name="Normal"><Font ss:FontName="Calibri" ss:Size="10" ss:Color="#1F2328"/></Style>
+  <Style ss:ID="Title"><Font ss:FontName="Calibri" ss:Size="14" ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1F2A36" ss:Pattern="Solid"/></Style>
+  <Style ss:ID="Hdr"><Font ss:FontName="Calibri" ss:Size="10" ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1F2A36" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2" ss:Color="#F2B705"/></Borders></Style>
+  <Style ss:ID="Tot"><Font ss:FontName="Calibri" ss:Size="10" ss:Bold="1" ss:Color="#1F2A36"/><Interior ss:Color="#FDF3D0" ss:Pattern="Solid"/><Borders><Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#1F2A36"/><Border ss:Position="Bottom" ss:LineStyle="Double" ss:Weight="3" ss:Color="#1F2A36"/></Borders></Style>
+  <Style ss:ID="Cell"><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E6E3DC"/></Borders></Style>
+ </Styles>`;
+ const xml='<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'+styles+
+  sheets.map(sh=>'<Worksheet ss:Name="'+esc(sh.name)+'"><Table>'+
+   sh.rows.map((r,ri)=>{
+    const first=String(r[0]||"");
+    const st=ri===0?"Title":(r.b||/total/i.test(first)?"Tot":(first==="Material"||first==="Mark"||first==="Diameter"?"Hdr":"Cell"));
+    return '<Row>'+r.map(c=>{const num=typeof c==="number"&&isFinite(c);return`<Cell ss:StyleID="${st}"><Data ss:Type="${num?"Number":"String"}">${esc(String(c==null?"":c))}</Data></Cell>`;}).join('')+'</Row>';
+   }).join('')+
+  '</Table></Worksheet>').join('')+'</Workbook>';
+ const slug=(curP().name||"site-quantities").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"site-quantities";
+ save(slug+"-BOQ.xls",xml);
+}
+$("xl").addEventListener("click",async()=>{
+ $("xs").textContent="Preparing Excel file...";
+ const R0=rpt();
+ if(R0&&!window.ExcelJS){
+  await loadScript(["https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js","https://unpkg.com/exceljs@4.4.0/dist/exceljs.min.js","https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"]);
+ }
+ if(R0&&window.ExcelJS){
+  try{await buildXlsx(R0);return;}catch(e){$("xs").textContent="Could not create the Excel file.";return;}
+ }
+ if(!window.XLSX){
+  await loadScript(["https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js","https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js","https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"]);
+ }
+ if(window.XLSX){
+  const ws=XLSX.utils.aoa_to_sheet(report());ws["!cols"]=[{wch:26},{wch:22},{wch:14},{wch:12},{wch:14},{wch:14}];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Quantities");const sr=schedRows();if(sr.length){const ss=XLSX.utils.aoa_to_sheet(sr);ss["!cols"]=[{wch:12},{wch:10},{wch:14},{wch:8},{wch:16},{wch:12},{wch:10},{wch:10},{wch:14}];XLSX.utils.book_append_sheet(wb,ss,"Bar schedule");}
+  save("site-quantities.xlsx",XLSX.write(wb,{bookType:"xlsx",type:"array"}));
+  return;
+ }
+ exportOfflineXls();
+ $("xs").textContent="Saved offline Excel (.xls) workbook.";
+});
 function showPreview(){
  const D=docHtml();if(D){$("pvp").innerHTML=D;$("pv").hidden=false;$("pvp").scrollTop=0;return;}
  if(!window.jspdf){$("xs").textContent="PDF export did not load.";return;}
