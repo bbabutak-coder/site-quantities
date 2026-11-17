@@ -137,6 +137,8 @@ main{padding-bottom:84px}
 <label for="type">Element type</label>
 <select id="type">
 <option value="excav">Excavation (Pit / Trench)</option>
+<option value="hardcore">Hardcore Filling & Blinding</option>
+<option value="masonry">Stone Masonry Work</option>
 <option value="lean">Lean Concrete / Blinding (C5)</option>
 <option value="slab">Slab</option>
 <option value="footing">Pad Footing (Rectangular)</option>
@@ -352,6 +354,8 @@ const Q=v=>{v=String(v==null?"":v).trim();let r;
 const f=(x,d=2)=>x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});
 const TYPES={
  excav:{dims:[["Pit / Trench Length (m)","l"],["Width (m)","w"],["Excavation Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
+ hardcore:{dims:[["Length (m)","l"],["Width (m)","w"],["Compacted Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
+ masonry:{dims:[["Length (m)","l"],["Thickness (m)","w"],["Height (m)","h"]],vol:d=>d.l*d.w*d.h},
  lean:{dims:[["Length (m)","l"],["Width (m)","w"],["Blinding Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
  slab:{dims:[["Length (m)","l"],["Width (m)","w"],["Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
  footing:{dims:[["Length (m)","l"],["Width (m)","w"],["Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
@@ -366,6 +370,8 @@ const TYPES={
 };
 const AREA={
  excav:d=>0,
+ hardcore:d=>0,
+ masonry:d=>2*d.l*d.h,
  lean:d=>0,
  slab:d=>slabForm(d),
  footing:d=>2*(d.l+d.w)*d.h,
@@ -407,7 +413,10 @@ function calcEl(){
   const net=v,bulked=net*(1+bf),backfill=net*br,cartaway=Math.max(0,net-backfill)*(1+bf);
   $("eNet").textContent=V(net);$("eBlk").textContent=V(bulked);$("eBck").textContent=V(backfill);$("eCrt").textContent=V(cartaway);
   CUR.el={excav:net,backfill:backfill,cartaway:cartaway};
- }else if(ln){
+ }else if(t==="hardcore"){
+  CUR.el={hardcore:lastGross};
+ }else if(t==="masonry"){
+  CUR.el={masonry:lastGross,form:AREA[t](d)*q};else if(ln){
   CUR.el={lean:lastGross};;
  }else{
   CUR.el={conc:lastGross,form:AREA[t](d,$("soffit").checked)*q};
@@ -537,7 +546,7 @@ function calcFn(){
  CUR.fl={floor:fa,tile:G};}
 ["pl","ph","po","pf","pt","ps","fL","fW","tl","tw","tj","fx"].forEach(id=>$(id).addEventListener("input",calcFn));
 
-const MAT=[["excav","Excavation (Pit/Trench)","m³"],["backfill","Backfill & Compaction","m³"],["cartaway","Cart-Away Surplus","m³"],["lean","Lean Concrete (C5)","m³"],["conc","Structural Concrete","m³"],["form","Formwork","m²"],["steel","Reinforcement","kg"],["brick","Blocks / Bricks","nos"],["cement","Cement","bags"],["sand","Sand","m³"],["agg","Aggregate","m³"],["water","Water","L"],["plas","Plastering","m²"],["floor","Floor area","m²"],["tile","Tiles","nos"]];
+const MAT=[["excav","Excavation (Pit/Trench)","m³"],["hardcore","Hardcore Filling","m³"],["masonry","Stone Masonry","m³"],["backfill","Backfill & Compaction","m³"],["cartaway","Cart-Away Surplus","m³"],["lean","Lean Concrete (C5)","m³"],["conc","Structural Concrete","m³"],["form","Formwork","m²"],["steel","Reinforcement","kg"],["brick","Blocks / Bricks","nos"],["cement","Cement","bags"],["sand","Sand","m³"],["agg","Aggregate","m³"],["water","Water","L"],["plas","Plastering","m²"],["floor","Floor area","m²"],["tile","Tiles","nos"]];
 const LS={get(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let proj=LS.get("sq_proj",[]),rates=LS.get("sq_rates",{}),PT={};
 const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
@@ -572,7 +581,7 @@ function projRows(){
   ...[...document.querySelectorAll("#pTab tbody tr")].map(tr=>[tr.cells[0].textContent,tr.cells[1].textContent,tr.querySelector("input").value,tr.cells[3].textContent]),
   ["Total","","",$("pTot")?$("pTot").textContent:""]];}
 proj=[];
-const CAT={excav:"Excavation",lean:"LeanConcrete",slab:"Slab",footing:"Footing",trap:"TrapezoidalFooting",beam:"Beam",wall:"Wall",brick:"MasonryWall",col:"Column",round:"Column",stair:"Stair",landing:"Landing"};
+const CAT={excav:"Excavation",hardcore:"Hardcore",masonry:"StoneMasonry",lean:"LeanConcrete",slab:"Slab",footing:"Footing",trap:"TrapezoidalFooting",beam:"Beam",wall:"Wall",brick:"MasonryWall",col:"Column",round:"Column",stair:"Stair",landing:"Landing"};
 const STORY_ORDER=["Substructure","Ground Floor","First Floor","Second Floor","Third Floor","Roof Level"];
 const storyRank=st=>{const idx=STORY_ORDER.indexOf(st||"Ground Floor");return idx>=0?idx:99;};
 const getLvl=(selId,custId)=>{const v=$(selId).value;return v==="Custom"?($(custId).value.trim()||"Custom Level"):v;};
