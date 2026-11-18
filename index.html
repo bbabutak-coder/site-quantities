@@ -31,7 +31,7 @@ nav button:focus-visible,input:focus-visible,select:focus-visible,.btn:focus-vis
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
 .panel[hidden]{display:none}
 label{display:block;font-size:.85rem;color:var(--muted);margin:0 0 3px}
-input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px}
+input,select,textarea{width:100%;padding:10px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .full{grid-column:1/-1}
 .chk{display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--ink);font-size:.95rem}
@@ -58,6 +58,24 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 #pv .bar,#pjs .bar{display:flex;gap:8px;justify-content:flex-end}
 #pList .pvr{border-color:var(--line)}.it{margin:6px 0 14px}
 .ri.ov{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+textarea{resize:vertical;min-height:84px;line-height:1.45}
+.ph{margin:18px 0 8px;padding-bottom:4px;font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800;border-bottom:1px solid var(--line)}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:.82rem;margin:10px 0}
+.dgrid b{display:block;font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800}
+.desc{font-size:.82rem;line-height:1.55;margin:8px 0 12px;padding:10px 12px;background:var(--bg);border:1px solid var(--line);border-radius:6px;white-space:pre-wrap}
+.hl{margin:8px 0 6px;padding:10px 12px 10px 14px;border-left:3.5px solid var(--gold);background:rgba(242,183,5,.08);border-radius:0 6px 6px 0;font-size:.8rem;line-height:1.55}
+.hl div::before{content:"\2022";color:var(--gold);font-weight:900;margin-right:8px}
+.cbox{margin:10px 0 12px}.ctl{font-size:.64rem;text-transform:uppercase;letter-spacing:.07em;font-weight:800;color:var(--muted);margin-bottom:5px}
+.split{display:flex;height:28px;border-radius:6px;overflow:hidden;background:var(--line);font-size:.7rem;font-weight:700}
+.split span{display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;color:#fff}
+.split .s1{background:#2b4a6a}.split .s2{background:var(--gold);color:#1f2a36}
+.drow{display:grid;grid-template-columns:40% 1fr 38px;gap:8px;align-items:center;font-size:.77rem;margin:5px 0}
+.dn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dv{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.dbar{height:9px;background:var(--line);border-radius:5px;overflow:hidden}.dbar i{display:block;height:100%;background:linear-gradient(90deg,#2b4a6a,var(--gold));border-radius:5px}
+.rdy{margin:12px 0 4px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.rbar{height:8px;border-radius:5px;background:var(--line);overflow:hidden;margin:6px 0 8px}.rbar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#3fa66b);border-radius:5px;transition:width .4s}
+.chip{display:inline-block;font-size:.7rem;padding:2px 9px;border-radius:999px;border:1px solid var(--line);margin:3px 4px 0 0;color:var(--muted);background:var(--surface)}
+.fsbox{margin-top:12px;padding:12px;border:1px dashed var(--line);border-radius:8px;background:var(--bg)}
 .rhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;background:#1f2a36;color:#fff;padding:16px 20px;border-radius:8px 8px 0 0;border-bottom:4px solid var(--gold);margin-bottom:12px}
 .rt1{font-size:1.25rem;font-weight:800;letter-spacing:-.01em;color:#fff}.rt2{font-size:.92rem;color:var(--gold);font-weight:600;margin-top:2px}.rm{font-size:.76rem;text-align:right;color:#d0d7de;line-height:1.5}
 .kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 14px}
@@ -153,7 +171,7 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 
 <h3 class="ch">Quick Navigation Modules</h3>
 <div class="card-grid">
-  <div class="card" data-nav="pr"><h3>Projects</h3><p>Create, rename &amp; switch projects, set currency, back up &amp; restore all your data.</p></div>
+  <div class="card" data-nav="pr"><h3>Projects</h3><p>Client &amp; site details, live project dashboard, save project files to your device and back up.</p></div>
   <div class="card" data-nav="el"><h3>Structural &amp; Concrete</h3><p>Slabs, ribbed slabs, lintels, footings, beams, columns &amp; masonry.</p></div>
   <div class="card" data-nav="rb"><h3>Rebar &amp; Bar Schedule</h3><p>Bar bending schedule with custom marks &amp; 12m stock optimization.</p></div>
   <div class="card" data-nav="mx"><h3>Concrete Mix</h3><p>C30, C25, C20, C15 ratios, cement bags, sand &amp; aggregate volumes.</p></div>
@@ -281,7 +299,7 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 <div class="out">
 <div><span>Concrete (net)</span><b id="vNet"></b></div>
 <div class="big"><span>Concrete with wastage</span><b id="vGross"></b></div>
-<div class="big"><span>Formwork area</span><b id="fArea"></b></div>
+<div class="big"><span id="fAreaL">Formwork area</span><b id="fArea"></b></div>
 </div>
 </section>
 
@@ -586,16 +604,38 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 </section>
 
 <section class="panel" id="pr" hidden>
-<h2 style="margin:0 0 4px;font-size:1.15rem">Projects &amp; settings</h2>
-<p class="sub">Choose the active project, rename it, or start a new one.</p>
+<div id="dash"></div>
+<h3 class="ph">Project</h3>
 <div class="grid">
 <div class="full"><label for="prSel">Project</label><select id="prSel"></select></div>
 <div class="full"><label for="prName">Project name</label><input id="prName" type="text"></div>
 <div><button class="btn" id="prNew" type="button">New project</button></div>
 <div><button class="btn" id="prRen" type="button">Rename</button></div>
 </div>
+<h3 class="ph">Project brief <span style="font-weight:600;text-transform:none;letter-spacing:0">· appears on the summary, PDF and Excel</span></h3>
+<div class="grid">
+<div class="full"><label for="piClient">Client name</label><input id="piClient" type="text" autocomplete="off" placeholder="e.g. Ato Kebede Alemu"></div>
+<div class="full"><label for="piSite">Site / location</label><input id="piSite" type="text" autocomplete="off" placeholder="e.g. Bole Sub-city, Addis Ababa"></div>
+<div><label for="piRef">Reference no.</label><input id="piRef" type="text" autocomplete="off" placeholder="e.g. BOQ-2611-01"></div>
+<div><label for="piRev">Revision</label><input id="piRev" type="text" autocomplete="off" placeholder="e.g. Rev 0"></div>
+<div><label for="piBy">Prepared by</label><input id="piBy" type="text" autocomplete="off" placeholder="Your name"></div>
+<div><label for="piRole">Title / role</label><input id="piRole" type="text" autocomplete="off" placeholder="e.g. Quantity Surveyor"></div>
+<div class="full"><label for="piAppr">Approved by (client / consultant)</label><input id="piAppr" type="text" autocomplete="off" placeholder="Name of approver"></div>
+<div class="full"><label for="piDesc">Project description / scope</label><textarea id="piDesc" rows="4" placeholder="Building type, number of floors, scope covered by this BOQ, assumptions and exclusions…"></textarea></div>
+</div>
+<h3 class="ph">Currency &amp; delete</h3>
 <div class="grid"><div><label for="cur">Currency symbol</label><input id="cur" value="ETB "></div><div><label>&nbsp;</label><button class="btn" id="pClr" type="button">Delete project</button></div></div>
-<p class="note">Currency applies to every cost, report and export. Projects and rates are stored on this device only, so use Backup regularly.</p>
+<h3 class="ph">Save &amp; open</h3>
+<div class="grid">
+<div><button class="btn main" id="spSave" type="button" style="margin-top:0">Save project file</button></div>
+<div><button class="btn" id="spOpen" type="button">Open project file</button></div>
+<div><button class="btn" id="bkp" type="button">Backup all projects</button></div>
+<div><button class="btn" id="rst" type="button">Restore backup</button></div>
+</div>
+<input id="spf" type="file" accept=".json,application/json" hidden><input id="rstf" type="file" accept=".json,application/json" hidden>
+<div class="fsbox" id="fsBox" hidden><b>Folder autosave</b><p class="note" id="fsMsg" style="margin:4px 0 8px"></p>
+<div class="grid"><div><button class="btn" id="fsLink" type="button" style="margin-top:0">Choose folder</button></div><div><button class="btn" id="fsOff" type="button" style="margin-top:0">Unlink</button></div></div></div>
+<p class="note" id="fsNote">Project files are saved wherever you choose (on iPhone: Save to Files). Folder autosave is available in desktop Chrome and Edge.</p>
 </section>
 
 <section class="panel" id="pj" hidden>
@@ -606,7 +646,7 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 </main>
 <button id="pjBtn" type="button" aria-label="Open projects"></button>
 <div id="pjs" hidden role="dialog" aria-label="Project"><div class="bar"><button class="btn main" id="pjClose" type="button" style="margin-top:0">Done</button></div><div id="pjp"><b>Project</b><div id="pItems"></div></div></div>
-<div id="pv" hidden role="dialog" aria-label="PDF preview"><div class="bar"><button class="btn" id="pvClose" type="button">Close</button><button class="btn main" id="pvSave" type="button" style="margin-top:0">Save PDF</button></div><div class="grid" id="pmeta" style="margin:8px auto 0;max-width:560px;width:100%"><div><input id="pmBy" type="text" placeholder="Prepared by" aria-label="Prepared by"></div><div><input id="pmSite" type="text" placeholder="Site or client" aria-label="Site or client"></div></div>
+<div id="pv" hidden role="dialog" aria-label="PDF preview"><div class="bar"><button class="btn" id="pvClose" type="button">Close</button><button class="btn" id="pvEdit" type="button">Edit project details</button><button class="btn main" id="pvSave" type="button" style="margin-top:0">Save PDF</button></div>
 <div id="pvp"></div></div>
 <script>
 const $=id=>document.getElementById(id);
@@ -617,7 +657,7 @@ const V=(x,d=3)=>IMP?f(x*M3,d)+" yd³":f(x,d)+" m³";
 const A=x=>IMP?f(x*M2)+" ft²":f(x)+" m²";
 const Ln=m=>IMP?f(m/FT,1)+" ft":f(m,1)+" m";
 const Wt=k=>IMP?f(k*KG,0)+" lb":f(k)+" kg";
-const RL=r=>n(r.l)*(IMP?FT:1);const CUR={};let editing=null,MC={};
+const RL=r=>n(r.l)*(IMP?FT:1);const CUR={};let editing=null,MC={};const FS={h:null,t:null,state:"off",last:""};
 const beamForm=d=>{const k=IMP?FT:1;let a=$("bBot").checked?d.l*d.w:0;
  if($("bSide").checked){const ns=+$("bK").value,ts=n($("bT").value)*k;a+=d.l*((2-ns)*d.h+ns*Math.max(0,d.h-ts));}return a;};
 const slabForm=d=>{const k=IMP?FT:1;let a=$("soffit").checked?d.l*d.w:0;
@@ -688,7 +728,8 @@ function calcEl(){
  lastGross=v*(1+w/100);
  $("vNet").textContent=V(v);
  $("vGross").textContent=V(lastGross);
- $("fArea").textContent=A(AREA[t](d,$("soffit").checked)*q);
+ $("fAreaL").textContent=t==="lean"?"Lean concrete area":"Formwork area";
+ $("fArea").textContent=A(t==="lean"?d.l*d.w*q:AREA[t](d,$("soffit").checked)*q);
  $("sideDims").hidden=!$("sides").checked;$("beamWrap").hidden=t!=="beam";$("bSideDims").hidden=!$("bSide").checked;
  const msn=t==="masonry",bk=t==="brick",ex=t==="excav",ln=t==="lean",rb=t==="ribbed";
  $("msn").hidden=!msn;$("brk").hidden=!bk;$("exc").hidden=!ex;$("rib").hidden=!rb;$("vNet").closest(".out").hidden=msn||bk||ex;
@@ -731,7 +772,7 @@ function calcEl(){
   
   CUR.el={masonry:lastGross,stoneBlock:grossStones,cement:msnCement,sand:msnSand,form:AREA[t](d)*q};
  }else if(ln){
-  CUR.el={lean:lastGross};
+  CUR.el={lean:d.l*d.w*q};
  }else{
   CUR.el={conc:lastGross,form:AREA[t](d,$("soffit").checked)*q};
  }
@@ -997,7 +1038,7 @@ const MAT=[
  ["masonry","Stone Masonry","m³"],
  ["backfill","Backfill & Compaction","m³"],
  ["cartaway","Cart-Away Surplus","m³"],
- ["lean","Lean Concrete (C5)","m³"],
+ ["lean","Lean Concrete (C5)","m²"],
  ["conc","Structural Concrete","m³"],
  ["form","Formwork","m²"],
  ["steel","Reinforcement","kg"],
@@ -1088,7 +1129,7 @@ const setLvl=(selId,custId,wrapId,val)=>{const v=val||"Ground Floor";if(STORY_OR
 [["plLvl","plCust","plCustWrap"],["flLvl","flCust","flCustWrap"],["pnLvl","pnCust","pnCustWrap"],["dwLvl","dwCust","dwCustWrap"],["clLvl","clCust","clCustWrap"],["plmvlLvl","plmvlCust","plmvlCustWrap"],["elmvlLvl","elmvlCust","elmvlCustWrap"],["rfLvl","rfCust","rfCustWrap"]].forEach(([s,c,w])=>$(s).addEventListener("change",()=>{$(w).hidden=$(s).value!=="Custom";}));
 let PR=LS.get("sq_projects",null);
 if(!PR||!PR.list||!PR.list.length)PR={cur:"p1",list:[{id:"p1",name:"Project 1",items:[]}]};
-const saveP=()=>LS.set("sq_projects",PR);
+const saveP=()=>{LS.set("sq_projects",PR);fsQueue();};
 const curP=()=>PR.list.find(p=>p.id===PR.cur)||PR.list[0];
 const nextCode=cat=>cat+(1+Math.max(0,...curP().items.filter(i=>i.cat===cat).map(i=>+i.code.slice(cat.length)||0)));
 const rt=(it,k)=>it.r&&it.r[k]!==undefined&&it.r[k]!==""?n(it.r[k]):n(rates[k]);const itemCost=it=>{let s=0;for(const k in it.m)s+=it.m[k]*rt(it,k);return s;};
@@ -1117,11 +1158,13 @@ function costs(){
  document.querySelectorAll("[data-c]").forEach(td=>{const v=MC[td.dataset.c]||0;tot+=v;td.textContent=c+f(v);});
  const e=$("pTot");if(e)e.textContent=c+f(tot);
  if($("homeTotalCost"))$("homeTotalCost").textContent=c+f(tot);
- renderItems();}
+ renderItems();refreshDash();}
 function renderProj(){
+ migrateLean();
+ if(!curP().info){curP().info={};if(!PR.mig2){PR.mig2=1;const o=LS.get("sq_meta",null);if(o&&PR.list.length===1){curP().info.by=o.by||"";curP().info.site=o.site||"";}}}
  const cp=curP();if(!cp.rates)cp.rates=PR.mig?{}:{...rates};PR.mig=1;rates=cp.rates;saveP();
  $("prSel").innerHTML=PR.list.map(p=>`<option value="${p.id}"${p.id===PR.cur?" selected":""}>${esc(p.name)}</option>`).join("");
- $("prName").value=curP().name;
+ $("prName").value=curP().name;fillInfo();
  const T={};curP().items.forEach(i=>{for(const k in i.m)T[k]=(T[k]||0)+i.m[k];});PT=T;
  const rs=MAT.filter(([k])=>T[k]>0);
  $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Total qty</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Project total</td><td id="pTot"></td></tr></tfoot>`:"";
@@ -1129,7 +1172,7 @@ function renderProj(){
 function renderPI(){const p=curP();$("pjBtn").textContent="Project: "+p.name;
  $("pItems").innerHTML=p.items.length?p.items.map(it=>`<div class="pi"><span><b>${esc(it.code)}</b> ${esc(it.d||"")}</span><span><button class="btn" data-dup="${esc(it.code)}" type="button" title="Duplicate item">Copy</button> <button class="btn" data-ed="${esc(it.code)}" type="button">Edit</button> <button class="btn" data-del="${esc(it.code)}" type="button" aria-label="Remove ${esc(it.code)}">✕</button></span></div>`).join(""):'<p class="note">No work items yet.</p>';}
 $("prSel").addEventListener("change",()=>{PR.cur=$("prSel").value;saveP();renderProj();});
-$("prNew").addEventListener("click",()=>{const id="p"+Date.now();PR.list.push({id,name:"Project "+(PR.list.length+1),items:[],rates:{...rates}});PR.cur=id;saveP();renderProj();});
+$("prNew").addEventListener("click",()=>{const id="p"+Date.now();{const o=curP().info||{};PR.list.push({id,name:"Project "+(PR.list.length+1),items:[],rates:{...rates},info:{by:o.by||"",role:o.role||""}});}PR.cur=id;saveP();renderProj();});
 $("prRen").addEventListener("click",()=>{const v=$("prName").value.trim();if(v){curP().name=v;saveP();renderProj();}});
 let arm=0;
 $("pClr").addEventListener("click",()=>{const b=$("pClr");
@@ -1150,7 +1193,7 @@ $("pClr").addEventListener("click",()=>{const b=$("pClr");
 $("addEl").addEventListener("click",()=>{
  const t=$("type").value;let m=CUR.el?{...CUR.el}:null;
  if(m){
-  const vol=m.conc||m.lean||0;
+  const vol=m.conc||(t==="lean"?lastGross:0);
   if($("incR").checked&&t!=="excav"&&t!=="lean"&&CUR.rb&&CUR.rb.steel>0)m.steel=CUR.rb.steel;
   if($("incM").checked&&t!=="brick"&&t!=="excav"&&vol>0)Object.assign(m,mixFor(vol));
  }
@@ -1207,6 +1250,13 @@ function loadSnap(s){
  updAdd();}
 $("pjBtn").addEventListener("click",()=>{renderPI();$("pjs").hidden=false;});
 $("pjClose").addEventListener("click",()=>{$("pjs").hidden=true;});
+function migrateLean(){let ch=false;
+ PR.list.forEach(p=>p.items.forEach(it=>{
+  if(it.cat!=="LeanConcrete"||it.la)return;
+  const s=it.s;
+  if(s&&s.vals&&s.ids){const k=s.u?FT:1;it.m.lean=n(s.vals.l)*k*n(s.vals.w)*k*(n(s.ids.qty)||0);it.la=1;ch=true;}
+ }));
+ if(ch)saveP();}
 const autoSet={};
 $("pList").addEventListener("input",e=>{const i=e.target;if(!i.classList.contains("ri"))return;
  const it=curP().items.find(x=>x.code===i.dataset.ic);if(!it)return;
@@ -1274,9 +1324,7 @@ function addSchedPdf(doc){
 function schedHtml(){
  const S=schedRows();if(!S.length)return"";
  return '<h3 style="margin-top:22px">Bar schedule (separate landscape page)</h3><div style="overflow-x:auto"><div style="min-width:620px">'+S.slice(1).map(r=>r.length===1?`<h3>${esc(r[0])}</h3>`:`<div class="pvr"${r.b?' style="font-weight:700"':""}>${r.map(c=>`<span>${esc(c)}</span>`).join("")}</div>`).join("")+'</div></div>';}
-const meta=()=>({by:$("pmBy").value.trim(),site:$("pmSite").value.trim()});
-{const m=LS.get("sq_meta",{});$("pmBy").value=m.by||"";$("pmSite").value=m.site||"";
- ["pmBy","pmSite"].forEach(id=>$(id).addEventListener("input",()=>{LS.set("sq_meta",meta());const D=docHtml();if(D)$("pvp").innerHTML=D;}));}
+const meta=()=>{const i=(curP().info)||{},g=k=>String(i[k]||"").trim();return{client:g("client"),site:g("site"),ref:g("ref"),rev:g("rev"),by:g("by"),role:g("role"),appr:g("appr"),desc:g("desc")};};
 const QD=k=>["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2;
 const WORK={Excavation:"Excavation Work",Hardcore:"Hardcore Filling Work",LeanConcrete:"Lean Concrete Work",StoneMasonry:"Stone Masonry Work",Footing:"Footing Work",TrapezoidalFooting:"Sloped Footing Work",Column:"Column Work",Beam:"Beam Work",LintelTieBeam:"Lintel / Tie Beam Work",Wall:"Concrete Wall Work",Slab:"Slab Work",RibbedSlab:"Ribbed Slab Work",Stair:"Staircase Work",Landing:"Landing Work",MasonryWall:"Masonry Wall Work",Roofing:"Roofing Work",Plaster:"Plastering Work",Ceiling:"Ceiling Work",Floor:"Flooring & Skirting Work",Painting:"Painting Work",WallTile:"Wall Tiling Work",StoneCladding:"Stone Cladding Work",AluminumWindow:"Aluminum Window Work",WoodenDoor:"Wooden Door Work",SteelDoor:"Steel Door Work",GlassPartition:"Glass Partition Work",DrainagePVC:"Drainage Work",WaterSupplyPPR:"Water Supply Work",InspectionChamber:"Inspection Chamber Work",SanitaryWC:"Water Closet Work",SanitaryBasin:"Washbasin Work",SanitaryShower:"Shower Work",ElectricalConduit:"Electrical Conduit Work",ElectricalSwitchBox:"Switch & Socket Work",DistributionBoard:"Distribution Board Work",ElectricalCabling:"Cabling Work"};
 const WORK_ORDER=Object.keys(WORK);
@@ -1288,7 +1336,7 @@ function execList(items){
   const pk=PRIM[cat]||[],w={t:"work",d,name:WORK[cat]||(cat+" Work"),n:its.length,codes:its.map(i=>i.code),cost:0,qn:0,k:pk[0]||"",u:pk.length?((MAT.find(m=>m[0]===pk[0])||[])[2]||""):"",subs:[]};
   let cC=0,qC=0,cF=0,qF=0,cS=0,qS=0;
   its.forEach(it=>{const co=k=>(it.m[k]||0)*rt(it,k);w.cost+=itemCost(it);pk.forEach(k=>w.qn+=it.m[k]||0);
-   const cv=(it.m.conc||0)+(it.m.lean||0);if(cv>0){qC+=cv;CK.forEach(k=>cC+=co(k));}
+   const cv=it.m.conc||0;if(cv>0){qC+=cv;CK.forEach(k=>cC+=co(k));}
    qF+=it.m.form||0;cF+=co("form");qS+=it.m.steel||0;cS+=co("steel");});
   if(qC>0||cC>0)w.subs.push({t:"sub",d:d+1,name:"Concrete work",qn:qC,u:"m³",k:"conc",cost:cC});
   if(qF>0||cF>0)w.subs.push({t:"sub",d:d+1,name:"Formwork",qn:qF,u:"m²",k:"form",cost:cF});
@@ -1331,32 +1379,27 @@ function rpt(){
    const cCost=cItems.reduce((a,it)=>a+itemCost(it),0);
    byStoryCat.push([lvl,cat,String(cItems.length),f(cCost)]);
   });
-  sItems.forEach(it=>{const ic=itemCost(it),cVol=(it.m.conc||0)+(it.m.lean||0);grand+=ic;sCost+=ic;tConc+=cVol;sConc+=cVol;tForm+=(it.m.form||0);sForm+=(it.m.form||0);tSteel+=(it.m.steel||0);sSteel+=(it.m.steel||0);
+  sItems.forEach(it=>{const ic=itemCost(it),cVol=it.m.conc||0;grand+=ic;sCost+=ic;tConc+=cVol;sConc+=cVol;tForm+=(it.m.form||0);sForm+=(it.m.form||0);tSteel+=(it.m.steel||0);sSteel+=(it.m.steel||0);
    sum.push([it.code,lvl,it.d||"-",cVol?f(cVol,2):"-",it.m.form?f(it.m.form,2):"-",it.m.steel?f(it.m.steel,1):"-",f(ic)]);
    det.push({t:`[${lvl}] ${it.code}${it.d?" — "+it.d:""}`,lines:MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>[l,u,f(it.m[k],QD(k)),rt(it,k)?f(rt(it,k)):"-",f(it.m[k]*rt(it,k))]),cost:f(ic)});});
   const subRow=[`Subtotal — ${lvl}`,"","",sConc?f(sConc,2):"-",sForm?f(sForm,2):"-",sSteel?f(sSteel,1):"-",f(sCost)];subRow.b=1;sum.push(subRow);
   const scTot=[`Story Total — ${lvl}`,"",String(sItems.length),f(sCost)];scTot.b=1;byStoryCat.push(scTot);
  });
  const mats=MAT.filter(([k])=>PT[k]>0).map(([k,l,u])=>[l,u,f(PT[k],QD(k)),rates[k]?f(n(rates[k])):"-",f(MC[k]||0)]);
- return{name:p.name,cur:$("cur").value,L:execList(items),sum,byStoryCat,det,mats,tConc:f(tConc,2),tForm:f(tForm,2),tSteel:f(tSteel,1),grand:f(grand),grandNum:grand,S:schedRows(),date:new Date().toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"})};}
+ return{name:p.name,cur:$("cur").value,L:execList(items),nItems:items.length,nLevels:stories.length,tConcN:tConc,tFormN:tForm,tSteelN:tSteel,sum,byStoryCat,det,mats,tConc:f(tConc,2),tForm:f(tForm,2),tSteel:f(tSteel,1),grand:f(grand),grandNum:grand,S:schedRows(),date:new Date().toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"})};}
 function schedGroups(S){const g=[];S.slice(1).forEach(r=>{if(r.length===1)g.push({t:r[0],h:null,r:[]});else if(r[0]==="Mark")g[g.length-1].h=r;else g[g.length-1].r.push(r);});return g;}
 function tbl(head,al,rows,foot){
  const tr=(r,c)=>`<tr${c?` class="${c}"`:""}>${r.map((x,i)=>`<td class="${al[i]}">${esc(x)}</td>`).join("")}</tr>`;
  return `<div style="overflow-x:auto"><table class="rt"><thead><tr>${head.map((x,i)=>`<th class="${al[i]}">${esc(x)}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>tr(r,r.b?"tot":(r.c||""))).join("")}${foot?tr(foot,"tot"):""}</tbody></table></div>`;}
 function docHtml(){
  const R=rpt();if(!R)return null;const m=meta();
- return `<div class="rhead"><div><div class="rt1">BILL OF QUANTITIES</div><div class="rt2">${esc(R.name)}</div></div><div class="rm"><b>Date:</b> ${esc(R.date)}${m.site?"<br><b>Project / Client:</b> "+esc(m.site):""}${m.by?"<br><b>Prepared by:</b> "+esc(m.by):""}<br><b>Currency:</b> ${esc(R.cur)} · Metric</div></div>
-<div class="kpi-strip">
- <div class="kpi-card"><div class="kpi-lbl">Concrete (incl. C5)</div><div class="kpi-val">${R.tConc} m³</div></div>
- <div class="kpi-card"><div class="kpi-lbl">Formwork</div><div class="kpi-val">${R.tForm} m²</div></div>
- <div class="kpi-card"><div class="kpi-lbl">Reinforcement</div><div class="kpi-val">${R.tSteel} kg</div></div>
- <div class="kpi-card gold"><div class="kpi-lbl">Grand Total</div><div class="kpi-val">${esc(R.cur)}${R.grand}</div></div>
-</div>
+ return `<div class="rhead"><div><div class="rt1">BILL OF QUANTITIES</div><div class="rt2">${esc(R.name)}</div></div><div class="rm">${m.ref?"<b>Ref:</b> "+esc(m.ref)+(m.rev?" · "+esc(m.rev):"")+"<br>":""}<b>Date:</b> ${esc(R.date)}<br><b>Currency:</b> ${esc(R.cur)} · Metric</div></div>
+${detailsHtml(m,R)}${kpiHtml(R)}${insightHtml(R)}
 <h3>1. Executive Summary — Substructure &amp; Superstructure</h3>${tbl(HX,AX,execRows(R.L),["GRAND TOTAL","","",R.cur+R.grand])}
 <h3>2. Detailed Quantities &amp; Cost Breakdown</h3>${R.det.map(d=>`<h4>${esc(d.t)}</h4>`+tbl(H2,A2,d.lines,["Item Subtotal","","","",R.cur+d.cost])).join("")}
 <h3>3. Consolidated Material Schedule</h3>${tbl(H2,A2,R.mats,["TOTAL MATERIAL COST","","","",R.cur+R.grand])}
 ${R.S.length?"<h3>4. Bar Bending Schedule (12 m Stock)</h3>"+schedGroups(R.S).map(g=>`<h4>${esc(g.t)}</h4>`+tbl(g.h,A3,g.r)).join(""):""}
-<div class="signoff"><div><b>Prepared &amp; Checked By</b><div class="signbox">${esc(m.by||"Engineer / Quantity Surveyor")} · Date: ${esc(R.date)}</div></div><div><b>Approved By (Client / Consultant)</b><div class="signbox">${esc(m.site||"Authorized Signature & Stamp")}</div></div></div>`;}
+<div class="signoff"><div><b>Prepared &amp; Checked By</b><div class="signbox">${esc([m.by,m.role].filter(Boolean).join(", ")||"Engineer / Quantity Surveyor")} · Date: ${esc(R.date)}</div></div><div><b>Approved By (Client / Consultant)</b><div class="signbox">${esc(m.appr||"Authorized Signature & Stamp")}</div></div></div>`;}
 function pdfTable(doc,y,cols,head,rows,al){
  const x0=14,rh=6.5,W=cols.reduce((a,b)=>a+b,0),ph=()=>doc.internal.pageSize.getHeight(),ls=()=>doc.internal.pageSize.getWidth()>250;
  const np=()=>{doc.addPage("a4",ls()?"landscape":"portrait");y=32;};
@@ -1380,18 +1423,44 @@ function pdfTable(doc,y,cols,head,rows,al){
 function buildPdf(R){
  const doc=new window.jspdf.jsPDF(),m=meta(),ft=a=>{a.b=1;return a;};
  const brk=(y,need)=>{if(y+need>doc.internal.pageSize.getHeight()-18){doc.addPage("a4",doc.internal.pageSize.getWidth()>250?"landscape":"portrait");return 32;}return y;};
- let y=32;
- doc.setFillColor(247,246,243);doc.setDrawColor(218,214,206);doc.setLineWidth(0.3);
- doc.roundedRect(14,y,182,24,2,2,"FD");
- doc.setFillColor(242,183,5);doc.rect(14,y,2.2,24,"F");
- doc.setTextColor(31,42,54);doc.setFont(undefined,"bold");doc.setFontSize(13.5);
- doc.text(R.name,20,y+7.5);
- doc.setFontSize(8.5);doc.setFont(undefined,"normal");doc.setTextColor(85,92,100);
- const line1=["Date: "+R.date,m.site?"Client / Site: "+m.site:"",m.by?"Prepared by: "+m.by:""].filter(Boolean).join("   |   ");
- doc.text(line1,20,y+13.5);
- doc.setFont(undefined,"bold");doc.setTextColor(31,42,54);
- doc.text(`Currency: ${R.cur}   ·   Concrete: ${R.tConc} m³   ·   Formwork: ${R.tForm} m²   ·   Steel: ${R.tSteel} kg   ·   Total: ${R.cur}${R.grand}`,20,y+19.8);
- y+=30;
+ const I=insights(R);let y=30;
+ const fitT=(s,w,sz)=>{s=String(s);doc.setFontSize(sz);while(s.length>1&&doc.getTextWidth(s)>w)s=s.slice(0,-1);return s;};
+ const det=[["CLIENT",m.client],["SITE / LOCATION",m.site],["REFERENCE",[m.ref,m.rev].filter(Boolean).join("  ·  ")],["PREPARED BY",[m.by,m.role].filter(Boolean).join(", ")],["APPROVED BY",m.appr],["DATE ISSUED",R.date],["CURRENCY",R.cur.trim()]].filter(x=>x[1]);
+ const ch=15+Math.ceil(det.length/2)*10.5;
+ doc.setFillColor(247,246,243);doc.setDrawColor(218,214,206);doc.setLineWidth(0.3);doc.roundedRect(14,y,182,ch,2,2,"FD");
+ doc.setFillColor(242,183,5);doc.rect(14,y,2.2,ch,"F");
+ doc.setTextColor(31,42,54);doc.setFont(undefined,"bold");doc.text(fitT(R.name,170,14.5),20,y+8.5);
+ det.forEach(([k,v],ix)=>{const cx=20+(ix%2)*92,cy=y+16.5+Math.floor(ix/2)*10.5;
+  doc.setFont(undefined,"bold");doc.setFontSize(6.5);doc.setTextColor(120,126,134);doc.text(k,cx,cy);
+  doc.setFont(undefined,"normal");doc.setTextColor(31,42,54);doc.text(fitT(v,84,9),cx,cy+4.6);});
+ y+=ch+6;
+ if(m.desc){let ls=doc.splitTextToSize(m.desc,176);const more=ls.length>7;ls=ls.slice(0,7);if(more)ls[6]=fitT(ls[6],168,8.4)+"…";
+  doc.setFont(undefined,"bold");doc.setFontSize(6.5);doc.setTextColor(120,126,134);doc.text("PROJECT DESCRIPTION",14,y);
+  doc.setFont(undefined,"normal");doc.setFontSize(8.4);doc.setTextColor(50,56,64);ls.forEach((s,ix)=>doc.text(s,14,y+5+ix*4.3));
+  y+=7+ls.length*4.3;}
+ [["CONCRETE",R.tConc+" m³"],["FORMWORK",R.tForm+" m²"],["REINFORCEMENT",R.tSteel+" kg"],["GRAND TOTAL",R.cur+R.grand]].forEach(([k,v],ix)=>{
+  const x=14+ix*46.17;doc.setFillColor(255,255,255);doc.setDrawColor(218,214,206);doc.setLineWidth(0.3);doc.roundedRect(x,y,43.5,16,1.5,1.5,"FD");
+  if(ix===3)doc.setFillColor(242,183,5);else doc.setFillColor(43,74,106);doc.rect(x,y,43.5,1.5,"F");
+  doc.setFont(undefined,"bold");doc.setFontSize(6.3);doc.setTextColor(120,126,134);doc.text(k,x+3,y+6);
+  doc.setTextColor(31,42,54);doc.text(fitT(v,38,10.5),x+3,y+12.6);});
+ y+=22;
+ {const hh=I.hl.length*4.7+5;doc.setFillColor(253,248,230);doc.rect(14,y,182,hh,"F");doc.setFillColor(242,183,5);doc.rect(14,y,2,hh,"F");
+  doc.setFont(undefined,"normal");doc.setTextColor(40,46,54);I.hl.forEach((s,ix)=>doc.text("•  "+fitT(s,168,8.3),20,y+5.4+ix*4.7));y+=hh+6;}
+ if(I.tot>0){
+  doc.setFont(undefined,"bold");doc.setFontSize(6.5);doc.setTextColor(120,126,134);doc.text("COST SPLIT",14,y);y+=2.6;
+  const a=Math.max(0,Math.min(1,I.sub/I.tot)),wA=182*a;
+  doc.setFillColor(43,74,106);if(wA>0)doc.rect(14,y,wA,7.5,"F");doc.setFillColor(242,183,5);if(182-wA>0)doc.rect(14+wA,y,182-wA,7.5,"F");
+  doc.setFont(undefined,"bold");doc.setFontSize(7.6);
+  if(wA>42){doc.setTextColor(255,255,255);doc.text("Substructure "+f(a*100,0)+"%",17,y+5);}
+  if(182-wA>46){doc.setTextColor(31,42,54);doc.text("Superstructure "+f(100-a*100,0)+"%",14+wA+3,y+5);}
+  y+=14;
+  doc.setFont(undefined,"bold");doc.setFontSize(6.5);doc.setTextColor(120,126,134);doc.text("TOP COST DRIVERS",14,y);y+=3;
+  const top=I.drivers.slice(0,5),mx=top[0]?top[0].cost:1;
+  top.forEach(d=>{doc.setFont(undefined,"normal");doc.setTextColor(40,46,54);doc.text(fitT(d.name,60,8),14,y+3.9);
+   doc.setFillColor(230,232,235);doc.rect(78,y,100,4.8,"F");doc.setFillColor(43,74,106);doc.rect(78,y,Math.max(0.5,100*d.cost/mx),4.8,"F");
+   doc.setTextColor(90,95,100);doc.text(f(pct(d.cost,I.tot),0)+"%",196,y+3.9,{align:"right"});y+=6.4;});
+  y+=4;}
+ doc.setTextColor(0);
  const H=t=>{y=brk(y+3,18);
   doc.setFillColor(242,183,5);doc.rect(14,y-3.6,2.2,4.8,"F");
   doc.setFont(undefined,"bold");doc.setFontSize(10.5);doc.setTextColor(31,42,54);
@@ -1408,8 +1477,8 @@ function buildPdf(R){
  doc.text("Prepared & Checked By:",14,y);doc.text("Approved By (Client / Consultant):",110,y);
  y+=11;doc.setDrawColor(120,120,120);doc.line(14,y,92,y);doc.line(110,y,196,y);
  y+=4;doc.setFont(undefined,"normal");doc.setFontSize(8);doc.setTextColor(90,95,100);
- doc.text((m.by||"Quantity Surveyor / Engineer")+"  ·  "+R.date,14,y);
- doc.text(m.site||"Authorized Signature & Stamp",110,y);
+ doc.text(([m.by,m.role].filter(Boolean).join(", ")||"Quantity Surveyor / Engineer")+"  ·  "+R.date,14,y);
+ doc.text(m.appr||"Authorized Signature & Stamp",110,y);
 
  if(R.S.length){doc.addPage("a4","landscape");y=32;
   doc.setFillColor(242,183,5);doc.rect(14,y-4,2.5,5.5,"F");
@@ -1424,7 +1493,7 @@ function buildPdf(R){
   doc.setDrawColor(31,42,54);doc.setLineWidth(0.85);doc.rect(16.6,7.1,6.8,6.8);doc.setFillColor(31,42,54);
   [[17.2,7.7],[22.8,7.7],[17.2,13.3],[22.8,13.3]].forEach(([a,b])=>doc.circle(a,b,0.8,"F"));
   doc.setTextColor(255);doc.setFont(undefined,"bold");doc.setFontSize(13.5);doc.text("BILL OF QUANTITIES",30,11.5);
-  doc.setFont(undefined,"normal");doc.setFontSize(8.5);doc.setTextColor(242,183,5);doc.text(R.name,30,16.8);
+  doc.setFont(undefined,"normal");doc.setFontSize(8.5);doc.setTextColor(242,183,5);doc.text(R.name+(m.ref?"   ·   Ref "+m.ref+(m.rev?" / "+m.rev:""):""),30,16.8);
   doc.setTextColor(255);doc.setFont(undefined,"bold");doc.setFontSize(9.5);doc.text("Site Quantities",w-14,11.2,{align:"right"});
   doc.setFont(undefined,"normal");doc.setFontSize(7.5);doc.setTextColor(185,195,205);doc.text("By Biruk Belayneh",w-14,16.2,{align:"right"});
   doc.setFillColor(242,183,5);doc.rect(0,21,w,1.8,"F");
@@ -1446,7 +1515,7 @@ function schedNum(){
  const out=[];secs.forEach(sc=>{const rr=sc.r.map(r=>({mk:r.mk||"",d:+r.d,l:n(r.l)*sc.k,q:Q(r.n)})).filter(x=>x.l>0&&x.q>0);
   if(rr.length)out.push({t:sc.t,rows:rr.map(x=>({...x,c:barCalc(x.d,x.l,x.q)}))});});return out;}
 async function buildXlsx(R){
- const wb=new ExcelJS.Workbook(),m=meta(),cur=R.cur;wb.creator="Site Quantities — By Biruk Belayneh";wb.created=new Date();
+ const wb=new ExcelJS.Workbook(),m=meta(),cur=R.cur;wb.creator="Site Quantities — By Biruk Belayneh";wb.created=new Date();wb.title=R.name;wb.subject=[m.client,m.site].filter(Boolean).join(" — ");wb.company=m.client||"";wb.description=m.desc||"";
  const items=curP().items.slice().sort((a,b)=>storyRank(a.lvl)-storyRank(b.lvl)||(a.lvl||"").localeCompare(b.lvl||"")||a.cat.localeCompare(b.cat)).map(it=>({code:it.code,cat:it.cat,lvl:it.lvl||"Ground Floor",d:it.d||"",m:it.m,lines:MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>({k,l,u,q:it.m[k],r:rt(it,k)}))}));
  const fill=c=>({type:"pattern",pattern:"solid",fgColor:{argb:c}});
  const th={style:"thin",color:{argb:"FFD8D5CE"}},medDk={style:"medium",color:{argb:"FF1F2A36"}},dblDk={style:"double",color:{argb:"FF1F2A36"}};
@@ -1491,12 +1560,12 @@ async function buildXlsx(R){
  wsS.columns=[{width:46},{width:8},{width:30},{width:14},{width:8},{width:20}];
  band(wsS,6,"Bill of Quantities — Executive Summary",R.name);
  r=4;
- [["Date Issued",R.date],["Client / Site",m.site||"-"],["Prepared By",m.by||"-"],["Currency",cur.trim()],["Measurement System","Metric (m, m², m³, kg)"]].forEach(([k,v])=>{
-  wsS.getRow(r).height=18;
+ (()=>{const mr=[["Project",R.name],["Reference / Revision",[m.ref,m.rev].filter(Boolean).join(" · ")||"-"],["Client",m.client||"-"],["Site / Location",m.site||"-"],["Prepared By",[m.by,m.role].filter(Boolean).join(", ")||"-"],["Approved By",m.appr||"-"],["Date Issued",R.date],["Currency",cur.trim()],["Measurement System","Metric (m, m², m³, kg)"]];if(m.desc)mr.push(["Description",m.desc]);return mr;})().forEach(([k,v])=>{
+  wsS.getRow(r).height=k==="Description"?Math.max(18,Math.ceil(String(v).length/64)*13+6):18;
   const c1=wsS.getCell(r,1);c1.value=k;c1.font={name:"Calibri",bold:true,size:10,color:{argb:DK}};c1.fill=fill(ZB);c1.border=bd;
   wsS.mergeCells(r,2,r,6);
   for(let col=2;col<=6;col++){const cx=wsS.getCell(r,col);cx.fill=fill("FFFFFFFF");cx.border=bd;}
-  const c2=wsS.getCell(r,2);c2.value=v;c2.font={name:"Calibri",size:10,color:{argb:"FF1F2328"}};
+  const c2=wsS.getCell(r,2);c2.value=v;c2.font={name:"Calibri",size:10,color:{argb:"FF1F2328"}};if(k==="Description")c2.alignment={vertical:"top",wrapText:true};
   r++;});
  r++;
  wsS.getCell(r,1).value="WORK SUMMARY — SUBSTRUCTURE & SUPERSTRUCTURE";wsS.getCell(r,1).font={name:"Calibri",bold:true,size:11.5,color:{argb:NV}};wsS.getRow(r).height=22;r++;
@@ -1505,13 +1574,22 @@ async function buildXlsx(R){
  const FMX=[0,F0,0,F2,0,FC];
  XL.forEach(x=>{
   const cost=x.t==="work"?{formula:x.codes.map(c=>`'Detailed BOQ'!E${tot[c].row}`).join("+"),result:x.cost}
-   :x.t==="sub"?x.cost:{formula:x.kids.map(k=>"F"+k.row).join("+")||"0",result:x.cost};
+   :x.t==="sub"?Math.round(x.cost*100)/100:{formula:x.kids.map(k=>"F"+k.row).join("+")||"0",result:x.cost};
   const o=x.t==="main"?{b:1,f:LT,tot:1,color:DK}:x.t==="lvl"?{b:1,f:ZB,color:DK}:x.t==="sub"?{color:"FF5D646C"}:{};
-  put(wsS,x.row,[x.name,x.t==="sub"?"":x.n,x.t==="work"?x.codes.join(", "):"",x.qn>0?x.qn:"",x.qn>0?x.u:"",cost],FMX,o);
+  put(wsS,x.row,[x.name,x.t==="sub"?"":x.n,x.t==="work"?x.codes.join(", "):"",x.qn>0?Math.round(x.qn*1e4)/1e4:"",x.qn>0?x.u:"",cost],FMX,o);
   wsS.getCell(x.row,1).alignment={vertical:"middle",indent:x.d};});
  r=r0+XL.length;
  put(wsS,r,["GRAND TOTAL","","","","",{formula:XL.filter(x=>x.t==="main").map(x=>"F"+x.row).join("+")||"0",result:gv}],FMX,{b:1,f:GD,tot:1,color:DK});
- r+=3;
+ const gR=r;
+ r+=2;
+ wsS.getCell(r,1).value="KEY INDICATORS";wsS.getCell(r,1).font={name:"Calibri",bold:true,size:11.5,color:{argb:NV}};wsS.getRow(r).height=22;r++;
+ {const I=insights(R),mr=nm=>XL.find(x=>x.t==="main"&&x.name===nm);
+  const rowsK=[["Substructure share of total cost",mr("SUBSTRUCTURE")?{formula:`IF(F${gR}=0,0,F${mr("SUBSTRUCTURE").row}/F${gR})`,result:pct(I.sub,I.tot)/100}:0,"0.0%"],
+   ["Superstructure share of total cost",mr("SUPERSTRUCTURE")?{formula:`IF(F${gR}=0,0,F${mr("SUPERSTRUCTURE").row}/F${gR})`,result:pct(I.sup,I.tot)/100}:0,"0.0%"],
+   ["Largest cost driver",I.top&&I.tot>0?I.top.name+" ("+f(pct(I.top.cost,I.tot),0)+"%)":"-",0],
+   ["Reinforcement density (kg per m³ of concrete)",Math.round(I.density*10)/10,"0.0"]];
+  rowsK.forEach(([k,v,fm])=>{put(wsS,r,[k,"","","","",v],[0,0,0,0,0,fm],{});r++;});}
+ r+=2;
  wsS.getCell(r,1).value="Prepared By: ___________________________";wsS.getCell(r,1).font={name:"Calibri",bold:true,size:10,color:{argb:DK}};
  wsS.getCell(r,3).value="Approved By: ___________________________";wsS.getCell(r,3).font={name:"Calibri",bold:true,size:10,color:{argb:DK}};
 
@@ -1542,14 +1620,94 @@ async function buildXlsx(R){
  const slug=(R.name||"site-quantities").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"site-quantities";
  save(slug+"-BOQ.xlsx",buf instanceof ArrayBuffer?buf:buf.buffer.slice(buf.byteOffset,buf.byteOffset+buf.byteLength));}
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
-{const b=document.createElement("div");b.style.cssText="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap";
- b.innerHTML='<button class="btn" id="bkp" type="button">Backup all projects</button><button class="btn" id="rst" type="button">Restore</button><input id="rstf" type="file" accept=".json,application/json" hidden>';
- $("pr").append(b);
- $("bkp").addEventListener("click",()=>save("site-projects-backup.json",JSON.stringify({PR,rates})));
- $("rst").addEventListener("click",()=>$("rstf").click());
- $("rstf").addEventListener("change",async e=>{const fl=e.target.files[0];if(!fl)return;
-  try{const d=JSON.parse(await fl.text());if(d.PR&&d.PR.list){PR=d.PR;rates=d.rates||{};saveP();renderProj();$("xs").textContent="Projects restored.";}}
-  catch(x){$("xs").textContent="That file could not be read.";}e.target.value="";});}
+
+/* ===== Project brief, dashboard, files & folder autosave ===== */
+const pct=(a,b)=>b>0?a/b*100:0;
+const PI=["Client","Site","Ref","Rev","By","Role","Appr","Desc"];
+function fillInfo(){const i=curP().info||{};PI.forEach(k=>{const e=$("pi"+k);if(e&&document.activeElement!==e)e.value=i[k.toLowerCase()]||"";});}
+PI.forEach(k=>$("pi"+k).addEventListener("input",()=>{const p=curP();(p.info=p.info||{})[k.toLowerCase()]=$("pi"+k).value;saveP();refreshDash();}));
+function insights(R){
+ const L=R.L,mn=nm=>(L.find(x=>x.t==="main"&&x.name===nm)||{cost:0}).cost,sub=mn("SUBSTRUCTURE"),sup=mn("SUPERSTRUCTURE"),by={};
+ L.filter(x=>x.t==="work").forEach(w=>{by[w.name]=(by[w.name]||0)+w.cost;});
+ const drivers=Object.entries(by).map(([name,cost])=>({name,cost})).sort((a,b)=>b.cost-a.cost),tot=R.grandNum,top=drivers[0];
+ const density=R.tConcN>0&&R.tSteelN>0?R.tSteelN/R.tConcN:0,hl=[];
+ hl.push(`${R.nItems} element${R.nItems===1?"":"s"} across ${R.nLevels} level${R.nLevels===1?"":"s"}.`);
+ if(tot>0){hl.push(`Substructure ${f(pct(sub,tot),0)}% and superstructure ${f(pct(sup,tot),0)}% of the total cost.`);
+  if(top&&top.cost>0)hl.push(`Largest cost driver: ${top.name}, ${f(pct(top.cost,tot),0)}% of the total (${R.cur}${f(top.cost)}).`);}
+ else hl.push("Rates not entered yet, so costs show as 0.00. Add rates in the Cost tab.");
+ if(density>0)hl.push(`Reinforcement density is about ${f(density,0)} kg per m³ of structural concrete.`);
+ return{sub,sup,tot,drivers,top,density,hl};}
+const kpiHtml=R=>`<div class="kpi-strip">
+ <div class="kpi-card"><div class="kpi-lbl">Concrete</div><div class="kpi-val">${R.tConc} m³</div></div>
+ <div class="kpi-card"><div class="kpi-lbl">Formwork</div><div class="kpi-val">${R.tForm} m²</div></div>
+ <div class="kpi-card"><div class="kpi-lbl">Reinforcement</div><div class="kpi-val">${R.tSteel} kg</div></div>
+ <div class="kpi-card gold"><div class="kpi-lbl">Grand Total</div><div class="kpi-val">${esc(R.cur)}${R.grand}</div></div></div>`;
+function insightHtml(R){
+ const I=insights(R);let h=`<div class="hl">${I.hl.map(x=>`<div>${esc(x)}</div>`).join("")}</div>`;
+ if(I.tot>0){const a=Math.max(0,Math.min(100,pct(I.sub,I.tot))),b=100-a,top=I.drivers.slice(0,5),mx=top[0]?top[0].cost:1;
+  h+=`<div class="cbox"><div class="ctl">Cost split</div><div class="split"><span class="s1" style="width:${a}%">${a>=18?"Substructure "+f(a,0)+"%":""}</span><span class="s2" style="width:${b}%">${b>=18?"Superstructure "+f(b,0)+"%":""}</span></div></div>
+<div class="cbox"><div class="ctl">Top cost drivers</div>${top.map(d=>`<div class="drow"><span class="dn">${esc(d.name)}</span><span class="dbar"><i style="width:${pct(d.cost,mx)}%"></i></span><span class="dv">${f(pct(d.cost,I.tot),0)}%</span></div>`).join("")}</div>`;}
+ return h;}
+function detailsHtml(m,R){
+ const d=[["Client",m.client],["Site / location",m.site],["Reference",[m.ref,m.rev].filter(Boolean).join(" · ")],["Prepared by",[m.by,m.role].filter(Boolean).join(", ")],["Approved by",m.appr],["Date issued",R.date]].filter(x=>x[1]);
+ return`<div class="dgrid">${d.map(([k,v])=>`<div><b>${esc(k)}</b>${esc(v)}</div>`).join("")}</div>${m.desc?`<div class="desc">${esc(m.desc)}</div>`:""}`;}
+function readiness(){
+ const i=curP().info||{},has=k=>!!String(i[k]||"").trim(),items=curP().items.length;
+ const unpriced=MAT.filter(([k])=>PT[k]>0&&!(MC[k]>0)).map(([,l])=>l);
+ const checks=[["Client name",has("client")],["Site / location",has("site")],["Prepared by",has("by")],["Reference no.",has("ref")],["Project description",has("desc")],["At least one element",items>0],["All materials priced",items>0&&unpriced.length===0]];
+ const done=checks.filter(c=>c[1]).length,todo=checks.filter(c=>!c[1]).map(c=>c[0]);
+ return`<div class="rdy"><div class="ctl" style="margin:0">Report readiness · ${done} of ${checks.length}</div><div class="rbar"><i style="width:${done/checks.length*100}%"></i></div>${todo.length?todo.map(x=>`<span class="chip">${esc(x)}</span>`).join("")+(items>0&&unpriced.length?`<div class="note" style="margin:6px 0 0">Missing rates: ${esc(unpriced.slice(0,4).join(", "))}${unpriced.length>4?" +"+(unpriced.length-4)+" more":""}</div>`:""):'<div style="font-size:.82rem;font-weight:700;color:#3fa66b">Ready to issue ✓</div>'}</div>`;}
+function dashHtml(){
+ const p=curP(),i=p.info||{},R=rpt();
+ const head=`<div class="rhead"><div><div class="rt1">${esc(p.name)}</div><div class="rt2">${esc([i.client,i.site].filter(x=>x&&x.trim()).join(" · ")||"Add client and site in the brief below")}</div></div><div class="rm">${i.ref?"<b>Ref:</b> "+esc(i.ref)+(i.rev?" · "+esc(i.rev):"")+"<br>":""}${esc(new Date().toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"}))}</div></div>`;
+ if(!R)return head+`<p class="note" style="margin:10px 0">Add elements from the Concrete or Finishes tabs and this dashboard fills with live totals, the substructure / superstructure split and your top cost drivers.</p>`+readiness();
+ return head+kpiHtml(R)+insightHtml(R)+readiness();}
+function refreshDash(){const d=$("dash");if(d)d.innerHTML=dashHtml();}
+
+/* project files */
+const slugOf=s=>String(s||"project").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"project";
+const projFile=p=>JSON.stringify({app:"Site Quantities",type:"project",version:2,saved:new Date().toISOString(),project:p},null,1);
+$("spSave").addEventListener("click",()=>{const p=curP();save(slugOf(p.name)+".sqproj.json",projFile(p));});
+$("spOpen").addEventListener("click",()=>$("spf").click());
+$("spf").addEventListener("change",async e=>{const fl=e.target.files[0];if(!fl)return;
+ try{const d=JSON.parse(await fl.text()),list=(d.type==="project"&&d.project)?[d.project]:(d.PR&&d.PR.list)?d.PR.list:null;if(!list)throw 0;
+  let last="",cnt=0;
+  list.forEach(p=>{if(!p||!Array.isArray(p.items))return;const q=JSON.parse(JSON.stringify(p));q.id="p"+Date.now()+Math.floor(Math.random()*1e5);
+   if(PR.list.some(x=>x.name===q.name))q.name+=" (opened)";q.rates=q.rates||{};PR.list.push(q);last=q.id;cnt++;});
+  if(!cnt)throw 0;PR.cur=last;saveP();renderProj();$("xs").textContent=cnt===1?"Opened “"+curP().name+"”.":"Opened "+cnt+" projects.";}
+ catch(x){$("xs").textContent="That file is not a Site Quantities project.";}
+ e.target.value="";});
+$("bkp").addEventListener("click",()=>save("site-projects-backup.json",JSON.stringify({PR,rates})));
+$("rst").addEventListener("click",()=>$("rstf").click());
+$("rstf").addEventListener("change",async e=>{const fl=e.target.files[0];if(!fl)return;
+ try{const d=JSON.parse(await fl.text());
+  if(d.PR&&d.PR.list&&confirm("Replace all projects on this device with this backup?")){PR=d.PR;rates=d.rates||{};saveP();renderProj();$("xs").textContent="Projects restored.";}}
+ catch(x){$("xs").textContent="That file could not be read.";}e.target.value="";});
+
+/* folder autosave (desktop Chrome / Edge) */
+const FSOK=typeof window.showDirectoryPicker==="function";
+const idb=(m,k,v)=>new Promise((res,rej)=>{const q=indexedDB.open("sq_fs",1);q.onupgradeneeded=()=>q.result.createObjectStore("kv");q.onerror=()=>rej(q.error);
+ q.onsuccess=()=>{const s=q.result.transaction("kv",m==="get"?"readonly":"readwrite").objectStore("kv"),r=m==="get"?s.get(k):m==="set"?s.put(v,k):s.delete(k);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);};});
+function fsUi(){
+ $("fsBox").hidden=!FSOK;$("fsNote").hidden=FSOK;if(!FSOK)return;
+ const nm=FS.h?FS.h.name:"";
+ $("fsMsg").textContent=FS.state==="on"?`Saving automatically to “${nm}”${FS.last?" · last saved "+FS.last:""}.`:FS.state==="needs"?`Folder “${nm}” needs your permission again after reopening the app.`:FS.state==="err"?"Could not write to the folder. Choose it again.":"Pick a folder and every change is saved there as a project file.";
+ $("fsLink").textContent=FS.state==="needs"?"Reconnect folder":FS.h?"Change folder":"Choose folder";$("fsOff").hidden=!FS.h;}
+async function fsPerm(ask){const o={mode:"readwrite"};let s=await FS.h.queryPermission(o);if(s!=="granted"&&ask)s=await FS.h.requestPermission(o);return s==="granted";}
+async function fsWrite(){if(!FS.h)return;
+ try{if(!(await fsPerm(false))){FS.state="needs";fsUi();return;}
+  const p=curP(),fh=await FS.h.getFileHandle(slugOf(p.name)+".sqproj.json",{create:true}),w=await fh.createWritable();
+  await w.write(projFile(p));await w.close();FS.state="on";FS.last=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});}
+ catch(e){FS.state="err";}fsUi();}
+function fsQueue(){if(!FS.h)return;clearTimeout(FS.t);FS.t=setTimeout(fsWrite,1200);}
+$("fsLink").addEventListener("click",async()=>{
+ try{if(FS.h&&FS.state==="needs"&&await fsPerm(true)){await fsWrite();return;}
+  const h=await window.showDirectoryPicker({mode:"readwrite",id:"sqproj"});FS.h=h;try{await idb("set","dir",h);}catch(e){}await fsWrite();}
+ catch(e){}});
+$("fsOff").addEventListener("click",async()=>{FS.h=null;FS.state="off";try{await idb("del","dir");}catch(e){}fsUi();});
+if(FSOK)idb("get","dir").then(async h=>{if(!h)return;FS.h=h;try{FS.state=(await h.queryPermission({mode:"readwrite"}))==="granted"?"on":"needs";}catch(e){FS.state="needs";}fsUi();}).catch(()=>{});
+fsUi();
+$("pvEdit").addEventListener("click",()=>{$("pv").hidden=true;document.querySelector('nav button[data-t="pr"]').click();$("piClient").scrollIntoView({block:"center"});});
 calcFn();renderProj();
 const BRK=()=>$("type").value==="brick"?[...document.querySelectorAll("#brk .out div")].map(x=>[x.children[0].textContent,x.children[1].textContent]):null;
 function report(){
