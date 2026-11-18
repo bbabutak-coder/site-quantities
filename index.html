@@ -598,7 +598,7 @@ const Q=v=>{v=String(v==null?"":v).trim();let r;
  return isFinite(r)&&r>0?Math.ceil(r-1e-9):0;};
 const f=(x,d=2)=>x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});
 const TYPES={
- excav:{dims:[["Pit / Trench Length (m)","l"],["Width (m)","w"],["Excavation Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
+ excav:[["Pit / Trench Length (m)","l"],["Width (m)","w"],["Excavation Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
  hardcore:{dims:[["Length (m)","l"],["Width (m)","w"],["Compacted Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
  masonry:{dims:[["Length (m)","l"],["Thickness (m)","w"],["Height (m)","h"]],vol:d=>d.l*d.w*d.h},
  lean:{dims:[["Length (m)","l"],["Width (m)","w"],["Blinding Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
@@ -918,7 +918,7 @@ function calcFn(){
  const plt=$("plSystem").value,plq=n($("plQty").value),plf=1+n($("plFitt").value)/100,plw=1+n($("plW").value)/100;
  const isPlLen=["drainPVC","waterPPR"].includes(plt);
  const plTotQty=isPlLen?plq*plf*plw:Math.ceil(plq*plw);
- $("plTot.textContent")// handled below
+ // $("plTot").textContent// handled below
  const plMap={drainPVC:["drainPipe","m"],waterPPR:["waterPipe","m"],chamber:["inspectionChamber","nos"],wc:["waterCloset","nos"],basin:["washbasin","nos"],shower:["showerSet","nos"]};
  const [plKey,plUnit]=plMap[plt];
  $("plTot").textContent=f(plTotQty,isPlLen?1:0)+" "+plUnit;
@@ -1446,7 +1446,7 @@ async function buildXlsx(R){
   const t=wsD.getCell(r,1);t.value=`[${it.lvl}] ${it.code}${it.d?" — "+it.d:""}`;t.font={name:"Calibri",bold:true,size:11,color:{argb:NV}};t.alignment={vertical:"middle",indent:1};wsD.getRow(r).height=22;r++;
   hdr(wsD,r,["Material / Work Description","Unit","Quantity","Unit Rate","Total Amount"],2);r++;const a=r;let s=0;
   it.lines.forEach((x,idx)=>{const amt=x.q*x.r;s+=amt;put(wsD,r,[x.l,x.u,x.q,x.r,{formula:`C${r}*D${r}`,result:amt}],[0,0,x.k==="brick"||x.k==="tile"?F0:F2,FC,FC],{f:idx%2===1?ZB:null});r++;});
-  put(wsD,r,["Subtotal — "+it.code,"","","",{formula:`SUM(E${a}:E${r-1})`,result:s}],[0,0,0,0,FC],{b:1,f:LT,tot:1,color:DK});tot[it.code]={row:r,v:s};r+=2;});
+  put(wsD,r,["Subtotal — "+it.code,"","","",{formula:`SUM(E${a}:E${r-1})`,result:s}],[0,0,0,0,FC],{b:1,f:LT,tot:1,color:DK});r+=2;});
  const gv=Object.values(tot).reduce((a,x)=>a+x.v,0);
  put(wsD,r,["GRAND PROJECT TOTAL","","","",{formula:Object.values(tot).map(x=>"E"+x.row).join("+")||"0",result:gv}],[0,0,0,0,FC],{b:1,f:GD,tot:1,color:DK});
 
