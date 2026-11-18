@@ -110,7 +110,7 @@ main{padding-bottom:84px}
 <button role="tab" aria-selected="false" data-t="el"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>Concrete &amp; formwork</button>
 <button role="tab" aria-selected="false" data-t="rb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/><path d="M7 5v4M13 5v4M10 10v4M16 10v4M7 15v4M13 15v4"/></svg>Rebar</button>
 <button role="tab" aria-selected="false" data-t="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>Mix</button>
-<button role="tab" aria-selected="false" data-t="fn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Finishes</button>
+<button role="tab" aria-selected="false" data-t="fn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Finishes &amp; MEP</button>
 <button role="tab" aria-selected="false" data-t="pj"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1 1-1.5 2.5-1.5s2.5.6 2.5 1.7-1 1.5-2.5 1.8-2.5.7-2.5 1.8S10.5 16 12 16s2.5-.5 2.5-1.5"/></svg>Cost</button>
 </nav>
 
@@ -124,10 +124,10 @@ main{padding-bottom:84px}
 </div>
 <h3 class="ch">Quick Navigation</h3>
 <div class="card-grid">
-<div class="card" data-nav="el"><h3>Concrete &amp; Formwork</h3><p>Slabs, footings, beams, columns, walls &amp; masonry blocks.</p></div>
+<div class="card" data-nav="el"><h3>Structural &amp; Concrete</h3><p>Slabs, ribbed slabs, lintels, footings, beams, columns &amp; masonry.</p></div>
 <div class="card" data-nav="rb"><h3>Rebar &amp; Bar Schedule</h3><p>Bar bending schedule with custom marks &amp; 12m stock optimization.</p></div>
 <div class="card" data-nav="mx"><h3>Concrete Mix</h3><p>C30, C25, C20, C15 ratios, cement bags, sand &amp; aggregate volumes.</p></div>
-<div class="card" data-nav="fn"><h3>Finishes</h3><p>Plastering mortar and flooring tile estimations with wastage.</p></div>
+<div class="card" data-nav="fn"><h3>Finishes, MEP &amp; Roof</h3><p>Plastering, tiling, painting, doors/windows, ceilings, MEP rough-ins &amp; roof trusses.</p></div>
 <div class="card" data-nav="pj"><h3>Cost &amp; BOQ</h3><p>Project rates, bills of quantities, Excel &amp; landscape PDF export.</p></div>
 </div>
 <p class="note" style="margin-top:16px">All calculations run locally on your device with complete offline support. Use the Cost tab or export buttons for professional client reporting.</p>
@@ -140,10 +140,12 @@ main{padding-bottom:84px}
 <option value="hardcore">Hardcore Filling & Blinding</option>
 <option value="masonry">Stone Masonry Work</option>
 <option value="lean">Lean Concrete / Blinding (C5)</option>
-<option value="slab">Slab</option>
+<option value="slab">Slab (Solid)</option>
+<option value="ribbed">Ribbed / Hollow-Block Slab</option>
 <option value="footing">Pad Footing (Rectangular)</option>
 <option value="trap">Trapezoidal / Sloped Footing</option>
 <option value="beam">Beam</option>
+<option value="lintel">Lintel / Tie Beam</option>
 <option value="wall">Concrete wall</option>
 <option value="brick">Brick / HCB wall</option>
 <option value="col">Rectangular column</option>
@@ -193,6 +195,22 @@ main{padding-bottom:84px}
 <div class="big"><span>Cart-Away Surplus (Bulked)</span><b id="eCrt"></b></div>
 </div>
 <p class="note">Bulked excavation = Net × (1 + Bulking%). Backfill = Net × Backfill%. Cart-away surplus = (Net − Backfill) × (1 + Bulking%).</p>
+</div>
+<div id="rib" hidden>
+<div class="grid">
+<div><label for="rbTop">Topping slab thickness (mm)</label><input id="rbTop" type="number" inputmode="decimal" min="30" value="60"></div>
+<div><label for="rbW">Rib width (mm)</label><input id="rbW" type="number" inputmode="decimal" min="60" value="120"></div>
+<div><label for="rbH">Rib / Block depth (mm)</label><input id="rbH" type="number" inputmode="decimal" min="100" value="200"></div>
+<div><label for="rbSp">Rib spacing c/c (mm)</label><input id="rbSp" type="number" inputmode="decimal" min="250" value="520"></div>
+<div><label for="rbBl">Filler block length (mm)</label><input id="rbBl" type="number" inputmode="decimal" min="150" value="250"></div>
+<div><label for="rbBx">Block wastage (%)</label><input id="rbBx" type="number" inputmode="decimal" min="0" value="5"></div>
+</div>
+<div class="out">
+<div><span>Slab plan area</span><b id="rbA"></b></div>
+<div><span>Concrete topping + ribs (net)</span><b id="rbC"></b></div>
+<div class="big"><span>Ribbed slab hollow blocks</span><b id="rbB"></b></div>
+</div>
+<p class="note">Ribbed slab concrete = plan area × [topping + (rib width × rib depth ÷ rib spacing)]. Filler blocks = plan area ÷ [(rib spacing − rib width + block width) ... approximated as (plan area − rib plan area) ÷ (block width × block length)].</p>
 </div>
 <div class="grid">
 <div><label for="qty">Number of elements</label><input id="qty" type="number" inputmode="decimal" min="1" value="1"></div>
@@ -282,7 +300,7 @@ main{padding-bottom:84px}
 </div>
 <button class="btn main" id="addPl" type="button">Add plastering to project</button>
 <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-<b>Flooring tiles</b>
+<b>Flooring tiles &amp; skirting</b>
 <div class="grid">
 <div><label for="fL">Floor length (<span class="u">m</span>)</label><input id="fL" type="number" inputmode="decimal" min="0"></div>
 <div><label for="fW">Floor width (<span class="u">m</span>)</label><input id="fW" type="number" inputmode="decimal" min="0"></div>
@@ -290,11 +308,14 @@ main{padding-bottom:84px}
 <div><label for="tw">Tile width (mm)</label><input id="tw" type="number" inputmode="decimal" value="600"></div>
 <div><label for="tj">Joint (mm)</label><input id="tj" type="number" inputmode="decimal" value="3"></div>
 <div><label for="fx">Wastage (%)</label><input id="fx" type="number" inputmode="decimal" value="10"></div>
+<div><label for="fSk">Skirting perimeter (<span class="u">m</span>)</label><input id="fSk" type="number" inputmode="decimal" min="0" placeholder="auto = 2×(L+W)"></div>
+<div><label for="fSkDed">Door width deduction (<span class="u">m</span>)</label><input id="fSkDed" type="number" inputmode="decimal" min="0" value="0"></div>
 </div>
 <div class="out">
 <div><span>Floor area</span><b id="gA"></b></div>
 <div><span>Tiles (net)</span><b id="gN"></b></div>
 <div class="big"><span>Tiles with wastage</span><b id="gG"></b></div>
+<div><span>Floor skirting length</span><b id="gSk"></b></div>
 </div>
 <div class="grid">
 <div><label for="flLvl">Building Story / Zone</label><select id="flLvl"><option value="Substructure">Substructure</option>
@@ -306,8 +327,208 @@ main{padding-bottom:84px}
 <option value="Custom">Custom floor / zone...</option></select></div>
 <div id="flCustWrap" hidden><label for="flCust">Custom Level / Zone</label><input id="flCust" type="text" placeholder="e.g. Basement 1"></div>
 </div>
-<button class="btn main" id="addFl" type="button">Add flooring to project</button>
-<p class="note">Plaster mortar dry volume = 1.3 × wet volume, cement 1440 kg/m³. Tiles = floor area ÷ (tile + joint) face area. Tile and joint sizes are in mm.</p>
+<button class="btn main" id="addFl" type="button">Add flooring &amp; skirting to project</button>
+<hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+<b>Painting, cladding &amp; wall tiling</b>
+<div class="grid">
+<div class="full"><label for="pnType">Finish system</label><select id="pnType">
+<option value="paint" selected>Emulsion / Acrylic Wall Paint (Primer + Coats)</option>
+<option value="gloss">Oil / Gloss Enamel Paint (Doors, Steel &amp; Dado)</option>
+<option value="quartz">Textured / Quartz Exterior Wall Finish</option>
+<option value="clad">Natural Stone / Granite Exterior Cladding</option>
+<option value="wtile">Ceramic / Porcelain Wall Tiling (Wet Areas)</option>
+</select></div>
+<div><label for="pnL">Wall / Surface length (<span class="u">m</span>)</label><input id="pnL" type="number" inputmode="decimal" min="0"></div>
+<div><label for="pnH">Wall height / width (<span class="u">m</span>)</label><input id="pnH" type="number" inputmode="decimal" min="0"></div>
+<div><label for="pnO">Openings (<span class="ua">m²</span>)</label><input id="pnO" type="number" inputmode="decimal" min="0" value="0"></div>
+<div><label for="pnF">Faces / Sides</label><select id="pnF"><option value="1" selected>One face</option><option value="2">Both faces</option></select></div>
+<div class="pn-paint"><label for="pnC">Number of finish coats</label><select id="pnC"><option value="1">1 coat</option><option value="2" selected>2 coats</option><option value="3">3 coats</option></select></div>
+<div class="pn-paint"><label for="pnCov">Coverage (m² / L per coat)</label><input id="pnCov" type="number" inputmode="decimal" min="1" value="10"></div>
+<div class="pn-paint"><label for="pnPr">Primer / Undercoat</label><select id="pnPr"><option value="1" selected>Include 1 primer coat (12 m²/L)</option><option value="0">No primer (repaint)</option></select></div>
+<div class="pn-wtile" hidden><label for="wtL">Wall tile length (mm)</label><input id="wtL" type="number" inputmode="decimal" value="600"></div>
+<div class="pn-wtile" hidden><label for="wtW">Wall tile width (mm)</label><input id="wtW" type="number" inputmode="decimal" value="300"></div>
+<div><label for="pnX">Wastage (%)</label><input id="pnX" type="number" inputmode="decimal" min="0" value="5"></div>
+</div>
+<div class="out">
+<div><span>Net finish area</span><b id="pnA"></b></div>
+<div class="pn-paint"><span>Primer required</span><b id="pnP"></b></div>
+<div class="big pn-paint"><span>Finish paint / coating</span><b id="pnQ"></b></div>
+<div class="big pn-wtile" hidden><span>Wall tiles (with wastage)</span><b id="pnT"></b></div>
+<div class="big pn-clad" hidden><span>Stone cladding area (incl. wastage)</span><b id="pnCl"></b></div>
+</div>
+<div class="grid">
+<div><label for="pnLvl">Building Story / Zone</label><select id="pnLvl"><option value="Substructure">Substructure</option>
+<option value="Ground Floor" selected>Ground Floor</option>
+<option value="First Floor">First Floor</option>
+<option value="Second Floor">Second Floor</option>
+<option value="Third Floor">Third Floor</option>
+<option value="Roof Level">Roof Level</option>
+<option value="Custom">Custom floor / zone...</option></select></div>
+<div id="pnCustWrap" hidden><label for="pnCust">Custom Level / Zone</label><input id="pnCust" type="text" placeholder="e.g. Exterior Facade"></div>
+</div>
+<button class="btn main" id="addPn" type="button">Add wall finish to project</button>
+<hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+<b>Doors, windows &amp; glass partitions</b>
+<div class="grid">
+<div class="full"><label for="dwType">Opening / Partition category</label><select id="dwType">
+<option value="winAl" selected>Aluminum Sliding / Casement Window</option>
+<option value="doorWd">Wooden Flush / Panel Door (with Frame &amp; Lock)</option>
+<option value="doorSt">Steel Security / Metal Door</option>
+<option value="glass">Tempered Glass Partition / Curtain Wall</option>
+</select></div>
+<div><label for="dwMark">Opening mark / ref</label><input id="dwMark" type="text" placeholder="e.g. D1, W1, GP1"></div>
+<div><label for="dwQty">Quantity (nos)</label><input id="dwQty" type="number" inputmode="decimal" min="1" value="1"></div>
+<div><label for="dwW">Width (<span class="u">m</span>)</label><input id="dwW" type="number" inputmode="decimal" min="0" value="1.2"></div>
+<div><label for="dwH">Height (<span class="u">m</span>)</label><input id="dwH" type="number" inputmode="decimal" min="0" value="1.5"></div>
+</div>
+<div class="out">
+<div><span>Unit opening area</span><b id="dwUa"></b></div>
+<div class="big"><span>Total glazed / leaf area</span><b id="dwTa"></b></div>
+<div><span>Total frame / perimeter length</span><b id="dwPr"></b></div>
+</div>
+<div class="grid">
+<div><label for="dwLvl">Building Story / Zone</label><select id="dwLvl"><option value="Substructure">Substructure</option>
+<option value="Ground Floor" selected>Ground Floor</option>
+<option value="First Floor">First Floor</option>
+<option value="Second Floor">Second Floor</option>
+<option value="Third Floor">Third Floor</option>
+<option value="Roof Level">Roof Level</option>
+<option value="Custom">Custom floor / zone...</option></select></div>
+<div id="dwCustWrap" hidden><label for="dwCust">Custom Level / Zone</label><input id="dwCust" type="text" placeholder="e.g. Main Entrance"></div>
+</div>
+<button class="btn main" id="addDw" type="button">Add door / window to project</button>
+<hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+<b>Ceiling works</b>
+<div class="grid">
+<div class="full"><label for="clType">Suspended ceiling system</label><select id="clType">
+<option value="gypsum" selected>Gypsum Board Suspended Ceiling (1200×2400 mm)</option>
+<option value="pvc">PVC / Acoustic Suspended Ceiling Panels</option>
+</select></div>
+<div><label for="clL">Room / Ceiling length (<span class="u">m</span>)</label><input id="clL" type="number" inputmode="decimal" min="0"></div>
+<div><label for="clW">Room / Ceiling width (<span class="u">m</span>)</label><input id="clW" type="number" inputmode="decimal" min="0"></div>
+<div><label for="clSp">Main runner / channel spacing (<span class="u">m</span>)</label><input id="clSp" type="number" inputmode="decimal" min="0.2" value="0.6"></div>
+<div><label for="clX">Wastage (%)</label><input id="clX" type="number" inputmode="decimal" min="0" value="8"></div>
+</div>
+<div class="out">
+<div class="big"><span>Ceiling area (net)</span><b id="clA"></b></div>
+<div><span>Gypsum / PVC boards (with wastage)</span><b id="clB"></b></div>
+<div><span>Metal framing channels &amp; perimeter angle</span><b id="clF"></b></div>
+</div>
+<div class="grid">
+<div><label for="clLvl">Building Story / Zone</label><select id="clLvl"><option value="Substructure">Substructure</option>
+<option value="Ground Floor" selected>Ground Floor</option>
+<option value="First Floor">First Floor</option>
+<option value="Second Floor">Second Floor</option>
+<option value="Third Floor">Third Floor</option>
+<option value="Roof Level">Roof Level</option>
+<option value="Custom">Custom floor / zone...</option></select></div>
+<div id="clCustWrap" hidden><label for="clCust">Custom Level / Zone</label><input id="clCust" type="text" placeholder="e.g. Lobby"></div>
+</div>
+<button class="btn main" id="addCl" type="button">Add ceiling works to project</button>
+<hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+<b>Plumbing &amp; sanitary rough-ins</b>
+<div class="grid">
+<div class="full"><label for="plSystem">Plumbing system / fixture type</label><select id="plSystem">
+<option value="drainPVC" selected>Drainage PVC Pipes &amp; Fittings (110mm / 50mm)</option>
+<option value="waterPPR">Water Supply PPR Pipes &amp; Fittings (Cold/Hot)</option>
+<option value="chamber">Inspection Chambers / Manholes (Masonry / Precast)</option>
+<option value="wc">Sanitary Fixture: Water Closet (WC) Suite</option>
+<option value="basin">Sanitary Fixture: Washbasin &amp; Mixer</option>
+<option value="shower">Sanitary Fixture: Shower Tray / Bathtub Set</option>
+</select></div>
+<div><label for="plQty">Quantity / Run length (<span class="u">m</span> or <span class="ua">nos</span>)</label><input id="plQty" type="number" inputmode="decimal" min="1" value="10"></div>
+<div><label for="plSize">Nominal size / Dia (mm)</label><input id="plSize" type="number" inputmode="decimal" min="15" value="110"></div>
+<div><label for="plFitt">Fittings allowance (%)</label><input id="plFitt" type="number" inputmode="decimal" min="0" value="15"></div>
+<div><label for="plW">Wastage (%)</label><input id="plW" type="number" inputmode="decimal" min="0" value="5"></div>
+</div>
+<div class="out">
+<div class="big"><span>Total quantity (with fittings &amp; wastage)</span><b id="plTot"></b></div>
+<div><span>Estimated material requirement</span><b id="plDesc"></b></div>
+</div>
+<div class="grid">
+<div><label for="plmvlLvl">Building Story / Zone</label><select id="plmvlLvl"><option value="Substructure">Substructure</option>
+<option value="Ground Floor" selected>Ground Floor</option>
+<option value="First Floor">First Floor</option>
+<option value="Second Floor">Second Floor</option>
+<option value="Third Floor">Third Floor</option>
+<option value="Roof Level">Roof Level</option>
+<option value="Custom">Custom floor / zone...</option></select></div>
+<div id="plmvlCustWrap" hidden><label for="plmvlCust">Custom Level / Zone</label><input id="plmvlCust" type="text" placeholder="e.g. Wet Core"></div>
+</div>
+<button class="btn main" id="addPlMep" type="button">Add plumbing item to project</button>
+<hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+<b>Electrical conduiting &amp; distribution</b>
+<div class="grid">
+<div class="full"><label for="elType">Electrical rough-in item</label><select id="elType">
+<option value="condPVC" selected>PVC Electrical Conduit (20mm / 25mm)</option>
+<option value="swBox">Switch &amp; Socket Junction / Gang Boxes</option>
+<option value="db">Distribution Board (DB) &amp; Breakers</option>
+<option value="cable">Electrical Cabling / Wiring (per floor)</option>
+</select></div>
+<div><label for="elQty">Quantity (run length <span class="u">m</span> or <span class="ua">nos</span>)</label><input id="elQty" type="number" inputmode="decimal" min="1" value="50"></div>
+<div><label for="elCirc">Circuits / Drops / Poles</label><input id="elCirc" type="number" inputmode="decimal" min="1" value="6"></div>
+<div><label for="elX">Wastage &amp; pull slack (%)</label><input id="elX" type="number" inputmode="decimal" min="0" value="10"></div>
+</div>
+<div class="out">
+<div class="big"><span>Total electrical quantity</span><b id="elTot"></b></div>
+<div><span>Component breakdown</span><b id="elDesc"></b></div>
+</div>
+<div class="grid">
+<div><label for="elmvlLvl">Building Story / Zone</label><select id="elmvlLvl"><option value="Substructure">Substructure</option>
+<option value="Ground Floor" selected>Ground Floor</option>
+<option value="First Floor">First Floor</option>
+<option value="Second Floor">Second Floor</option>
+<option value="Third Floor">Third Floor</option>
+<option value="Roof Level">Roof Level</option>
+<option value="Custom">Custom floor / zone...</option></select></div>
+<div id="elmvlCustWrap" hidden><label for="elmvlCust">Custom Level / Zone</label><input id="elmvlCust" type="text" placeholder="e.g. Electrical Shaft"></div>
+</div>
+<button class="btn main" id="addElMep" type="button">Add electrical item to project</button>
+<hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+<b>Roof trusses, coverings &amp; rainwater goods</b>
+<div class="grid">
+<div class="full"><label for="rfType">Roofing covering</label><select id="rfType">
+<option value="ega" selected>EGA / Corrugated Galvanized Iron Sheet (CIS)</option>
+<option value="tile">Clay / Concrete Roof Tiles</option>
+<option value="decra">Stone-Coated Steel Roof Tiles (Decra)</option>
+</select></div>
+<div><label for="rfStr">Roof structure / truss</label><select id="rfStr">
+<option value="steel" selected>Structural Steel RHS / Angle Trusses &amp; Purlins</option>
+<option value="timber">Seasoned Timber Trusses, Rafters &amp; Purlins</option>
+<option value="none">Covering only (no truss)</option>
+</select></div>
+<div><label for="rfTrSp">Truss spacing (<span class="u">m</span>)</label><input id="rfTrSp" type="number" inputmode="decimal" min="0.5" value="1.5"></div>
+<div><label for="rfPrSp">Purlin spacing (<span class="u">m</span>)</label><input id="rfPrSp" type="number" inputmode="decimal" min="0.3" value="0.9"></div>
+<div><label for="rfL">Plan / Ridge length (<span class="u">m</span>)</label><input id="rfL" type="number" inputmode="decimal" min="0"></div>
+<div><label for="rfW">Plan span / width (<span class="u">m</span>)</label><input id="rfW" type="number" inputmode="decimal" min="0"></div>
+<div><label for="rfP">Roof pitch / slope (°)</label><input id="rfP" type="number" inputmode="decimal" min="0" max="60" value="15"></div>
+<div><label for="rfE">Eaves overhang (<span class="u">m</span>)</label><input id="rfE" type="number" inputmode="decimal" min="0" value="0.6"></div>
+<div><label for="rfSl">Effective sheet / tile width (mm)</label><input id="rfSl" type="number" inputmode="decimal" min="100" value="760"></div>
+<div><label for="rfSh">Effective sheet / tile length (mm)</label><input id="rfSh" type="number" inputmode="decimal" min="100" value="3000"></div>
+<div><label for="rfRd">Ridge cap length (<span class="u">m</span>)</label><input id="rfRd" type="number" inputmode="decimal" min="0" placeholder="auto = plan length"></div>
+<div><label for="rfGt">Eaves gutter length (<span class="u">m</span>)</label><input id="rfGt" type="number" inputmode="decimal" min="0" placeholder="auto = 2 × plan length"></div>
+<div><label for="rfDp">Downpipes (no. × height <span class="u">m</span>)</label><input id="rfDp" type="number" inputmode="decimal" min="0" value="0" placeholder="total downpipe m"></div>
+<div><label for="rfX">Overlap &amp; wastage (%)</label><input id="rfX" type="number" inputmode="decimal" min="0" value="10"></div>
+</div>
+<div class="out">
+<div><span>Sloped roof area (incl. eaves)</span><b id="rfA"></b></div>
+<div class="big"><span>Roof sheets / tiles (with wastage)</span><b id="rfN"></b></div>
+<div><span>Truss &amp; purlin members</span><b id="rfTr"></b></div>
+<div><span>Ridge cap / flashing</span><b id="rfC"></b></div>
+<div><span>Eaves gutters &amp; downpipes</span><b id="rfGd"></b></div>
+</div>
+<div class="grid">
+<div><label for="rfLvl">Building Story / Zone</label><select id="rfLvl"><option value="Substructure">Substructure</option>
+<option value="Ground Floor">Ground Floor</option>
+<option value="First Floor">First Floor</option>
+<option value="Second Floor">Second Floor</option>
+<option value="Third Floor">Third Floor</option>
+<option value="Roof Level" selected>Roof Level</option>
+<option value="Custom">Custom floor / zone...</option></select></div>
+<div id="rfCustWrap" hidden><label for="rfCust">Custom Level / Zone</label><input id="rfCust" type="text" placeholder="e.g. Main Roof"></div>
+</div>
+<button class="btn main" id="addRf" type="button">Add roof system to project</button>
+<p class="note">Plaster dry volume = 1.3 × wet volume. Paint volume = (area × coats ÷ coverage) × (1 + wastage%). Sloped roof area = (length + 2×eaves) × (width + 2×eaves) ÷ cos(pitch°). Steel/timber roof framing estimates total truss chords/webs + purlin run length (m).</p>
 </section>
 
 <section class="panel" id="pj" hidden>
@@ -358,9 +579,11 @@ const TYPES={
  masonry:{dims:[["Length (m)","l"],["Thickness (m)","w"],["Height (m)","h"]],vol:d=>d.l*d.w*d.h},
  lean:{dims:[["Length (m)","l"],["Width (m)","w"],["Blinding Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
  slab:{dims:[["Length (m)","l"],["Width (m)","w"],["Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
+ ribbed:{dims:[["Slab Length (m)","l"],["Slab Width (m)","w"]],vol:d=>{const top=n($("rbTop").value)/1000,rw=n($("rbW").value)/1000,rh=n($("rbH").value)/1000,sp=Math.max(0.2,n($("rbSp").value)/1000);return d.l*d.w*(top+(rw*rh)/sp);}},
  footing:{dims:[["Length (m)","l"],["Width (m)","w"],["Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
  trap:{dims:[["Bottom Length L1 (m)","l"],["Bottom Width W1 (m)","w"],["Top Length L2 (m)","l2"],["Top Width W2 (m)","w2"],["Total Depth h (m)","h"]],vol:d=>{const a1=d.l*d.w,a2=d.l2*d.w2;return(d.h/3)*(a1+a2+Math.sqrt(a1*a2));}},
  beam:{dims:[["Length (m)","l"],["Width (m)","w"],["Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
+ lintel:{dims:[["Lintel / Tie Beam Length (m)","l"],["Wall Thickness / Width (m)","w"],["Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
  wall:{dims:[["Length (m)","l"],["Thickness (m)","w"],["Height (m)","h"]],vol:d=>d.l*d.w*d.h},
  col:{dims:[["Width (m)","l"],["Depth (m)","w"],["Height (m)","h"]],vol:d=>d.l*d.w*d.h},
  round:{dims:[["Diameter (m)","l"],["Height (m)","h"]],vol:d=>Math.PI*d.l*d.l/4*d.h},
@@ -374,9 +597,11 @@ const AREA={
  masonry:d=>2*d.l*d.h,
  lean:d=>0,
  slab:d=>slabForm(d),
+ ribbed:d=>d.l*d.w,
  footing:d=>2*(d.l+d.w)*d.h,
  trap:d=>{const dl=Math.abs(d.l-d.l2)/2,dw=Math.abs(d.w-d.w2)/2;const s1=Math.hypot(d.h,dw),s2=Math.hypot(d.h,dl);return(d.l+d.l2)*s1+(d.w+d.w2)*s2;},
  beam:d=>beamForm(d),
+ lintel:d=>d.l*(d.w+2*d.h),
  wall:d=>2*d.l*d.h,
  col:d=>2*(d.l+d.w)*d.h,
  round:d=>Math.PI*d.l*d.h,
@@ -405,14 +630,21 @@ function calcEl(){
  $("vGross").textContent=V(lastGross);
  $("fArea").textContent=A(AREA[t](d,$("soffit").checked)*q);
  $("sideDims").hidden=!$("sides").checked;$("beamWrap").hidden=t!=="beam";$("bSideDims").hidden=!$("bSide").checked;
- const bk=t==="brick",ex=t==="excav",ln=t==="lean";
- $("brk").hidden=!bk;$("exc").hidden=!ex;$("vNet").closest(".out").hidden=bk||ex;
+ const bk=t==="brick",ex=t==="excav",ln=t==="lean",rb=t==="ribbed";
+ $("brk").hidden=!bk;$("exc").hidden=!ex;$("rib").hidden=!rb;$("vNet").closest(".out").hidden=bk||ex;
  if(bk){CUR.el=null;calcBrick(d,q,w);}
  else if(ex){
   const bf=n($("exB").value)/100,br=Math.min(1,n($("exR").value)/100);
   const net=v,bulked=net*(1+bf),backfill=net*br,cartaway=Math.max(0,net-backfill)*(1+bf);
   $("eNet").textContent=V(net);$("eBlk").textContent=V(bulked);$("eBck").textContent=V(backfill);$("eCrt").textContent=V(cartaway);
   CUR.el={excav:net,backfill:backfill,cartaway:cartaway};
+ }else if(rb){
+  const planA=d.l*d.w*q,rw=n($("rbW").value)/1000,sp=Math.max(0.2,n($("rbSp").value)/1000),bl=Math.max(0.1,n($("rbBl").value)/1000);
+  const blkW=Math.max(0.1,sp-rw);
+  const netBlk=planA/(sp*bl);
+  const grossBlk=Math.ceil(netBlk*(1+n($("rbBx").value)/100));
+  $("rbA").textContent=A(planA);$("rbC").textContent=V(v);$("rbB").textContent=grossBlk.toLocaleString()+" pcs";
+  CUR.el={conc:lastGross,form:planA,ribBlock:grossBlk};
  }else if(t==="hardcore"){
   CUR.el={hardcore:lastGross};
  }else if(t==="masonry"){
@@ -424,7 +656,7 @@ function calcEl(){
  }
 }
 ["type"].forEach(id=>$(id).addEventListener("change",buildDims));
-["qty","waste","soffit","sides","sl","sh","bBot","bSide","bK","bT","exB","exR"].forEach(id=>$(id).addEventListener("input",calcEl));
+["qty","waste","soffit","sides","sl","sh","bBot","bSide","bK","bT","exB","exR","rbTop","rbW","rbH","rbSp","rbBl","rbBx"].forEach(id=>$(id).addEventListener("input",calcEl));
 
 const DIAS=[6,8,10,12,14,16,18,20,22,25,28,32,36,40,50];
 let rows=[{mk:"Top bar",d:12,n:"",l:""},{mk:"Stirrup",d:8,n:"",l:""}];
@@ -505,7 +737,7 @@ $("unit").addEventListener("change",()=>{
  for(const k in vals)if(k!=="ns"&&vals[k]!=="")vals[k]=+(vals[k]*c).toFixed(3);
  rows.forEach(r=>{if(r.l!=="")r.l=+(r.l*c).toFixed(3);});
  $("mv").value=+(n($("mv").value)*(IMP?M3:1/M3)).toFixed(3);
- ["sl","sh","bT"].forEach(id=>{if($(id).value!=="")$(id).value=+(n($(id).value)*c).toFixed(3);});
+ ["sl","sh","bT","pl","ph","fL","fW","fSk","fSkDed","pnL","pnH","dwW","dwH","clL","clW","clSp","plQty","elQty","rfTrSp","rfPrSp","rfL","rfW","rfE","rfRd","rfGt","rfDp"].forEach(id=>{if($(id).value!=="")$(id).value=+(n($(id).value)*c).toFixed(3);});
  $("mvl").textContent="Concrete volume ("+(IMP?"yd³":"m³")+")";
  buildDims();drawRows();calcMx();calcFn();});
 
@@ -546,13 +778,194 @@ function calcFn(){
  $("fA").textContent=A(pa);$("fM").textContent=V(wet);
  $("fC").textContent=f(cm*1440/50,1)+" bags ("+f(cm*1440,0)+" kg)";$("fS").textContent=V(dry*s/(1+s),2);
  CUR.pl={plas:pa,cement:cm*1440/50,sand:dry*s/(1+s)};
- const fa=n($("fL").value)*k*n($("fW").value)*k,fc=(n($("tl").value)+n($("tj").value))*(n($("tw").value)+n($("tj").value));
- const N=fc>0?fa*1e6/fc:0,G=Math.ceil(N*(1+n($("fx").value)/100));
- $("gA").textContent=A(fa);$("gN").textContent=Math.ceil(N).toLocaleString();$("gG").textContent=G.toLocaleString();
- CUR.fl={floor:fa,tile:G};}
-["pl","ph","po","pf","pt","ps","fL","fW","tl","tw","tj","fx"].forEach(id=>$(id).addEventListener("input",calcFn));
 
-const MAT=[["excav","Excavation (Pit/Trench)","m³"],["hardcore","Hardcore Filling","m³"],["masonry","Stone Masonry","m³"],["backfill","Backfill & Compaction","m³"],["cartaway","Cart-Away Surplus","m³"],["lean","Lean Concrete (C5)","m³"],["conc","Structural Concrete","m³"],["form","Formwork","m²"],["steel","Reinforcement","kg"],["brick","Blocks / Bricks","nos"],["cement","Cement","bags"],["sand","Sand","m³"],["agg","Aggregate","m³"],["water","Water","L"],["plas","Plastering","m²"],["floor","Floor area","m²"],["tile","Tiles","nos"]];
+ // Flooring & Skirting
+ const flL=n($("fL").value)*k,flW=n($("fW").value)*k;
+ const fa=flL*flW,fc=(n($("tl").value)+n($("tj").value))*(n($("tw").value)+n($("tj").value));
+ const N=fc>0?fa*1e6/fc:0,G=Math.ceil(N*(1+n($("fx").value)/100));
+ const rawPerim=n($("fSk").value)*k||(fa>0?2*(flL+flW):0);
+ const skirtM=Math.max(0,rawPerim-n($("fSkDed").value)*k);
+ $("gA").textContent=A(fa);$("gN").textContent=Math.ceil(N).toLocaleString();$("gG").textContent=G.toLocaleString();
+ $("gSk").textContent=Ln(skirtM);
+ CUR.fl={floor:fa,tile:G};
+ if(skirtM>0)CUR.fl.skirting=skirtM;
+
+ // Painting, Cladding & Wall Tiling
+ const pnt=$("pnType").value,isWtile=pnt==="wtile",isClad=pnt==="clad";
+ document.querySelectorAll(".pn-paint").forEach(el=>el.hidden=isWtile||isClad);
+ document.querySelectorAll(".pn-wtile").forEach(el=>el.hidden=!isWtile);
+ document.querySelectorAll(".pn-clad").forEach(el=>el.hidden=!isClad);
+ const pnArea=Math.max(0,n($("pnL").value)*k*n($("pnH").value)*k-n($("pnO").value)/(IMP?M2:1))*(+$("pnF").value);
+ const pnW=1+n($("pnX").value)/100;
+ $("pnA").textContent=A(pnArea);
+ if(isWtile){
+  const wtc=(n($("wtL").value)+3)*(n($("wtW").value)+3);
+  const wtN=wtc>0?Math.ceil((pnArea*1e6/wtc)*pnW):0;
+  $("pnT").textContent=wtN.toLocaleString()+" pcs";
+  CUR.pn={wtile:wtN};
+ }else if(isClad){
+  const clArea=pnArea*pnW;
+  $("pnCl").textContent=A(clArea);
+  CUR.pn={cladding:clArea};
+ }else{
+  const cov=n($("pnCov").value)||10,coats=+$("pnC").value,hasPr=+$("pnPr").value===1;
+  const prL=hasPr?(pnArea/12)*pnW:0;
+  const ptL=(pnArea*coats/cov)*pnW;
+  $("pnP").textContent=hasPr?f(prL,1)+" L":"None";
+  $("pnQ").textContent=f(ptL,1)+" L";
+  CUR.pn=pnt==="gloss"?{glossArea:pnArea,glossPaint:ptL}:{paintArea:pnArea,paint:ptL};
+  if(prL>0)CUR.pn.primer=prL;
+ }
+
+ // Doors, Windows & Glass Partitions
+ const dwt=$("dwType").value,dwq=Math.ceil(n($("dwQty").value)),dww=n($("dwW").value)*k,dwh=n($("dwH").value)*k;
+ const dwUnitA=dww*dwh,dwTotA=dwUnitA*dwq,dwPerim=2*(dww+dwh)*dwq;
+ $("dwUa").textContent=A(dwUnitA);
+ $("dwTa").textContent=A(dwTotA);
+ $("dwPr").textContent=Ln(dwPerim);
+ const dwMap={winAl:["winAl","winAlArea"],doorWd:["doorWd","doorWdArea"],doorSt:["doorSt","doorStArea"],glass:["glassPart","glassArea"]};
+ const [kNos,kArea]=dwMap[dwt];
+ CUR.dw=dwTotA>0?{[kNos]:dwq,[kArea]:dwTotA}:{};
+
+ // Ceiling Works
+ const clL=n($("clL").value)*k,clW=n($("clW").value)*k,clSp=Math.max(0.2,n($("clSp").value)*k);
+ const clArea=clL*clW,clWaste=1+n($("clX").value)/100;
+ const boardA=2.88; // 1.2m x 2.4m standard board
+ const clBoards=clArea>0?Math.ceil((clArea/boardA)*clWaste):0;
+ const clFrameM=clArea>0?((clArea/clSp)+2*(clL+clW))*clWaste:0;
+ $("clA").textContent=A(clArea);
+ $("clB").textContent=clBoards.toLocaleString()+" boards";
+ $("clF").textContent=Ln(clFrameM);
+ CUR.cl=clArea>0?{ceilingArea:clArea,[($("clType").value==="pvc"?"pvcBoard":"gypBoard")]:clBoards,ceilFrame:clFrameM}:{};
+
+ // Roof Trusses, Coverings, Gutters & Downpipes
+ const rL=n($("rfL").value)*k,rW=n($("rfW").value)*k,rE=n($("rfE").value)*k;
+ const pitchRad=Math.min(60,n($("rfP").value))*Math.PI/180;
+ const cosP=Math.max(0.5,Math.cos(pitchRad));
+ const planL=rL>0?rL+2*rE:0,planW=rW>0?rW+2*rE:0;
+ const rfArea=(planL*planW)/cosP;
+ const unitEff=(n($("rfSl").value)/1000)*(n($("rfSh").value)/1000);
+ const rfW=1+n($("rfX").value)/100;
+ const rfCnt=unitEff>0?Math.ceil((rfArea/unitEff)*rfW):0;
+ const ridgeM=n($("rfRd").value)*k||(rL>0?planL:0);
+ const gutterM=n($("rfGt").value)*k||(rL>0?2*planL:0);
+ const downpipeM=n($("rfDp").value)*k;
+ const trSp=Math.max(0.5,n($("rfTrSp").value)*k),prSp=Math.max(0.3,n($("rfPrSp").value)*k);
+ const nTruss=planL>0?Math.floor(planL/trSp)+1:0;
+ // Truss linear length approx: bottom chord + 2 rafters + internal web factor (2.65 * span)
+ const trussLenM=nTruss*(planW*2.65);
+ const slopedSpan=planW/cosP;
+ const nPurlin=slopedSpan>0?Math.ceil(slopedSpan/prSp)+1:0;
+ const purlinLenM=nPurlin*planL;
+ const totalFrameM=trussLenM+purlinLenM;
+ const rfStrType=$("rfStr").value;
+ $("rfA").textContent=A(rfArea);
+ $("rfN").textContent=rfCnt.toLocaleString()+" pcs";
+ $("rfTr").textContent=rfStrType==="none"?"None":`${nTruss} trusses · ${Ln(totalFrameM)} total members`;
+ $("rfC").textContent=Ln(ridgeM);
+ $("rfGd").textContent=`Gutter: ${Ln(gutterM)} · Downpipe: ${Ln(downpipeM)}`;
+ CUR.rf={roofArea:rfArea,roofSheet:rfCnt};
+ if(ridgeM>0)CUR.rf.ridge=ridgeM;
+ if(gutterM>0)CUR.rf.gutter=gutterM;
+ if(downpipeM>0)CUR.rf.downpipe=downpipeM;
+ if(rfStrType==="steel"&&totalFrameM>0)CUR.rf.steelTruss=totalFrameM;
+ if(rfStrType==="timber"&&totalFrameM>0)CUR.rf.timberTruss=totalFrameM;
+
+ // Plumbing & Sanitary MEP
+ const plt=$("plSystem").value,plq=n($("plQty").value),plf=1+n($("plFitt").value)/100,plw=1+n($("plW").value)/100;
+ const isPlLen=["drainPVC","waterPPR"].includes(plt);
+ const plTotQty=isPlLen?plq*plf*plw:Math.ceil(plq*plw);
+ $("plTot.textContent")// handled below
+ const plMap={drainPVC:["drainPipe","m"],waterPPR:["waterPipe","m"],chamber:["inspectionChamber","nos"],wc:["waterCloset","nos"],basin:["washbasin","nos"],shower:["showerSet","nos"]};
+ const [plKey,plUnit]=plMap[plt];
+ $("plTot").textContent=f(plTotQty,isPlLen?1:0)+" "+plUnit;
+ $("plDesc").textContent=isPlLen?`${plq} ${LU()} net + ${n($("plFitt").value)}% fittings + ${n($("plW").value)}% waste`:`${plq} units + ${n($("plW").value)}% spare/wastage`;
+ CUR.plmep={[plKey]:plTotQty};
+
+ // Electrical Conduiting & Distribution
+ const elt=$("elType").value,elq=n($("elQty").value),elcirc=n($("elCirc").value),elx=1+n($("elX").value)/100;
+ const isElLen=["condPVC","cable"].includes(elt);
+ const elTotQty=isElLen?elq*elx:Math.ceil(elq*elx);
+ const elMap={condPVC:["pvcConduit","m"],swBox:["switchBox","nos"],db:["distBoard","nos"],cable:["cableWiring","m"]};
+ const [elKey,elUnit]=elMap[elt];
+ $("elTot").textContent=f(elTotQty,isElLen?1:0)+" "+elUnit;
+ $("elDesc").textContent=isElLen?`${elq} ${LU()} net + ${n($("elX").value)}% slack/waste`:`${elq} units across ${elcirc} circuits`;
+ CUR.elmep={[elKey]:elTotQty};
+}
+["pl","ph","po","pf","pt","ps","fL","fW","tl","tw","tj","fx","fSk","fSkDed","pnL","pnH","pnO","pnF","pnC","pnCov","pnPr","wtL","wtW","pnX","dwQty","dwW","dwH","clL","clW","clSp","clX","plQty","plSize","plFitt","plW","elQty","elCirc","elX","rfTrSp","rfPrSp","rfL","rfW","rfP","rfE","rfSl","rfSh","rfRd","rfGt","rfDp","rfX"].forEach(id=>$(id).addEventListener("input",calcFn));
+["dwType","clType","plSystem","elType","rfStr"].forEach(id=>$(id).addEventListener("change",calcFn));
+$("pnType").addEventListener("change",()=>{
+ const v=$("pnType").value;
+ if(v==="quartz"){$("pnCov").value="4";$("pnC").value="1";}
+ else if(v==="paint"){$("pnCov").value="10";$("pnC").value="2";}
+ else if(v==="gloss"){$("pnCov").value="12";$("pnC").value="2";}
+ calcFn();
+});
+$("rfType").addEventListener("change",()=>{
+ const v=$("rfType").value;
+ if(v==="ega"){$("rfSl").value="760";$("rfSh").value="3000";}
+ else if(v==="tile"){$("rfSl").value="300";$("rfSh").value="400";}
+ else if(v==="decra"){$("rfSl").value="1340";$("rfSh").value="370";}
+ calcFn();
+});
+
+const MAT=[
+ ["excav","Excavation (Pit/Trench)","m³"],
+ ["hardcore","Hardcore Filling","m³"],
+ ["masonry","Stone Masonry","m³"],
+ ["backfill","Backfill & Compaction","m³"],
+ ["cartaway","Cart-Away Surplus","m³"],
+ ["lean","Lean Concrete (C5)","m³"],
+ ["conc","Structural Concrete","m³"],
+ ["form","Formwork","m²"],
+ ["steel","Reinforcement","kg"],
+ ["ribBlock","Ribbed Slab Filler Blocks","nos"],
+ ["brick","Blocks / Bricks","nos"],
+ ["cement","Cement","bags"],
+ ["sand","Sand","m³"],
+ ["agg","Aggregate","m³"],
+ ["water","Water","L"],
+ ["plas","Plastering","m²"],
+ ["paintArea","Emulsion / Wall Paint Area","m²"],
+ ["glossArea","Gloss / Enamel Paint Area","m²"],
+ ["primer","Primer / Undercoat","L"],
+ ["paint","Emulsion / Quartz Coating","L"],
+ ["glossPaint","Gloss / Enamel Paint","L"],
+ ["cladding","Stone / Facade Cladding","m²"],
+ ["wtile","Wall Tiles","nos"],
+ ["floor","Floor area","m²"],
+ ["tile","Floor Tiles","nos"],
+ ["skirting","Floor Skirting","m"],
+ ["winAl","Aluminum Windows","nos"],
+ ["winAlArea","Aluminum Window Area","m²"],
+ ["doorWd","Wooden Doors","nos"],
+ ["doorWdArea","Wooden Door Area","m²"],
+ ["doorSt","Steel Security Doors","nos"],
+ ["doorStArea","Steel Door Area","m²"],
+ ["glassPart","Glass Partitions","nos"],
+ ["glassArea","Glass Partition Area","m²"],
+ ["ceilingArea","Suspended Ceiling Area","m²"],
+ ["gypBoard","Gypsum Ceiling Boards","nos"],
+ ["pvcBoard","PVC Ceiling Panels","nos"],
+ ["ceilFrame","Ceiling Framing Channels","m"],
+ ["steelTruss","Steel Roof Trusses & Purlins","m"],
+ ["timberTruss","Timber Roof Trusses & Purlins","m"],
+ ["roofArea","Roof Covering Area","m²"],
+ ["roofSheet","Roof Sheets / Tiles","nos"],
+ ["ridge","Ridge Cap / Flashing","m"],
+ ["gutter","Eaves Rainwater Gutter","m"],
+ ["downpipe","Rainwater Downpipes","m"],
+ ["drainPipe","Drainage PVC Pipes & Fittings","m"],
+ ["waterPipe","Water Supply PPR Pipes","m"],
+ ["inspectionChamber","Inspection Chambers / Manholes","nos"],
+ ["waterCloset","Water Closet (WC) Suites","nos"],
+ ["washbasin","Washbasins & Mixers","nos"],
+ ["shower","Shower / Bathtub Sets","nos"],
+ ["pvcConduit","PVC Electrical Conduits","m"],
+ ["switchBox","Switch & Socket Boxes","nos"],
+ ["distBoard","Distribution Boards (DB)","nos"],
+ ["cableWiring","Electrical Cabling & Wiring","m"]
+];
 const LS={get(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let proj=LS.get("sq_proj",[]),rates=LS.get("sq_rates",{}),PT={};
 const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
@@ -569,7 +982,7 @@ function renderProj(){
  $("pList").innerHTML=proj.length?proj.map((p,i)=>`<div class="pi"><span>${esc(p.n)}</span><button class="btn" data-pd="${i}" type="button" aria-label="Remove">✕</button></div>`).join(""):'<p class="note">No items yet. Use Add to project on any tab.</p>';
  const T={};proj.forEach(p=>{for(const k in p.m)T[k]=(T[k]||0)+p.m[k];});PT=T;
  const rs=MAT.filter(([k])=>T[k]>0);
- $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Quantity</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],k==="brick"||k==="tile"?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Total</td><td id="pTot"></td></tr></tfoot>`:"";
+ $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Quantity</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],["brick","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Total</td><td id="pTot"></td></tr></tfoot>`:"";
  costs();
 }
 $("pList").addEventListener("click",e=>{const b=e.target.closest("[data-pd]");if(b){proj.splice(+b.dataset.pd,1);LS.set("sq_proj",proj);renderProj();}});
@@ -581,18 +994,41 @@ $("pClr").addEventListener("click",()=>{if(proj.length&&confirm("Remove all proj
  b.addEventListener("click",()=>addP(nm(),get()));$(id).appendChild(b);});
 $("addPl").addEventListener("click",()=>addItem("Plaster","",CUR.pl,snapFn("pl"),getLvl("plLvl","plCust")));
 $("addFl").addEventListener("click",()=>addItem("Floor","",CUR.fl,snapFn("fl"),getLvl("flLvl","flCust")));
+$("addPn").addEventListener("click",()=>{
+ const t=$("pnType").value;
+ const cat=t==="wtile"?"WallTile":t==="clad"?"StoneCladding":"Painting";
+ addItem(cat,"",CUR.pn,snapFn("pn"),getLvl("pnLvl","pnCust"));
+});
+$("addDw").addEventListener("click",()=>{
+ const t=$("dwType").value;
+ const catMap={winAl:"AluminumWindow",doorWd:"WoodenDoor",doorSt:"SteelDoor",glass:"GlassPartition"};
+ const mk=$("dwMark").value.trim();
+ addItem(catMap[t],mk,CUR.dw,snapFn("dw"),getLvl("dwLvl","dwCust"));
+});
+$("addCl").addEventListener("click",()=>addItem("Ceiling","",CUR.cl,snapFn("cl"),getLvl("clLvl","clCust")));
+$("addPlMep").addEventListener("click",()=>{
+ const t=$("plSystem").value;
+ const catMap={drainPVC:"DrainagePVC",waterPPR:"WaterSupplyPPR",chamber:"InspectionChamber",wc:"SanitaryWC",basin:"SanitaryBasin",shower:"SanitaryShower"};
+ addItem(catMap[t],"",CUR.plmep,snapFn("plmep"),getLvl("plmvlLvl","plmvlCust"));
+});
+$("addElMep").addEventListener("click",()=>{
+ const t=$("elType").value;
+ const catMap={condPVC:"ElectricalConduit",swBox:"ElectricalSwitchBox",db:"DistributionBoard",cable:"ElectricalCabling"};
+ addItem(catMap[t],"",CUR.elmep,snapFn("elmep"),getLvl("elmvlLvl","elmvlCust"));
+});
+$("addRf").addEventListener("click",()=>addItem("Roofing","",CUR.rf,snapFn("rf"),getLvl("rfLvl","rfCust")));
 function projRows(){
  if(!proj.length)return[];
  return[[""],["Project items"],...proj.map(p=>[p.n]),["Project totals (metric)"],["Material","Quantity","Rate","Cost"],
   ...[...document.querySelectorAll("#pTab tbody tr")].map(tr=>[tr.cells[0].textContent,tr.cells[1].textContent,tr.querySelector("input").value,tr.cells[3].textContent]),
   ["Total","","",$("pTot")?$("pTot").textContent:""]];}
 proj=[];
-const CAT={excav:"Excavation",hardcore:"Hardcore",masonry:"StoneMasonry",lean:"LeanConcrete",slab:"Slab",footing:"Footing",trap:"TrapezoidalFooting",beam:"Beam",wall:"Wall",brick:"MasonryWall",col:"Column",round:"Column",stair:"Stair",landing:"Landing"};
+const CAT={excav:"Excavation",hardcore:"Hardcore",masonry:"StoneMasonry",lean:"LeanConcrete",slab:"Slab",ribbed:"RibbedSlab",footing:"Footing",trap:"TrapezoidalFooting",beam:"Beam",lintel:"LintelTieBeam",wall:"Wall",brick:"MasonryWall",col:"Column",round:"Column",stair:"Stair",landing:"Landing"};
 const STORY_ORDER=["Substructure","Ground Floor","First Floor","Second Floor","Third Floor","Roof Level"];
 const storyRank=st=>{const idx=STORY_ORDER.indexOf(st||"Ground Floor");return idx>=0?idx:99;};
 const getLvl=(selId,custId)=>{const v=$(selId).value;return v==="Custom"?($(custId).value.trim()||"Custom Level"):v;};
 const setLvl=(selId,custId,wrapId,val)=>{const v=val||"Ground Floor";if(STORY_ORDER.includes(v)){$(selId).value=v;$(wrapId).hidden=true;}else{$(selId).value="Custom";$(custId).value=v;$(wrapId).hidden=false;}};
-[["plLvl","plCust","plCustWrap"],["flLvl","flCust","flCustWrap"]].forEach(([s,c,w])=>$(s).addEventListener("change",()=>{$(w).hidden=$(s).value!=="Custom";}));
+[["plLvl","plCust","plCustWrap"],["flLvl","flCust","flCustWrap"],["pnLvl","pnCust","pnCustWrap"],["dwLvl","dwCust","dwCustWrap"],["clLvl","clCust","clCustWrap"],["plmvlLvl","plmvlCust","plmvlCustWrap"],["elmvlLvl","elmvlCust","elmvlCustWrap"],["rfLvl","rfCust","rfCustWrap"]].forEach(([s,c,w])=>$(s).addEventListener("change",()=>{$(w).hidden=$(s).value!=="Custom";}));
 let PR=LS.get("sq_projects",null);
 if(!PR||!PR.list||!PR.list.length)PR={cur:"p1",list:[{id:"p1",name:"Project 1",items:[]}]};
 const saveP=()=>LS.set("sq_projects",PR);
@@ -614,7 +1050,7 @@ function renderItems(){
   const cats=[...new Set(lvlItems.map(i=>i.cat))];
   const catHtml=cats.map(cat=>{let sub=0;
    const h=lvlItems.filter(i=>i.cat===cat).map(it=>{const ic=itemCost(it);sub+=ic;
-    return `<div class="it"><div class="pi"><b>${esc(it.code)}</b><span>${esc(it.d||"")}</span></div>${MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>`<div class="pvr"><span>${l}</span><span>${f(it.m[k],k==="brick"||k==="tile"?0:2)} ${u}</span><span><input class="ri${it.r&&it.r[k]!==undefined&&it.r[k]!==""?" ov":""}" type="number" inputmode="decimal" min="0" data-ic="${esc(it.code)}" data-k="${k}" value="${it.r&&it.r[k]!==undefined?it.r[k]:""}" placeholder="${rates[k]||"rate"}" style="width:64px;padding:4px" aria-label="Rate for ${l}"></span><span>${rt(it,k)?c+f(it.m[k]*rt(it,k)):""}</span></div>`).join("")}<div class="pvr"><b>Cost of ${esc(it.code)}</b><b>${c}${f(ic)}</b></div></div>`;}).join("");
+    return `<div class="it"><div class="pi"><b>${esc(it.code)}</b><span>${esc(it.d||"")}</span></div>${MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>`<div class="pvr"><span>${l}</span><span>${f(it.m[k],["brick","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</span><span><input class="ri${it.r&&it.r[k]!==undefined&&it.r[k]!==""?" ov":""}" type="number" inputmode="decimal" min="0" data-ic="${esc(it.code)}" data-k="${k}" value="${it.r&&it.r[k]!==undefined?it.r[k]:""}" placeholder="${rates[k]||"rate"}" style="width:64px;padding:4px" aria-label="Rate for ${l}"></span><span>${rt(it,k)?c+f(it.m[k]*rt(it,k)):""}</span></div>`).join("")}<div class="pvr"><b>Cost of ${esc(it.code)}</b><b>${c}${f(ic)}</b></div></div>`;}).join("");
    return `<h4 style="margin:10px 0 4px;color:var(--accent)">${esc(cat)} — ${c}${f(sub)}</h4>${h}`;
   }).join("");
   return `<div style="border-top:2px solid var(--line);margin-top:14px;padding-top:6px"><h3 class="ch" style="margin-top:4px">${esc(lvl)} (Subtotal: ${c}${f(lvlTot)})</h3>${catHtml}</div>`;
@@ -634,7 +1070,7 @@ function renderProj(){
  $("prName").value=curP().name;
  const T={};curP().items.forEach(i=>{for(const k in i.m)T[k]=(T[k]||0)+i.m[k];});PT=T;
  const rs=MAT.filter(([k])=>T[k]>0);
- $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Total qty</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],k==="brick"||k==="tile"?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Project total</td><td id="pTot"></td></tr></tfoot>`:"";
+ $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Total qty</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],["brick","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Project total</td><td id="pTot"></td></tr></tfoot>`:"";
  costs();updAdd();renderPI();}
 function renderPI(){const p=curP();$("pjBtn").textContent="Project: "+p.name;
  $("pItems").innerHTML=p.items.length?p.items.map(it=>`<div class="pi"><span><b>${esc(it.code)}</b> ${esc(it.d||"")}</span><span><button class="btn" data-dup="${esc(it.code)}" type="button" title="Duplicate item">Copy</button> <button class="btn" data-ed="${esc(it.code)}" type="button">Edit</button> <button class="btn" data-del="${esc(it.code)}" type="button" aria-label="Remove ${esc(it.code)}">✕</button></span></div>`).join(""):'<p class="note">No work items yet.</p>';}
@@ -680,17 +1116,18 @@ $("pItems").addEventListener("click",e=>{const b=e.target.closest("[data-del]");
 $("pjBtn").addEventListener("click",()=>{$("pjs").hidden=false;});
 $("pjClose").addEventListener("click",()=>{$("pjs").hidden=true;});
 let editing=null,MC={};
-const PL=["pl","ph","po","pf","pt","ps"],FL=["fL","fW","tl","tw","tj","fx"],BR=["bl","bw","bh","bj","bt","bo","bs","bPreset"],MXI=["mix","cc","cs","ca","wc"];
-const snapFn=k=>({kind:k,u:IMP,lvl:getLvl(k+"Lvl",k+"Cust"),v:(k==="pl"?PL:FL).map(id=>$(id).value)});
-const snapEl=()=>({kind:"el",u:IMP,lvl:getLvl("elLvl","elCust"),type:$("type").value,vals:{...vals},qty:$("qty").value,waste:$("waste").value,soffit:$("soffit").checked,sides:$("sides").checked,sl:$("sl").value,sh:$("sh").value,bBot:$("bBot").checked,bSide:$("bSide").checked,bK:$("bK").value,bT:$("bT").value,exB:$("exB").value,exR:$("exR").value,b:BR.map(id=>$(id).value),rows:JSON.parse(JSON.stringify(rows)),incR:$("incR").checked,incM:$("incM").checked,mx:MXI.map(id=>$(id).value)});
+const PL=["pl","ph","po","pf","pt","ps"],FL=["fL","fW","tl","tw","tj","fx","fSk","fSkDed"],PN=["pnType","pnL","pnH","pnO","pnF","pnC","pnCov","pnPr","wtL","wtW","pnX"],DW=["dwType","dwMark","dwQty","dwW","dwH"],CL=["clType","clL","clW","clSp","clX"],PLMEP=["plSystem","plQty","plSize","plFitt","plW"],ELMEP=["elType","elQty","elCirc","elX"],RF=["rfType","rfStr","rfTrSp","rfPrSp","rfL","rfW","rfP","rfE","rfSl","rfSh","rfRd","rfGt","rfDp","rfX"],BR=["bl","bw","bh","bj","bt","bo","bs","bPreset"],MXI=["mix","cc","cs","ca","wc"];
+const fnMap={pl:PL,fl:FL,pn:PN,dw:DW,cl:CL,plmep:PLMEP,elmep:ELMEP,rf:RF};
+const snapFn=k=>({kind:k,u:IMP,lvl:getLvl(k+"Lvl",k+"Cust"),v:fnMap[k].map(id=>$(id).value)});
+const snapEl=()=>({kind:"el",u:IMP,lvl:getLvl("elLvl","elCust"),type:$("type").value,vals:{...vals},qty:$("qty").value,waste:$("waste").value,soffit:$("soffit").checked,sides:$("sides").checked,sl:$("sl").value,sh:$("sh").value,bBot:$("bBot").checked,bSide:$("bSide").checked,bK:$("bK").value,bT:$("bT").value,exB:$("exB").value,exR:$("exR").value,rb:["rbTop","rbW","rbH","rbSp","rbBl","rbBx"].map(id=>$(id).value),b:BR.map(id=>$(id).value),rows:JSON.parse(JSON.stringify(rows)),incR:$("incR").checked,incM:$("incM").checked,mx:MXI.map(id=>$(id).value)});
 function loadSnap(s){
  if(!!s.u!==IMP){$("unit").value=s.u?"ft":"m";$("unit").dispatchEvent(new Event("change"));}
- if(s.kind==="el"){$("type").value=s.type;vals={...s.vals};buildDims();$("qty").value=s.qty;$("waste").value=s.waste;$("soffit").checked=s.soffit;$("sides").checked=s.sides!==false;$("sl").value=s.sl||"";$("sh").value=s.sh||"";$("bBot").checked=s.bBot!==false;$("bSide").checked=s.bSide!==false;$("bK").value=s.bK||"0";$("bT").value=s.bT||"";if(s.exB!==undefined)$("exB").value=s.exB;if(s.exR!==undefined)$("exR").value=s.exR;
+ if(s.kind==="el"){$("type").value=s.type;vals={...s.vals};buildDims();$("qty").value=s.qty;$("waste").value=s.waste;$("soffit").checked=s.soffit;$("sides").checked=s.sides!==false;$("sl").value=s.sl||"";$("sh").value=s.sh||"";$("bBot").checked=s.bBot!==false;$("bSide").checked=s.bSide!==false;$("bK").value=s.bK||"0";$("bT").value=s.bT||"";if(s.exB!==undefined)$("exB").value=s.exB;if(s.exR!==undefined)$("exR").value=s.exR;if(s.rb)["rbTop","rbW","rbH","rbSp","rbBl","rbBx"].forEach((id,i)=>{if(s.rb[i]!==undefined)$(id).value=s.rb[i];});
   setLvl("elLvl","elCust","elCustWrap",s.lvl);
   BR.forEach((id,i)=>{if(s.b[i]!==undefined)$(id).value=s.b[i];});rows=JSON.parse(JSON.stringify(s.rows));drawRows();
   MXI.forEach((id,i)=>$(id).value=s.mx[i]);$("cust").hidden=$("mix").value!=="custom";calcMx();
   $("incR").checked=s.incR;$("incM").checked=s.incM;calcEl();}
- else{(s.kind==="pl"?PL:FL).forEach((id,i)=>$(id).value=s.v[i]);setLvl(s.kind+"Lvl",s.kind+"Cust",s.kind+"CustWrap",s.lvl);calcFn();}
+ else{(fnMap[s.kind]||PL).forEach((id,i)=>{if(s.v[i]!==undefined)$(id).value=s.v[i];});setLvl(s.kind+"Lvl",s.kind+"Cust",s.kind+"CustWrap",s.lvl);calcFn();}
  document.querySelector(`nav button[data-t="${s.kind==="el"?"el":"fn"}"]`).click();}
 function addItem(cat,desc,m,s,lvl){
  if(!m||!Object.values(m).some(v=>v>0)){$("xs").textContent="Nothing to save yet. Enter the dimensions first.";return;}
@@ -703,7 +1140,7 @@ function addItem(cat,desc,m,s,lvl){
 function updAdd(){
  const e=editing,P=curP().name,set=(id,kind,idle)=>{const b=$(id);if(b)b.textContent=e&&e.kind===kind?"Update "+e.code:idle;};
  set("addEl","el","Save as "+nextCode(CAT[$("type").value])+" to "+P);
- set("addPl","pl","Add plastering to project");set("addFl","fl","Add flooring to project");}
+ set("addPl","pl","Add plastering to project");set("addFl","fl","Add flooring & skirting to project");set("addPn","pn","Add wall finish to project");set("addDw","dw","Add door / window to project");set("addCl","cl","Add ceiling works to project");set("addPlMep","plmep","Add plumbing item to project");set("addElMep","elmep","Add electrical item to project");set("addRf","rf","Add roof system to project");}
 function renderPI(){const p=curP();$("pjBtn").textContent="Project: "+p.name;
  $("pItems").innerHTML=p.items.length?p.items.map(it=>`<div class="pi"><span><b>${esc(it.code)}</b> ${esc(it.d||"")}</span><span><button class="btn" data-dup="${esc(it.code)}" type="button" title="Duplicate item">Copy</button> <button class="btn" data-ed="${esc(it.code)}" type="button">Edit</button> <button class="btn" data-del="${esc(it.code)}" type="button" aria-label="Remove ${esc(it.code)}">✕</button></span></div>`).join(""):'<p class="note">No work items yet.</p>';}
 function costs(){
@@ -737,7 +1174,8 @@ $("pItems").addEventListener("click",e=>{
   const copy=JSON.parse(JSON.stringify(orig));
   copy.code=nextCode(orig.cat);
   p.items.push(copy);saveP();renderProj();
-  const sn=copy.s||{kind:copy.cat==="Plaster"?"pl":copy.cat==="Floor"?"fl":"el"};
+  const catKind=c=>c==="Plaster"?"pl":c==="Floor"?"fl":(c==="Painting"||c==="WallTile"||c==="StoneCladding")?"pn":(c==="AluminumWindow"||c==="WoodenDoor"||c==="SteelDoor"||c==="GlassPartition")?"dw":c==="Ceiling"?"cl":["DrainagePVC","WaterSupplyPPR","InspectionChamber","SanitaryWC","SanitaryBasin","SanitaryShower"].includes(c)?"plmep":["ElectricalConduit","ElectricalSwitchBox","DistributionBoard","ElectricalCabling"].includes(c)?"elmep":c==="Roofing"?"rf":"el";
+  const sn=copy.s||{kind:catKind(copy.cat)};
   editing={code:copy.code,kind:sn.kind};
   if(copy.s)loadSnap(copy.s);else document.querySelector(`nav button[data-t="${sn.kind==="el"?"el":"fn"}"]`).click();
   if($("icode"))$("icode").value=copy.code;
@@ -746,7 +1184,7 @@ $("pItems").addEventListener("click",e=>{
   return;
  }
  const b=e.target.closest("[data-ed]");if(!b)return;
- const it=curP().items.find(i=>i.code===b.dataset.ed);if(!it)return;const sn=it.s||{kind:it.cat==="Plaster"?"pl":it.cat==="Floor"?"fl":"el"};
+ const it=curP().items.find(i=>i.code===b.dataset.ed);if(!it)return;const sn=it.s||{kind:catKind(it.cat)};
  editing={code:it.code,kind:sn.kind};if(it.s)loadSnap(it.s);else document.querySelector(`nav button[data-t="${sn.kind==="el"?"el":"fn"}"]`).click();if($("icode"))$("icode").value=it.code;$("idesc").value=it.d||"";$("pjs").hidden=true;$("edCx").hidden=false;
  $("xs").textContent=it.s?"Editing "+it.code+". Change the values, then tap Update.":"Editing "+it.code+". It was saved before editing existed, so enter its values again, then tap Update.";updAdd();});
 $("edCx").addEventListener("click",()=>{editing=null;if($("icode"))$("icode").value="";$("edCx").hidden=true;$("xs").textContent="";updAdd();});
@@ -789,7 +1227,7 @@ function schedHtml(){
 const meta=()=>({by:$("pmBy").value.trim(),site:$("pmSite").value.trim()});
 {const m=LS.get("sq_meta",{});$("pmBy").value=m.by||"";$("pmSite").value=m.site||"";
  ["pmBy","pmSite"].forEach(id=>$(id).addEventListener("input",()=>{LS.set("sq_meta",meta());const D=docHtml();if(D)$("pvp").innerHTML=D;}));}
-const QD=k=>k==="brick"||k==="tile"?0:2;
+const QD=k=>["brick","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2;
 const H1=["Code","Story / Zone","Description","Concrete (m³)","Formwork (m²)","Steel (kg)","Cost"],A1="lllrrrr",H2=["Material","Unit","Quantity","Rate","Amount"],A2="llrrr",A3="lrrrrrrrr",H4=["Story / Level","Element Type","Items","Cost"],A4="llrr";
 function rpt(){
  const p=curP(),items=p.items.slice().sort((a,b)=>storyRank(a.lvl)-storyRank(b.lvl)||(a.lvl||"").localeCompare(b.lvl||"")||a.cat.localeCompare(b.cat));
@@ -1043,7 +1481,7 @@ function report(){
  document.querySelectorAll("#rOff p").forEach(p=>R.push(["Offcut",p.innerText]));
  R.push([""],["Mix"],["Concrete volume",$("mv").value+" "+(IMP?"yd³":"m³")],["Mix ratio",$("mix").options[$("mix").selectedIndex].text],["Water-cement ratio",$("wc").value],["Cement",$("mC").textContent],["Sand",$("mS").textContent],["Aggregate",$("mA").textContent],["Water",$("mW").textContent]);
  const pr=projRows();
- if(pr.length)return[["Site quantities"],...pr.slice(1),[""],["Total quantity of all items"],["Material","Quantity","Rate","Cost"],...MAT.filter(([k])=>PT[k]>0).map(([k,l,u])=>[l,f(PT[k],k==="brick"||k==="tile"?0:2)+" "+u,rates[k]||"",f(MC[k]||0)])];
+ if(pr.length)return[["Site quantities"],...pr.slice(1),[""],["Total quantity of all items"],["Material","Quantity","Rate","Cost"],...MAT.filter(([k])=>PT[k]>0).map(([k,l,u])=>[l,f(PT[k],["brick","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)+" "+u,rates[k]||"",f(MC[k]||0)])];
  return R;}
 async function save(name,data){
  const st=$("xs");st.textContent="";
