@@ -154,6 +154,25 @@ main{padding-bottom:84px}
 <option value="landing">Landing</option>
 </select>
 <div class="grid" id="dims"></div>
+<div id="msn" hidden>
+<div class="grid">
+<div><label for="msnL">Stone / Block length (mm)</label><input id="msnL" type="number" inputmode="decimal" value="300"></div>
+<div><label for="msnW">Stone / Block width (mm)</label><input id="msnW" type="number" inputmode="decimal" value="200"></div>
+<div><label for="msnH">Stone / Block height (mm)</label><input id="msnH" type="number" inputmode="decimal" value="150"></div>
+<div><label for="msnJ">Mortar joint (mm)</label><input id="msnJ" type="number" inputmode="decimal" value="15"></div>
+<div><label for="msnMo">Mortar volume ratio (%)</label><input id="msnMo" type="number" inputmode="decimal" min="20" max="50" value="35"></div>
+<div><label for="msnBs">Mortar 1 : sand</label><input id="msnBs" type="number" inputmode="decimal" value="4"></div>
+<div class="full"><label for="msnO">Openings deduction (m²)</label><input id="msnO" type="number" inputmode="decimal" value="0"></div>
+</div>
+<div class="out">
+<div><span>Blocks / stones (net)</span><b id="msnNet"></b></div>
+<div class="big"><span>Blocks / stone with wastage</span><b id="msnGross"></b></div>
+<div><span>Mortar (wet volume)</span><b id="msnMortar"></b></div>
+<div class="big"><span>Mortar cement</span><b id="msnCement"></b></div>
+<div class="big"><span>Mortar sand</span><b id="msnSand"></b></div>
+</div>
+<p class="note">Stone masonry calculation based on net wall volume (gross minus openings), mortar volume proportion (~35%), unit stone/block size with mortar joints, and 1:sand mortar mix ratio.</p>
+</div>
 <div id="brk" hidden>
 <div class="grid">
 <div class="full"><label for="bPreset">Standard Unit Preset</label>
@@ -187,6 +206,11 @@ main{padding-bottom:84px}
 <div class="grid">
 <div><label for="exB">Bulking factor (%)</label><input id="exB" type="number" inputmode="decimal" min="0" value="25"></div>
 <div><label for="exR">Backfill ratio (% of net vol)</label><input id="exR" type="number" inputmode="decimal" min="0" max="100" value="70"></div>
+<div class="full"><label class="chk"><input type="checkbox" id="exCustomToggle"> Enable custom backfill &amp; cart-away amounts</label></div>
+<div id="exCustomWrap" hidden class="full grid" style="margin-top:0">
+<div><label for="exCustomBck">Custom Backfill Volume (<span class="u">m</span>³)</label><input id="exCustomBck" type="number" inputmode="decimal" min="0" value="0"></div>
+<div><label for="exCustomCrt">Custom Cart-Away Volume (<span class="u">m</span>³ bulked)</label><input id="exCustomCrt" type="number" inputmode="decimal" min="0" value="0"></div>
+</div>
 </div>
 <div class="out">
 <div><span>Net Pit / Trench Excavation</span><b id="eNet"></b></div>
@@ -574,7 +598,7 @@ const Q=v=>{v=String(v==null?"":v).trim();let r;
  return isFinite(r)&&r>0?Math.ceil(r-1e-9):0;};
 const f=(x,d=2)=>x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});
 const TYPES={
- excav:{dims:[["Pit / Trench Length (m)","l"],["Width (m)","w"],["Excavation Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
+ excav:[["Pit / Trench Length (m)","l"],["Width (m)","w"],["Excavation Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
  hardcore:{dims:[["Length (m)","l"],["Width (m)","w"],["Compacted Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
  masonry:{dims:[["Length (m)","l"],["Thickness (m)","w"],["Height (m)","h"]],vol:d=>d.l*d.w*d.h},
  lean:{dims:[["Length (m)","l"],["Width (m)","w"],["Blinding Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
@@ -630,8 +654,8 @@ function calcEl(){
  $("vGross").textContent=V(lastGross);
  $("fArea").textContent=A(AREA[t](d,$("soffit").checked)*q);
  $("sideDims").hidden=!$("sides").checked;$("beamWrap").hidden=t!=="beam";$("bSideDims").hidden=!$("bSide").checked;
- const bk=t==="brick",ex=t==="excav",ln=t==="lean",rb=t==="ribbed";
- $("brk").hidden=!bk;$("exc").hidden=!ex;$("rib").hidden=!rb;$("vNet").closest(".out").hidden=bk||ex;
+ const msn=t==="masonry",bk=t==="brick",ex=t==="excav",ln=t==="lean",rb=t==="ribbed";
+ $("msn").hidden=!msn;$("brk").hidden=!bk;$("exc").hidden=!ex;$("rib").hidden=!rb;$("vNet").closest(".out").hidden=msn||bk||ex;
  if(bk){CUR.el=null;calcBrick(d,q,w);}
  else if(ex){
   const bf=n($("exB").value)/100,br=Math.min(1,n($("exR").value)/100);
@@ -648,7 +672,26 @@ function calcEl(){
  }else if(t==="hardcore"){
   CUR.el={hardcore:lastGross};
  }else if(t==="masonry"){
-  CUR.el={masonry:lastGross,form:AREA[t](d)*q};
+  const msnL=n($("msnL").value),msnW=n($("msnW").value),msnH=n($("msnH").value),msnJ=n($("msnJ").value);
+  const msnMo=n($("msnMo").value)/100,msnBs=n($("msnBs").value)||4,msnWst=n($("waste").value)/100;
+  const opArea=n($("msnO").value)/(IMP?M2:1);
+  const netVol=Math.max(0,v-(opArea*d.w));
+  const mortarWet=netVol*msnMo;
+  const stoneNetVol=netVol-mortarWet;
+  const unitVol=((msnL+msnJ)*(msnW+msnJ)*(msnH+msnJ))/1e9;
+  const netStones=unitVol>0?Math.ceil(stoneNetVol/unitVol):0;
+  const grossStones=Math.ceil(netStones*(1+msnWst));
+  const dryMortar=mortarWet*1.27*(1+msnWst);
+  const msnCement=dryMortar/(1+msnBs)*1440/50;
+  const msnSand=dryMortar*msnBs/(1+msnBs);
+  
+  $("msnNet").textContent=netStones.toLocaleString()+" pcs ("+V(stoneNetVol)+"; "+f(stoneNetVol/netVol*100,1)+"% vol)";
+  $("msnGross").textContent=grossStones.toLocaleString()+" pcs";
+  $("msnMortar").textContent=V(mortarWet);
+  $("msnCement").textContent=f(msnCement,1)+" bags ("+f(msnCement*50,0)+" kg)";
+  $("msnSand").textContent=V(msnSand);
+  
+  CUR.el={masonry:lastGross,stoneBlock:grossStones,cement:msnCement,sand:msnSand,form:AREA[t](d)*q};
  }else if(ln){
   CUR.el={lean:lastGross};
  }else{
@@ -656,7 +699,7 @@ function calcEl(){
  }
 }
 ["type"].forEach(id=>$(id).addEventListener("change",buildDims));
-["qty","waste","soffit","sides","sl","sh","bBot","bSide","bK","bT","exB","exR","rbTop","rbW","rbH","rbSp","rbBl","rbBx"].forEach(id=>$(id).addEventListener("input",calcEl));
+["qty","waste","soffit","sides","sl","sh","bBot","bSide","bK","bT","exB","exR","rbTop","rbW","rbH","rbSp","rbBl","rbBx","msnL","msnW","msnH","msnJ","msnMo","msnBs","msnO"].forEach(id=>$(id).addEventListener("input",calcEl));
 
 const DIAS=[6,8,10,12,14,16,18,20,22,25,28,32,36,40,50];
 let rows=[{mk:"Top bar",d:12,n:"",l:""},{mk:"Stirrup",d:8,n:"",l:""}];
@@ -921,6 +964,7 @@ const MAT=[
  ["steel","Reinforcement","kg"],
  ["ribBlock","Ribbed Slab Filler Blocks","nos"],
  ["brick","Blocks / Bricks","nos"],
+ ["stoneBlock","Stone Masonry Blocks / Stones","nos"],
  ["cement","Cement","bags"],
  ["sand","Sand","m³"],
  ["agg","Aggregate","m³"],
@@ -982,7 +1026,7 @@ function renderProj(){
  $("pList").innerHTML=proj.length?proj.map((p,i)=>`<div class="pi"><span>${esc(p.n)}</span><button class="btn" data-pd="${i}" type="button" aria-label="Remove">✕</button></div>`).join(""):'<p class="note">No items yet. Use Add to project on any tab.</p>';
  const T={};proj.forEach(p=>{for(const k in p.m)T[k]=(T[k]||0)+p.m[k];});PT=T;
  const rs=MAT.filter(([k])=>T[k]>0);
- $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Quantity</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],["brick","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Total</td><td id="pTot"></td></tr></tfoot>`:"";
+ $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Quantity</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Total</td><td id="pTot"></td></tr></tfoot>`:"";
  costs();
 }
 $("pList").addEventListener("click",e=>{const b=e.target.closest("[data-pd]");if(b){proj.splice(+b.dataset.pd,1);LS.set("sq_proj",proj);renderProj();}});
@@ -1050,7 +1094,7 @@ function renderItems(){
   const cats=[...new Set(lvlItems.map(i=>i.cat))];
   const catHtml=cats.map(cat=>{let sub=0;
    const h=lvlItems.filter(i=>i.cat===cat).map(it=>{const ic=itemCost(it);sub+=ic;
-    return `<div class="it"><div class="pi"><b>${esc(it.code)}</b><span>${esc(it.d||"")}</span></div>${MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>`<div class="pvr"><span>${l}</span><span>${f(it.m[k],["brick","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</span><span><input class="ri${it.r&&it.r[k]!==undefined&&it.r[k]!==""?" ov":""}" type="number" inputmode="decimal" min="0" data-ic="${esc(it.code)}" data-k="${k}" value="${it.r&&it.r[k]!==undefined?it.r[k]:""}" placeholder="${rates[k]||"rate"}" style="width:64px;padding:4px" aria-label="Rate for ${l}"></span><span>${rt(it,k)?c+f(it.m[k]*rt(it,k)):""}</span></div>`).join("")}<div class="pvr"><b>Cost of ${esc(it.code)}</b><b>${c}${f(ic)}</b></div></div>`;}).join("");
+    return `<div class="it"><div class="pi"><b>${esc(it.code)}</b><span>${esc(it.d||"")}</span></div>${MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>`<div class="pvr"><span>${l}</span><span>${f(it.m[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</span><span><input class="ri${it.r&&it.r[k]!==undefined&&it.r[k]!==""?" ov":""}" type="number" inputmode="decimal" min="0" data-ic="${esc(it.code)}" data-k="${k}" value="${it.r&&it.r[k]!==undefined?it.r[k]:""}" placeholder="${rates[k]||"rate"}" style="width:64px;padding:4px" aria-label="Rate for ${l}"></span><span>${rt(it,k)?c+f(it.m[k]*rt(it,k)):""}</span></div>`).join("")}<div class="pvr"><b>Cost of ${esc(it.code)}</b><b>${c}${f(ic)}</b></div></div>`;}).join("");
    return `<h4 style="margin:10px 0 4px;color:var(--accent)">${esc(cat)} — ${c}${f(sub)}</h4>${h}`;
   }).join("");
   return `<div style="border-top:2px solid var(--line);margin-top:14px;padding-top:6px"><h3 class="ch" style="margin-top:4px">${esc(lvl)} (Subtotal: ${c}${f(lvlTot)})</h3>${catHtml}</div>`;
@@ -1070,7 +1114,7 @@ function renderProj(){
  $("prName").value=curP().name;
  const T={};curP().items.forEach(i=>{for(const k in i.m)T[k]=(T[k]||0)+i.m[k];});PT=T;
  const rs=MAT.filter(([k])=>T[k]>0);
- $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Total qty</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],["brick","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Project total</td><td id="pTot"></td></tr></tfoot>`:"";
+ $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Total qty</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Project total</td><td id="pTot"></td></tr></tfoot>`:"";
  costs();updAdd();renderPI();}
 function renderPI(){const p=curP();$("pjBtn").textContent="Project: "+p.name;
  $("pItems").innerHTML=p.items.length?p.items.map(it=>`<div class="pi"><span><b>${esc(it.code)}</b> ${esc(it.d||"")}</span><span><button class="btn" data-dup="${esc(it.code)}" type="button" title="Duplicate item">Copy</button> <button class="btn" data-ed="${esc(it.code)}" type="button">Edit</button> <button class="btn" data-del="${esc(it.code)}" type="button" aria-label="Remove ${esc(it.code)}">✕</button></span></div>`).join(""):'<p class="note">No work items yet.</p>';}
@@ -1116,13 +1160,15 @@ $("pItems").addEventListener("click",e=>{const b=e.target.closest("[data-del]");
 $("pjBtn").addEventListener("click",()=>{$("pjs").hidden=false;});
 $("pjClose").addEventListener("click",()=>{$("pjs").hidden=true;});
 let editing=null,MC={};
-const PL=["pl","ph","po","pf","pt","ps"],FL=["fL","fW","tl","tw","tj","fx","fSk","fSkDed"],PN=["pnType","pnL","pnH","pnO","pnF","pnC","pnCov","pnPr","wtL","wtW","pnX"],DW=["dwType","dwMark","dwQty","dwW","dwH"],CL=["clType","clL","clW","clSp","clX"],PLMEP=["plSystem","plQty","plSize","plFitt","plW"],ELMEP=["elType","elQty","elCirc","elX"],RF=["rfType","rfStr","rfTrSp","rfPrSp","rfL","rfW","rfP","rfE","rfSl","rfSh","rfRd","rfGt","rfDp","rfX"],BR=["bl","bw","bh","bj","bt","bo","bs","bPreset"],MXI=["mix","cc","cs","ca","wc"];
+const PL=["pl","ph","po","pf","pt","ps"],FL=["fL","fW","tl","tw","tj","fx","fSk","fSkDed"],PN=["pnType","pnL","pnH","pnO","pnF","pnC","pnCov","pnPr","wtL","wtW","pnX"],DW=["dwType","dwMark","dwQty","dwW","dwH"],CL=["clType","clL","clW","clSp","clX"],PLMEP=["plSystem","plQty","plSize","plFitt","plW"],ELMEP=["elType","elQty","elCirc","elX"],RF=["rfType","rfStr","rfTrSp","rfPrSp","rfL","rfW","rfP","rfE","rfSl","rfSh","rfRd","rfGt","rfDp","rfX"],BR=["bl","bw","bh","bj","bt","bo","bs","bPreset"],EXC=["exB","exR","exCustomToggle","exCustomBck","exCustomCrt"],MXI=["mix","cc","cs","ca","wc"];
 const fnMap={pl:PL,fl:FL,pn:PN,dw:DW,cl:CL,plmep:PLMEP,elmep:ELMEP,rf:RF};
 const snapFn=k=>({kind:k,u:IMP,lvl:getLvl(k+"Lvl",k+"Cust"),v:fnMap[k].map(id=>$(id).value)});
-const snapEl=()=>({kind:"el",u:IMP,lvl:getLvl("elLvl","elCust"),type:$("type").value,vals:{...vals},qty:$("qty").value,waste:$("waste").value,soffit:$("soffit").checked,sides:$("sides").checked,sl:$("sl").value,sh:$("sh").value,bBot:$("bBot").checked,bSide:$("bSide").checked,bK:$("bK").value,bT:$("bT").value,exB:$("exB").value,exR:$("exR").value,rb:["rbTop","rbW","rbH","rbSp","rbBl","rbBx"].map(id=>$(id).value),b:BR.map(id=>$(id).value),rows:JSON.parse(JSON.stringify(rows)),incR:$("incR").checked,incM:$("incM").checked,mx:MXI.map(id=>$(id).value)});
+const snapEl=()=>({kind:"el",u:IMP,lvl:getLvl("elLvl","elCust"),type:$("type").value,vals:{...vals},qty:$("qty").value,waste:$("waste").value,soffit:$("soffit").checked,sides:$("sides").checked,sl:$("sl").value,sh:$("sh").value,bBot:$("bBot").checked,bSide:$("bSide").checked,bK:$("bK").value,bT:$("bT").value,exB:$("exB").value,exR:$("exR").value,ex:EXC.map(id=>$(id).type==="checkbox"?$(id).checked:$(id).value),rb:["rbTop","rbW","rbH","rbSp","rbBl","rbBx"].map(id=>$(id).value),b:BR.map(id=>$(id).value),rows:JSON.parse(JSON.stringify(rows)),incR:$("incR").checked,incM:$("incM").checked,mx:MXI.map(id=>$(id).value)});
 function loadSnap(s){
  if(!!s.u!==IMP){$("unit").value=s.u?"ft":"m";$("unit").dispatchEvent(new Event("change"));}
- if(s.kind==="el"){$("type").value=s.type;vals={...s.vals};buildDims();$("qty").value=s.qty;$("waste").value=s.waste;$("soffit").checked=s.soffit;$("sides").checked=s.sides!==false;$("sl").value=s.sl||"";$("sh").value=s.sh||"";$("bBot").checked=s.bBot!==false;$("bSide").checked=s.bSide!==false;$("bK").value=s.bK||"0";$("bT").value=s.bT||"";if(s.exB!==undefined)$("exB").value=s.exB;if(s.exR!==undefined)$("exR").value=s.exR;if(s.rb)["rbTop","rbW","rbH","rbSp","rbBl","rbBx"].forEach((id,i)=>{if(s.rb[i]!==undefined)$(id).value=s.rb[i];});
+ if(s.kind==="el"){$("type").value=s.type;vals={...s.vals};buildDims();$("qty").value=s.qty;$("waste").value=s.waste;$("soffit").checked=s.soffit;$("sides").checked=s.sides!==false;$("sl").value=s.sl||"";$("sh").value=s.sh||"";$("bBot").checked=s.bBot!==false;$("bSide").checked=s.bSide!==false;$("bK").value=s.bK||"0";$("bT").value=s.bT||"";if(s.exB!==undefined)$("exB").value=s.exB;if(s.exR!==undefined)$("exR").value=s.exR;
+  if(s.ex){EXC.forEach((id,i)=>{if(s.ex[i]!==undefined){if($(id).type==="checkbox")$(id).checked=s.ex[i];else $(id).value=s.ex[i];}});$("exCustomWrap").hidden=!$("exCustomToggle").checked;}
+  if(s.rb)["rbTop","rbW","rbH","rbSp","rbBl","rbBx"].forEach((id,i)=>{if(s.rb[i]!==undefined)$(id).value=s.rb[i];});
   setLvl("elLvl","elCust","elCustWrap",s.lvl);
   BR.forEach((id,i)=>{if(s.b[i]!==undefined)$(id).value=s.b[i];});rows=JSON.parse(JSON.stringify(s.rows));drawRows();
   MXI.forEach((id,i)=>$(id).value=s.mx[i]);$("cust").hidden=$("mix").value!=="custom";calcMx();
@@ -1227,7 +1273,7 @@ function schedHtml(){
 const meta=()=>({by:$("pmBy").value.trim(),site:$("pmSite").value.trim()});
 {const m=LS.get("sq_meta",{});$("pmBy").value=m.by||"";$("pmSite").value=m.site||"";
  ["pmBy","pmSite"].forEach(id=>$(id).addEventListener("input",()=>{LS.set("sq_meta",meta());const D=docHtml();if(D)$("pvp").innerHTML=D;}));}
-const QD=k=>["brick","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2;
+const QD=k=>["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2;
 const H1=["Code","Story / Zone","Description","Concrete (m³)","Formwork (m²)","Steel (kg)","Cost"],A1="lllrrrr",H2=["Material","Unit","Quantity","Rate","Amount"],A2="llrrr",A3="lrrrrrrrr",H4=["Story / Level","Element Type","Items","Cost"],A4="llrr";
 function rpt(){
  const p=curP(),items=p.items.slice().sort((a,b)=>storyRank(a.lvl)-storyRank(b.lvl)||(a.lvl||"").localeCompare(b.lvl||"")||a.cat.localeCompare(b.cat));
@@ -1400,7 +1446,7 @@ async function buildXlsx(R){
   const t=wsD.getCell(r,1);t.value=`[${it.lvl}] ${it.code}${it.d?" — "+it.d:""}`;t.font={name:"Calibri",bold:true,size:11,color:{argb:NV}};t.alignment={vertical:"middle",indent:1};wsD.getRow(r).height=22;r++;
   hdr(wsD,r,["Material / Work Description","Unit","Quantity","Unit Rate","Total Amount"],2);r++;const a=r;let s=0;
   it.lines.forEach((x,idx)=>{const amt=x.q*x.r;s+=amt;put(wsD,r,[x.l,x.u,x.q,x.r,{formula:`C${r}*D${r}`,result:amt}],[0,0,x.k==="brick"||x.k==="tile"?F0:F2,FC,FC],{f:idx%2===1?ZB:null});r++;});
-  put(wsD,r,["Subtotal — "+it.code,"","","",{formula:`SUM(E${a}:E${r-1})`,result:s}],[0,0,0,0,FC],{b:1,f:LT,tot:1,color:DK});tot[it.code]={row:r,v:s};r+=2;});
+  put(wsD,r,["Subtotal — "+it.code,"","","",{formula:`SUM(E${a}:E${r-1})`,result:s}],[0,0,0,0,FC],{b:1,f:LT,tot:1,color:DK});r+=2;});
  const gv=Object.values(tot).reduce((a,x)=>a+x.v,0);
  put(wsD,r,["GRAND PROJECT TOTAL","","","",{formula:Object.values(tot).map(x=>"E"+x.row).join("+")||"0",result:gv}],[0,0,0,0,FC],{b:1,f:GD,tot:1,color:DK});
 
@@ -1481,7 +1527,7 @@ function report(){
  document.querySelectorAll("#rOff p").forEach(p=>R.push(["Offcut",p.innerText]));
  R.push([""],["Mix"],["Concrete volume",$("mv").value+" "+(IMP?"yd³":"m³")],["Mix ratio",$("mix").options[$("mix").selectedIndex].text],["Water-cement ratio",$("wc").value],["Cement",$("mC").textContent],["Sand",$("mS").textContent],["Aggregate",$("mA").textContent],["Water",$("mW").textContent]);
  const pr=projRows();
- if(pr.length)return[["Site quantities"],...pr.slice(1),[""],["Total quantity of all items"],["Material","Quantity","Rate","Cost"],...MAT.filter(([k])=>PT[k]>0).map(([k,l,u])=>[l,f(PT[k],["brick","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)+" "+u,rates[k]||"",f(MC[k]||0)])];
+ if(pr.length)return[["Site quantities"],...pr.slice(1),[""],["Total quantity of all items"],["Material","Quantity","Rate","Cost"],...MAT.filter(([k])=>PT[k]>0).map(([k,l,u])=>[l,f(PT[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)+" "+u,rates[k]||"",f(MC[k]||0)])];
  return R;}
 async function save(name,data){
  const st=$("xs");st.textContent="";
