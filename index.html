@@ -71,6 +71,9 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 .rt tbody tr:nth-child(even):not(.tot){background:var(--surface-hover)}
 .rt .l{text-align:left}.rt .r{text-align:right;font-variant-numeric:tabular-nums}
 .rt tr.tot td{font-weight:700;background:var(--result);border-top:1.5px solid var(--gold);border-bottom:2px solid var(--gold);color:var(--ink)}
+.rt tr.lv td{font-weight:700;background:var(--surface-hover);border-top:1px solid var(--gold)}
+.rt tr.w td,.rt tr.sub td{background:var(--surface)}
+.rt tr.sub td{color:var(--muted);font-size:.72rem}
 #pvp h3{margin:16px 0 6px;font-size:.95rem;color:var(--ink);border-left:3.5px solid var(--gold);padding-left:8px;text-transform:uppercase;letter-spacing:.03em}
 #pvp h4{margin:10px 0 3px;font-size:.84rem;color:var(--accent);font-weight:700}
 #pvp .sum th,#pvp .sum td{color:var(--ink);border-color:var(--line)}
@@ -1275,6 +1278,45 @@ const meta=()=>({by:$("pmBy").value.trim(),site:$("pmSite").value.trim()});
 {const m=LS.get("sq_meta",{});$("pmBy").value=m.by||"";$("pmSite").value=m.site||"";
  ["pmBy","pmSite"].forEach(id=>$(id).addEventListener("input",()=>{LS.set("sq_meta",meta());const D=docHtml();if(D)$("pvp").innerHTML=D;}));}
 const QD=k=>["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2;
+const WORK={Excavation:"Excavation Work",Hardcore:"Hardcore Filling Work",LeanConcrete:"Lean Concrete Work",StoneMasonry:"Stone Masonry Work",Footing:"Footing Work",TrapezoidalFooting:"Sloped Footing Work",Column:"Column Work",Beam:"Beam Work",LintelTieBeam:"Lintel / Tie Beam Work",Wall:"Concrete Wall Work",Slab:"Slab Work",RibbedSlab:"Ribbed Slab Work",Stair:"Staircase Work",Landing:"Landing Work",MasonryWall:"Masonry Wall Work",Roofing:"Roofing Work",Plaster:"Plastering Work",Ceiling:"Ceiling Work",Floor:"Flooring & Skirting Work",Painting:"Painting Work",WallTile:"Wall Tiling Work",StoneCladding:"Stone Cladding Work",AluminumWindow:"Aluminum Window Work",WoodenDoor:"Wooden Door Work",SteelDoor:"Steel Door Work",GlassPartition:"Glass Partition Work",DrainagePVC:"Drainage Work",WaterSupplyPPR:"Water Supply Work",InspectionChamber:"Inspection Chamber Work",SanitaryWC:"Water Closet Work",SanitaryBasin:"Washbasin Work",SanitaryShower:"Shower Work",ElectricalConduit:"Electrical Conduit Work",ElectricalSwitchBox:"Switch & Socket Work",DistributionBoard:"Distribution Board Work",ElectricalCabling:"Cabling Work"};
+const WORK_ORDER=Object.keys(WORK);
+const PRIM={Excavation:["excav"],Hardcore:["hardcore"],LeanConcrete:["lean"],StoneMasonry:["masonry"],Footing:["conc"],TrapezoidalFooting:["conc"],Column:["conc"],Beam:["conc"],LintelTieBeam:["conc"],Wall:["conc"],Slab:["conc"],RibbedSlab:["conc"],Stair:["conc"],Landing:["conc"],MasonryWall:["wallArea"],Roofing:["roofArea"],Plaster:["plas"],Ceiling:["ceilingArea"],Floor:["floor"],Painting:["paintArea","glossArea"],WallTile:["wtile"],StoneCladding:["cladding"],AluminumWindow:["winAl"],WoodenDoor:["doorWd"],SteelDoor:["doorSt"],GlassPartition:["glassPart"],DrainagePVC:["drainPipe"],WaterSupplyPPR:["waterPipe"],InspectionChamber:["inspectionChamber"],SanitaryWC:["waterCloset"],SanitaryBasin:["washbasin"],SanitaryShower:["shower"],ElectricalConduit:["pvcConduit"],ElectricalSwitchBox:["switchBox"],DistributionBoard:["distBoard"],ElectricalCabling:["cableWiring"]};
+const wcmp=(a,b)=>{const x=WORK_ORDER.indexOf(a),y=WORK_ORDER.indexOf(b);return(x<0?999:x)-(y<0?999:y)||a.localeCompare(b);};
+function execList(items){
+ const L=[],lv=it=>it.lvl||"Ground Floor",CK=["conc","lean","cement","sand","agg","water"];
+ const work=(cat,its,d)=>{
+  const pk=PRIM[cat]||[],w={t:"work",d,name:WORK[cat]||(cat+" Work"),n:its.length,codes:its.map(i=>i.code),cost:0,qn:0,k:pk[0]||"",u:pk.length?((MAT.find(m=>m[0]===pk[0])||[])[2]||""):"",subs:[]};
+  let cC=0,qC=0,cF=0,qF=0,cS=0,qS=0;
+  its.forEach(it=>{const co=k=>(it.m[k]||0)*rt(it,k);w.cost+=itemCost(it);pk.forEach(k=>w.qn+=it.m[k]||0);
+   const cv=(it.m.conc||0)+(it.m.lean||0);if(cv>0){qC+=cv;CK.forEach(k=>cC+=co(k));}
+   qF+=it.m.form||0;cF+=co("form");qS+=it.m.steel||0;cS+=co("steel");});
+  if(qC>0||cC>0)w.subs.push({t:"sub",d:d+1,name:"Concrete work",qn:qC,u:"m³",k:"conc",cost:cC});
+  if(qF>0||cF>0)w.subs.push({t:"sub",d:d+1,name:"Formwork",qn:qF,u:"m²",k:"form",cost:cF});
+  if(qS>0||cS>0)w.subs.push({t:"sub",d:d+1,name:"Reinforcement (bar)",qn:qS,u:"kg",k:"steel",cost:cS});
+  if(w.subs.length){const o=w.cost-w.subs.reduce((a,s)=>a+s.cost,0);if(Math.abs(o)>0.005)w.subs.push({t:"sub",d:d+1,name:"Other items",qn:0,u:"",k:"",cost:o});}
+  return w;};
+ const group=(its,d)=>{const by={};its.forEach(i=>(by[i.cat]=by[i.cat]||[]).push(i));return Object.keys(by).sort(wcmp).map(c=>work(c,by[c],d));};
+ const mains=[],add=(name,its,levelled)=>{
+  if(!its.length)return;
+  const m={t:"main",d:0,name,n:its.length,kids:[],cost:0};L.push(m);mains.push(m);
+  const put=(w,host)=>{host.kids.push(w);L.push(w,...w.subs);};
+  if(!levelled)group(its,1).forEach(w=>put(w,m));
+  else[...new Set(its.map(lv))].sort((a,b)=>storyRank(a)-storyRank(b)||a.localeCompare(b)).forEach(s=>{
+   const si=its.filter(i=>lv(i)===s),l={t:"lvl",d:1,name:s,n:si.length,kids:[],cost:0};m.kids.push(l);L.push(l);
+   group(si,2).forEach(w=>put(w,l));});};
+ add("SUBSTRUCTURE",items.filter(i=>lv(i)==="Substructure"),false);
+ add("SUPERSTRUCTURE",items.filter(i=>lv(i)!=="Substructure"),true);
+ L.forEach(r=>{if(r.t==="lvl")r.cost=r.kids.reduce((a,k)=>a+k.cost,0);});
+ mains.forEach(m=>m.cost=m.kids.reduce((a,k)=>a+k.cost,0));
+ return L;}
+const NB="\u00a0\u00a0\u00a0";
+function execRows(L){
+ return L.map(r=>{
+  const q=r.qn>0?f(r.qn,QD(r.k))+" "+r.u:"";
+  const row=[NB.repeat(r.d)+r.name,r.t==="sub"?"":String(r.n),q,f(r.cost)];
+  if(r.t==="main")row.b=1;else row.c=r.t==="lvl"?"lv":r.t==="sub"?"sub":"w";
+  return row;});}
+const HX=["Description","Items","Quantity","Cost"],AX="lrrr";
 const H1=["Code","Story / Zone","Description","Concrete (m³)","Formwork (m²)","Steel (kg)","Cost"],A1="lllrrrr",H2=["Material","Unit","Quantity","Rate","Amount"],A2="llrrr",A3="lrrrrrrrr",H4=["Story / Level","Element Type","Items","Cost"],A4="llrr";
 function rpt(){
  const p=curP(),items=p.items.slice().sort((a,b)=>storyRank(a.lvl)-storyRank(b.lvl)||(a.lvl||"").localeCompare(b.lvl||"")||a.cat.localeCompare(b.cat));
@@ -1296,11 +1338,11 @@ function rpt(){
   const scTot=[`Story Total — ${lvl}`,"",String(sItems.length),f(sCost)];scTot.b=1;byStoryCat.push(scTot);
  });
  const mats=MAT.filter(([k])=>PT[k]>0).map(([k,l,u])=>[l,u,f(PT[k],QD(k)),rates[k]?f(n(rates[k])):"-",f(MC[k]||0)]);
- return{name:p.name,cur:$("cur").value,sum,byStoryCat,det,mats,tConc:f(tConc,2),tForm:f(tForm,2),tSteel:f(tSteel,1),grand:f(grand),grandNum:grand,S:schedRows(),date:new Date().toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"})};}
+ return{name:p.name,cur:$("cur").value,L:execList(items),sum,byStoryCat,det,mats,tConc:f(tConc,2),tForm:f(tForm,2),tSteel:f(tSteel,1),grand:f(grand),grandNum:grand,S:schedRows(),date:new Date().toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"})};}
 function schedGroups(S){const g=[];S.slice(1).forEach(r=>{if(r.length===1)g.push({t:r[0],h:null,r:[]});else if(r[0]==="Mark")g[g.length-1].h=r;else g[g.length-1].r.push(r);});return g;}
 function tbl(head,al,rows,foot){
  const tr=(r,c)=>`<tr${c?` class="${c}"`:""}>${r.map((x,i)=>`<td class="${al[i]}">${esc(x)}</td>`).join("")}</tr>`;
- return `<div style="overflow-x:auto"><table class="rt"><thead><tr>${head.map((x,i)=>`<th class="${al[i]}">${esc(x)}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>tr(r,r.b?"tot":"")).join("")}${foot?tr(foot,"tot"):""}</tbody></table></div>`;}
+ return `<div style="overflow-x:auto"><table class="rt"><thead><tr>${head.map((x,i)=>`<th class="${al[i]}">${esc(x)}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>tr(r,r.b?"tot":(r.c||""))).join("")}${foot?tr(foot,"tot"):""}</tbody></table></div>`;}
 function docHtml(){
  const R=rpt();if(!R)return null;const m=meta();
  return `<div class="rhead"><div><div class="rt1">BILL OF QUANTITIES</div><div class="rt2">${esc(R.name)}</div></div><div class="rm"><b>Date:</b> ${esc(R.date)}${m.site?"<br><b>Project / Client:</b> "+esc(m.site):""}${m.by?"<br><b>Prepared by:</b> "+esc(m.by):""}<br><b>Currency:</b> ${esc(R.cur)} · Metric</div></div>
@@ -1310,11 +1352,10 @@ function docHtml(){
  <div class="kpi-card"><div class="kpi-lbl">Reinforcement</div><div class="kpi-val">${R.tSteel} kg</div></div>
  <div class="kpi-card gold"><div class="kpi-lbl">Grand Total</div><div class="kpi-val">${esc(R.cur)}${R.grand}</div></div>
 </div>
-<h3>1. Cost Summary by Story / Level &amp; Element Type</h3>${tbl(H4,A4,R.byStoryCat,["GRAND TOTAL","","",R.cur+R.grand])}
-<h3>2. Work Breakdown by Floor / Level</h3>${tbl(H1,A1,R.sum,["GRAND TOTAL","","",R.tConc,R.tForm,R.tSteel,R.cur+R.grand])}
-<h3>3. Detailed Quantities &amp; Cost Breakdown</h3>${R.det.map(d=>`<h4>${esc(d.t)}</h4>`+tbl(H2,A2,d.lines,["Item Subtotal","","","",R.cur+d.cost])).join("")}
-<h3>4. Consolidated Material Schedule</h3>${tbl(H2,A2,R.mats,["TOTAL MATERIAL COST","","","",R.cur+R.grand])}
-${R.S.length?"<h3>5. Bar Bending Schedule (12 m Stock)</h3>"+schedGroups(R.S).map(g=>`<h4>${esc(g.t)}</h4>`+tbl(g.h,A3,g.r)).join(""):""}
+<h3>1. Executive Summary — Substructure &amp; Superstructure</h3>${tbl(HX,AX,execRows(R.L),["GRAND TOTAL","","",R.cur+R.grand])}
+<h3>2. Detailed Quantities &amp; Cost Breakdown</h3>${R.det.map(d=>`<h4>${esc(d.t)}</h4>`+tbl(H2,A2,d.lines,["Item Subtotal","","","",R.cur+d.cost])).join("")}
+<h3>3. Consolidated Material Schedule</h3>${tbl(H2,A2,R.mats,["TOTAL MATERIAL COST","","","",R.cur+R.grand])}
+${R.S.length?"<h3>4. Bar Bending Schedule (12 m Stock)</h3>"+schedGroups(R.S).map(g=>`<h4>${esc(g.t)}</h4>`+tbl(g.h,A3,g.r)).join(""):""}
 <div class="signoff"><div><b>Prepared &amp; Checked By</b><div class="signbox">${esc(m.by||"Engineer / Quantity Surveyor")} · Date: ${esc(R.date)}</div></div><div><b>Approved By (Client / Consultant)</b><div class="signbox">${esc(m.site||"Authorized Signature & Stamp")}</div></div></div>`;}
 function pdfTable(doc,y,cols,head,rows,al){
  const x0=14,rh=6.5,W=cols.reduce((a,b)=>a+b,0),ph=()=>doc.internal.pageSize.getHeight(),ls=()=>doc.internal.pageSize.getWidth()>250;
@@ -1328,8 +1369,10 @@ function pdfTable(doc,y,cols,head,rows,al){
  if(y+rh*2.5>ph()-18)np();hd();
  rows.forEach((r,idx)=>{if(y+rh>ph()-18){np();hd();}
   if(r.b){doc.setFillColor(243,239,228);doc.rect(x0,y,W,rh,"F");doc.setDrawColor(31,42,54);doc.setLineWidth(0.35);doc.line(x0,y,x0+W,y);doc.line(x0,y+rh,x0+W,y+rh);}
-  else if(idx%2===1){doc.setFillColor(250,249,246);doc.rect(x0,y,W,rh,"F");}
-  doc.setFont(undefined,r.b?"bold":"normal");doc.setTextColor(r.b?31:25,r.b?42:28,r.b?54:32);
+  else if(r.c==="lv"){doc.setFillColor(236,240,245);doc.rect(x0,y,W,rh,"F");}
+  else if(!r.c&&idx%2===1){doc.setFillColor(250,249,246);doc.rect(x0,y,W,rh,"F");}
+  const bold=r.b||r.c==="lv",sb=r.c==="sub";
+  doc.setFont(undefined,bold?"bold":"normal");doc.setTextColor(bold?31:sb?105:25,bold?42:sb?110:28,bold?54:sb?118:32);
   let x=x0;r.forEach((t,i)=>{put(t,x,cols[i],i,y);x+=cols[i];});
   if(!r.b){doc.setDrawColor(230,227,220);doc.setLineWidth(0.18);doc.line(x0,y+rh,x0+W,y+rh);}
   y+=rh;});
@@ -1353,13 +1396,11 @@ function buildPdf(R){
   doc.setFillColor(242,183,5);doc.rect(14,y-3.6,2.2,4.8,"F");
   doc.setFont(undefined,"bold");doc.setFontSize(10.5);doc.setTextColor(31,42,54);
   doc.text(t.toUpperCase(),18.5,y);doc.setTextColor(0);y+=2.8;};
- H("1. Cost Summary by Story / Level & Element Type");
- y=pdfTable(doc,y,[56,64,22,40],H4,[...R.byStoryCat,ft(["GRAND TOTAL","","",R.cur+R.grand])],A4);
- H("2. Work Breakdown by Floor / Level");
- y=pdfTable(doc,y,[22,28,44,21,21,20,26],H1,[...R.sum,ft(["GRAND TOTAL","","",R.tConc,R.tForm,R.tSteel,R.cur+R.grand])],A1);
- H("3. Detailed Quantities & Cost Breakdown");
+ H("1. Executive Summary — Substructure & Superstructure");
+ y=pdfTable(doc,y,[96,16,38,32],HX,[...execRows(R.L),ft(["GRAND TOTAL","","",R.cur+R.grand])],AX);
+ H("2. Detailed Quantities & Cost Breakdown");
  R.det.forEach(d=>{y=brk(y,28);doc.setFont(undefined,"bold");doc.setFontSize(9.2);doc.setTextColor(31,78,121);doc.text(d.t,14,y+4);doc.setTextColor(0);y+=5.2;y=pdfTable(doc,y,[62,20,32,32,36],H2,[...d.lines,ft(["Item Subtotal","","","",R.cur+d.cost])],A2);});
- H("4. Consolidated Material Schedule");
+ H("3. Consolidated Material Schedule");
  y=pdfTable(doc,y,[62,20,32,32,36],H2,[...R.mats,ft(["TOTAL MATERIAL COST","","","",R.cur+R.grand])],A2);
  y=brk(y+4,24);
  doc.setDrawColor(190,190,190);doc.setLineWidth(0.25);doc.line(14,y,196,y);y+=6;
@@ -1373,7 +1414,7 @@ function buildPdf(R){
  if(R.S.length){doc.addPage("a4","landscape");y=32;
   doc.setFillColor(242,183,5);doc.rect(14,y-4,2.5,5.5,"F");
   doc.setFont(undefined,"bold");doc.setFontSize(12);doc.setTextColor(31,42,54);
-  doc.text("5. BAR BENDING SCHEDULE (METRIC, 12 M STOCK BARS)",19,y);doc.setTextColor(0);y+=4;
+  doc.text("4. BAR BENDING SCHEDULE (METRIC, 12 M STOCK BARS)",19,y);doc.setTextColor(0);y+=4;
   schedGroups(R.S).forEach(g=>{y=brk(y,26);doc.setFont(undefined,"bold");doc.setFontSize(9.5);doc.setTextColor(31,78,121);doc.text(g.t,14,y+4);doc.setTextColor(0);y+=5.2;y=pdfTable(doc,y,[22,22,32,24,36,32,30,32,39],g.h,g.r,A3);});}
 
  const N=doc.getNumberOfPages();
@@ -1447,34 +1488,32 @@ async function buildXlsx(R){
  const gv=Object.values(tot).reduce((a,x)=>a+x.v,0);
  put(wsD,r,["GRAND PROJECT TOTAL","","","",{formula:Object.values(tot).map(x=>"E"+x.row).join("+")||"0",result:gv}],[0,0,0,0,FC],{b:1,f:GD,tot:1,color:DK});
 
- wsS.columns=[{width:16},{width:22},{width:32},{width:16},{width:16},{width:16},{width:20}];
- band(wsS,7,"Bill of Quantities — Executive Summary",R.name);
+ wsS.columns=[{width:46},{width:8},{width:30},{width:14},{width:8},{width:20}];
+ band(wsS,6,"Bill of Quantities — Executive Summary",R.name);
  r=4;
- const metaPairs=[["Date Issued",R.date],["Client / Site",m.site||"-"],["Prepared By",m.by||"-"],["Currency",cur.trim()],["Measurement System","Metric (m, m², m³, kg)"]];
- metaPairs.forEach(([k,v])=>{
+ [["Date Issued",R.date],["Client / Site",m.site||"-"],["Prepared By",m.by||"-"],["Currency",cur.trim()],["Measurement System","Metric (m, m², m³, kg)"]].forEach(([k,v])=>{
   wsS.getRow(r).height=18;
   const c1=wsS.getCell(r,1);c1.value=k;c1.font={name:"Calibri",bold:true,size:10,color:{argb:DK}};c1.fill=fill(ZB);c1.border=bd;
-  wsS.mergeCells(r,2,r,7);
-  for(let col=2;col<=7;col++){const cx=wsS.getCell(r,col);cx.fill=fill("FFFFFFFF");cx.border=bd;}
+  wsS.mergeCells(r,2,r,6);
+  for(let col=2;col<=6;col++){const cx=wsS.getCell(r,col);cx.fill=fill("FFFFFFFF");cx.border=bd;}
   const c2=wsS.getCell(r,2);c2.value=v;c2.font={name:"Calibri",size:10,color:{argb:"FF1F2328"}};
   r++;});
  r++;
- wsS.getCell(r,1).value="WORK BREAKDOWN BY BUILDING STORY / LEVEL & ELEMENT";wsS.getCell(r,1).font={name:"Calibri",bold:true,size:11.5,color:{argb:NV}};wsS.getRow(r).height=22;r++;
- hdr(wsS,r,["Item Code","Story / Level","Work Description","Concrete (m³)","Formwork (m²)","Steel (kg)","Total Cost"],3);r++;
- const stRows=[],stories=[...new Set(items.map(i=>i.lvl))];
- stories.forEach(lvl=>{
-  const sItems=items.filter(i=>i.lvl===lvl);const a=r;
-  sItems.forEach((it,idx)=>{const cVol=(it.m.conc||0)+(it.m.lean||0);put(wsS,r,[it.code,lvl,it.d||it.cat,cVol,it.m.form||0,it.m.steel||0,{formula:`'Detailed BOQ'!E${tot[it.code].row}`,result:tot[it.code].v}],[0,0,0,F2,F2,F2,FC],{f:idx%2===1?ZB:null});r++;});
-  const subC=sItems.reduce((x,i)=>x+(i.m.conc||0)+(i.m.lean||0),0),subF=sItems.reduce((x,i)=>x+(i.m.form||0),0),subS=sItems.reduce((x,i)=>x+(i.m.steel||0),0),subV=sItems.reduce((x,i)=>x+tot[i.code].v,0);
-  put(wsS,r,["Subtotal",lvl,"",{formula:`SUM(D${a}:D${r-1})`,result:subC},{formula:`SUM(E${a}:E${r-1})`,result:subF},{formula:`SUM(F${a}:F${r-1})`,result:subS},{formula:`SUM(G${a}:G${r-1})`,result:subV}],[0,0,0,F2,F2,F2,FC],{b:1,f:LT,tot:1,color:DK});
-  stRows.push(r);r++;
- });
- const sumRefs=col=>({formula:stRows.map(rr=>col+rr).join("+")||"0"});
- const smConc=items.reduce((a,x)=>a+(x.m.conc||0)+(x.m.lean||0),0),smForm=items.reduce((a,x)=>a+(x.m.form||0),0),smSteel=items.reduce((a,x)=>a+(x.m.steel||0),0);
- put(wsS,r,["GRAND TOTAL","","",{...sumRefs("D"),result:smConc},{...sumRefs("E"),result:smForm},{...sumRefs("F"),result:smSteel},{...sumRefs("G"),result:gv}],[0,0,0,F2,F2,F2,FC],{b:1,f:GD,tot:1,color:DK});
+ wsS.getCell(r,1).value="WORK SUMMARY — SUBSTRUCTURE & SUPERSTRUCTURE";wsS.getCell(r,1).font={name:"Calibri",bold:true,size:11.5,color:{argb:NV}};wsS.getRow(r).height=22;r++;
+ hdr(wsS,r,["Description","Items","Items Included","Quantity","Unit","Cost"],3);r++;
+ const XL=R.L,r0=r;XL.forEach((x,i)=>x.row=r0+i);
+ const FMX=[0,F0,0,F2,0,FC];
+ XL.forEach(x=>{
+  const cost=x.t==="work"?{formula:x.codes.map(c=>`'Detailed BOQ'!E${tot[c].row}`).join("+"),result:x.cost}
+   :x.t==="sub"?x.cost:{formula:x.kids.map(k=>"F"+k.row).join("+")||"0",result:x.cost};
+  const o=x.t==="main"?{b:1,f:LT,tot:1,color:DK}:x.t==="lvl"?{b:1,f:ZB,color:DK}:x.t==="sub"?{color:"FF5D646C"}:{};
+  put(wsS,x.row,[x.name,x.t==="sub"?"":x.n,x.t==="work"?x.codes.join(", "):"",x.qn>0?x.qn:"",x.qn>0?x.u:"",cost],FMX,o);
+  wsS.getCell(x.row,1).alignment={vertical:"middle",indent:x.d};});
+ r=r0+XL.length;
+ put(wsS,r,["GRAND TOTAL","","","","",{formula:XL.filter(x=>x.t==="main").map(x=>"F"+x.row).join("+")||"0",result:gv}],FMX,{b:1,f:GD,tot:1,color:DK});
  r+=3;
  wsS.getCell(r,1).value="Prepared By: ___________________________";wsS.getCell(r,1).font={name:"Calibri",bold:true,size:10,color:{argb:DK}};
- wsS.getCell(r,4).value="Approved By: ___________________________";wsS.getCell(r,4).font={name:"Calibri",bold:true,size:10,color:{argb:DK}};
+ wsS.getCell(r,3).value="Approved By: ___________________________";wsS.getCell(r,3).font={name:"Calibri",bold:true,size:10,color:{argb:DK}};
 
  wsM.columns=[{width:32},{width:12},{width:18},{width:18},{width:20}];
  band(wsM,5,"Consolidated Material Quantities & Cost",R.name);
