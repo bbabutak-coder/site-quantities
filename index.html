@@ -13,36 +13,39 @@
 <title>Site Quantities Calculator</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
---bg:#e9e7e2;--surface:#f7f6f3;--ink:#1f2328;--muted:#5d646c;--line:#c9c6bf;--accent:#1f4e79;--accent-ink:#fff;--result:#dfe8f1}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#16191c;--surface:#20252a;--ink:#e8eaec;--muted:#98a0a8;--line:#3a4148;--accent:#6aa5d8;--accent-ink:#10161b;--result:#1b2a38}}
-:root[data-theme="dark"]{color-scheme:dark;--bg:#16191c;--surface:#20252a;--ink:#e8eaec;--muted:#98a0a8;--line:#3a4148;--accent:#6aa5d8;--accent-ink:#10161b;--result:#1b2a38}
+--bg:#12161a;--surface:#1a2128;--surface-hover:#222c37;--ink:#e8eaec;--muted:#98a0a8;--line:#2c3540;--accent:#3182ce;--accent-ink:#fff;--result:#1b2a38;--gold:#f2b705}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){color-scheme:light;--bg:#f4f3f0;--surface:#ffffff;--surface-hover:#f7f6f3;--ink:#1f2328;--muted:#5d646c;--line:#d8d5ce;--accent:#1f4e79;--accent-ink:#fff;--result:#edf2f7;--gold:#d99b00}}
+:root[data-theme="light"]{color-scheme:light;--bg:#f4f3f0;--surface:#ffffff;--surface-hover:#f7f6f3;--ink:#1f2328;--muted:#5d646c;--line:#d8d5ce;--accent:#1f4e79;--accent-ink:#fff;--result:#edf2f7;--gold:#d99b00}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:560px;margin:0 auto;padding:16px 14px 40px}
+main{max-width:600px;margin:0 auto;padding:16px 14px 84px}
 h1{font-size:1.35rem;margin:4px 0 2px;letter-spacing:-.01em}
 .sub{color:var(--muted);font-size:.9rem;margin:0 0 14px}
-nav{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:14px;overflow-x:auto}
-nav button{flex:1 0 auto;padding:10px 10px;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--muted);font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}
+nav{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:16px;overflow-x:auto;background:var(--surface);padding:4px 6px 0;border-radius:8px 8px 0 0}
+nav button{flex:1 0 auto;padding:10px 12px;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--muted);font:inherit;font-weight:600;cursor:pointer;white-space:nowrap;border-radius:6px 6px 0 0;transition:all .15s ease}
+nav button:hover{color:var(--ink);background:var(--surface-hover)}
 nav button svg{width:16px;height:16px;vertical-align:-3px;margin-right:6px}
-nav button[aria-selected="true"]{color:var(--ink);border-bottom-color:#f2b705}
+nav button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--gold);background:var(--surface-hover)}
 nav button:focus-visible,input:focus-visible,select:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
 .panel[hidden]{display:none}
 label{display:block;font-size:.85rem;color:var(--muted);margin:0 0 3px}
-input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px}
+input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .full{grid-column:1/-1}
 .chk{display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--ink);font-size:.95rem}
 .chk input{width:auto}
-.out{margin-top:14px;background:var(--result);border-left:4px solid var(--accent);border-radius:4px;padding:10px 12px}
-.out div{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.out{margin-top:14px;background:var(--result);border-left:4px solid var(--gold);border-radius:6px;padding:12px 14px}
+.out div{display:flex;justify-content:space-between;gap:10px;padding:4px 0}
 .out b{font-variant-numeric:tabular-nums}
 .big{font-size:1.15rem}
 .row{display:grid;grid-template-columns:1.2fr 0.85fr 1.05fr 1.05fr auto auto;gap:5px;align-items:end;margin-top:8px}
 .row .w{font-size:.8rem;color:var(--muted);grid-column:1/-1;margin-top:-2px}
-.btn{padding:10px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:4px;font:inherit;cursor:pointer}
+.btn{padding:10px 14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;font:inherit;cursor:pointer;transition:all .15s ease}
+.btn:hover{border-color:var(--gold)}
 .btn.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600;margin-top:10px}
+.btn.main:hover{filter:brightness(1.1)}
 .sumwrap{overflow-x:auto;margin-top:14px}
 .sum{width:100%;border-collapse:collapse;font-size:.9rem;font-variant-numeric:tabular-nums}
 .sum th,.sum td{padding:7px 6px;text-align:right;border-bottom:1px solid var(--line)}
@@ -51,48 +54,54 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 .sum tfoot td{font-weight:700;border-bottom:0}
 #cust[hidden]{display:none}
 [hidden]{display:none!important}
-#pv,#pjs{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.6);display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px calc(env(safe-area-inset-bottom,0px) + 8px)}
+#pv,#pjs{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px calc(env(safe-area-inset-bottom,0px) + 8px)}
 #pv .bar,#pjs .bar{display:flex;gap:8px;justify-content:flex-end}
 #pList .pvr{border-color:var(--line)}.it{margin:6px 0 14px}
-.ri.ov{border-color:#f2b705;box-shadow:inset 0 0 0 1px #f2b705}
-.rhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;background:#1f2a36;color:#fff;padding:14px 16px;border-radius:6px 6px 0 0;border-bottom:4px solid #f2b705;margin-bottom:12px}
-.rt1{font-size:1.25rem;font-weight:800;letter-spacing:-.01em;color:#fff}.rt2{font-size:.92rem;color:#f2b705;font-weight:600;margin-top:2px}.rm{font-size:.76rem;text-align:right;color:#d0d7de;line-height:1.5}
+.ri.ov{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.rhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;background:#1f2a36;color:#fff;padding:16px 20px;border-radius:8px 8px 0 0;border-bottom:4px solid var(--gold);margin-bottom:12px}
+.rt1{font-size:1.25rem;font-weight:800;letter-spacing:-.01em;color:#fff}.rt2{font-size:.92rem;color:var(--gold);font-weight:600;margin-top:2px}.rm{font-size:.76rem;text-align:right;color:#d0d7de;line-height:1.5}
 .kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 14px}
-.kpi-card{background:#f7f6f3;border:1px solid #e2dfd7;border-top:3px solid #1f2a36;border-radius:4px;padding:8px 10px}
-.kpi-card.gold{border-top-color:#f2b705;background:#fdfaf0}
-.kpi-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:#5d646c;font-weight:700}
-.kpi-val{font-size:.95rem;font-weight:800;color:#1f2a36;margin-top:2px;font-variant-numeric:tabular-nums}
-.rt{width:100%;border-collapse:collapse;font-size:.78rem;margin:4px 0 14px;border:1px solid #d8d5ce}
-.rt th{background:#1f2a36;color:#fff;padding:6px 8px;font-weight:600;letter-spacing:.02em;border-bottom:2px solid #f2b705}
-.rt td{padding:5px 8px;border-bottom:1px solid #e6e3dc}
-.rt tbody tr:nth-child(even):not(.tot){background:#faf9f6}
+.kpi-card{background:var(--bg);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:10px 12px}
+.kpi-card.gold{border-top-color:var(--gold);background:rgba(242,183,5,0.05)}
+.kpi-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700}
+.kpi-val{font-size:.95rem;font-weight:800;color:var(--ink);margin-top:3px;font-variant-numeric:tabular-nums}
+.rt{width:100%;border-collapse:collapse;font-size:.78rem;margin:4px 0 14px;border:1px solid var(--line)}
+.rt th{background:#1f2a36;color:#fff;padding:8px 10px;font-weight:600;letter-spacing:.02em;border-bottom:2px solid var(--gold)}
+.rt td{padding:6px 8px;border-bottom:1px solid var(--line)}
+.rt tbody tr:nth-child(even):not(.tot){background:var(--surface-hover)}
 .rt .l{text-align:left}.rt .r{text-align:right;font-variant-numeric:tabular-nums}
-.rt tr.tot td{font-weight:700;background:#f3efe4;border-top:1.5px solid #1f2a36;border-bottom:2px solid #1f2a36;color:#1f2a36}
-#pvp h3{margin:16px 0 6px;font-size:.95rem;color:#1f2a36;border-left:3.5px solid #f2b705;padding-left:8px;text-transform:uppercase;letter-spacing:.03em}
-#pvp h4{margin:10px 0 3px;font-size:.84rem;color:#1f4e79;font-weight:700}
-#pvp .sum th,#pvp .sum td{color:#111;border-color:#ddd}
-.signoff{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px;padding-top:12px;border-top:1px dashed #c9c6bf;font-size:.76rem;color:#444}
-.signbox{border-top:1px solid #888;margin-top:24px;padding-top:4px}
-#pjp{background:var(--surface);color:var(--ink)}#pjp .btn{margin-top:12px}
-main{padding-bottom:84px}
-#pjBtn{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:40;max-width:62vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:10px 16px;border-radius:999px;border:0;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.3);cursor:pointer}
-.ch{margin:16px 0 4px;font-size:1rem}
-#pvp,#pjp{flex:1;overflow:auto;background:#fff;color:#111;margin-top:8px;padding:16px;border-radius:4px;font-size:.85rem;max-width:560px;width:100%;align-self:center}
+.rt tr.tot td{font-weight:700;background:var(--result);border-top:1.5px solid var(--gold);border-bottom:2px solid var(--gold);color:var(--ink)}
+#pvp h3{margin:16px 0 6px;font-size:.95rem;color:var(--ink);border-left:3.5px solid var(--gold);padding-left:8px;text-transform:uppercase;letter-spacing:.03em}
+#pvp h4{margin:10px 0 3px;font-size:.84rem;color:var(--accent);font-weight:700}
+#pvp .sum th,#pvp .sum td{color:var(--ink);border-color:var(--line)}
+.signoff{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px;padding-top:12px;border-top:1px dashed var(--line);font-size:.76rem;color:var(--muted)}
+.signbox{border-top:1px solid var(--muted);margin-top:24px;padding-top:4px}
+#pjp{background:var(--surface);color:var(--ink);border-radius:8px;padding:16px}#pjp .btn{margin-top:12px}
+#pjBtn{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:40;max-width:62vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:12px 18px;border-radius:999px;border:0;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,.4);cursor:pointer;transition:transform .15s}
+#pjBtn:hover{transform:scale(1.03)}
+.ch{margin:18px 0 8px;font-size:1.05rem;font-weight:700;color:var(--ink);border-left:3px solid var(--gold);padding-left:8px}
+#pvp,#pjp{flex:1;overflow:auto;background:var(--surface);color:var(--ink);margin-top:8px;padding:20px;border-radius:8px;font-size:.88rem;max-width:600px;width:100%;align-self:center}
 #pvp h2{margin:0 0 6px;font-size:1.1rem}#pvp h3{margin:12px 0 4px;font-size:.95rem}
-.pvr{display:flex;gap:8px;padding:2px 0;border-bottom:1px solid #ddd}.pvr span{flex:1;min-width:0;overflow-wrap:anywhere}.pv2 span:first-child{flex:0 0 42%}
-.pi{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--line)}
+.pvr{display:flex;gap:8px;padding:4px 0;border-bottom:1px solid var(--line)}.pvr span{flex:1;min-width:0;overflow-wrap:anywhere}.pv2 span:first-child{flex:0 0 42%}
+.pi{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
 #rOff p{margin:8px 0 0;font-size:.9rem}
 #rOff span{color:var(--muted)}
-.note{font-size:.8rem;color:var(--muted);margin-top:12px}
-.brand{display:flex;align-items:center;gap:12px;background:#1f2a36;color:#fff;margin:-16px -14px 0;padding:14px}
-.brand h1{color:#fff;margin:0;font-size:1.3rem;font-weight:800;letter-spacing:-.01em}.brand span{display:block;font-size:.85rem;color:#b9c3cd}.brand .by{color:#f2b705;font-weight:600}
-.logo{width:42px;height:42px;flex:none}
-.stripe{height:7px;margin:0 -14px 14px;background:repeating-linear-gradient(135deg,#f2b705 0 10px,#1f2a36 10px 20px)}
-.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.card{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px;cursor:pointer;transition:border-color .2s}
-.card:hover{border-color:var(--accent)}
-.card h3{margin:0 0 4px;font-size:0.95rem;color:var(--accent)}
-.card p{margin:0;font-size:0.8rem;color:var(--muted)}
+.note{font-size:.82rem;color:var(--muted);margin-top:14px;line-height:1.5}
+.brand{display:flex;align-items:center;gap:14px;background:#1f2a36;color:#fff;margin:-18px -18px 0;padding:16px 18px;border-radius:10px 10px 0 0}
+.brand h1{color:#fff;margin:0;font-size:1.35rem;font-weight:800;letter-spacing:-.01em}.brand span{display:block;font-size:.85rem;color:#b9c3cd}.brand .by{color:var(--gold);font-weight:600}
+.logo{width:46px;height:46px;flex:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+.stripe{height:6px;margin:0 -18px 16px;background:repeating-linear-gradient(135deg,var(--gold) 0 12px,#1f2a36 12px 24px)}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;cursor:pointer;transition:all .2s ease;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);transition:background .2s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);background:var(--surface-hover)}
+.card:hover::before{background:var(--gold)}
+.card h3{margin:0 0 4px;font-size:0.95rem;color:var(--ink);font-weight:700}
+.card p{margin:0;font-size:0.78rem;color:var(--muted);line-height:1.4}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;background:var(--result);border:1px solid var(--line);border-radius:8px;padding:12px}
+.stat-item{text-align:center}
+.stat-item span{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
+.stat-item b{display:block;font-size:1.05rem;color:var(--ink);margin-top:2px;font-variant-numeric:tabular-nums}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
@@ -100,9 +109,18 @@ main{padding-bottom:84px}
 </head>
 <body>
 <main>
-<header class="brand"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="10" fill="#f2b705"/><rect x="9" y="9" width="30" height="30" rx="3" fill="none" stroke="#1f2a36" stroke-width="3"/><circle cx="16" cy="16" r="3.2" fill="#1f2a36"/><circle cx="32" cy="16" r="3.2" fill="#1f2a36"/><circle cx="16" cy="32" r="3.2" fill="#1f2a36"/><circle cx="32" cy="32" r="3.2" fill="#1f2a36"/></svg><div><h1>Site Quantities</h1><span class="by">By Biruk Belayneh</span><span>Concrete, formwork, rebar and mix</span></div></header>
+<header class="brand">
+  <svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="10" fill="#f2b705"/><rect x="9" y="9" width="30" height="30" rx="3" fill="none" stroke="#1f2a36" stroke-width="3"/><circle cx="16" cy="16" r="3.2" fill="#1f2a36"/><circle cx="32" cy="16" r="3.2" fill="#1f2a36"/><circle cx="16" cy="32" r="3.2" fill="#1f2a36"/><circle cx="32" cy="32" r="3.2" fill="#1f2a36"/></svg>
+  <div style="flex:1"><h1>Site Quantities</h1><span class="by">By Biruk Belayneh</span><span>Professional Estimation Suite</span></div>
+  <button id="themeToggle" type="button" aria-label="Toggle theme" title="Switch Theme" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:8px;padding:8px 10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s">
+    <svg id="themeIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1.05 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+  </button>
+</header>
 <div class="stripe"></div>
-<div class="grid" style="margin:0 0 6px"><div><label for="unit">Units</label><select id="unit"><option value="m">Metric (m, m³, kg)</option><option value="ft">Imperial (ft, yd³, lb)</option></select></div><div><label>Export results</label><div style="display:flex;gap:6px"><button class="btn" id="xl" type="button">Excel</button><button class="btn" id="pdf" type="button">PDF</button></div></div></div>
+<div class="grid" style="margin:0 0 8px">
+<div><label for="unit">Units</label><select id="unit"><option value="m">Metric (m, m³, kg)</option><option value="ft">Imperial (ft, yd³, lb)</option></select></div>
+<div><label>Export results</label><div style="display:flex;gap:6px"><button class="btn" id="xl" type="button">Excel</button><button class="btn" id="pdf" type="button">PDF</button></div></div>
+</div>
 <p class="note" id="xs" style="margin:0 0 10px"></p>
 <button class="btn" id="edCx" type="button" hidden style="margin-bottom:10px">Cancel edit</button>
 <nav role="tablist">
@@ -115,22 +133,29 @@ main{padding-bottom:84px}
 </nav>
 
 <section class="panel" id="home">
-<h2>Welcome to Site Quantities</h2>
-<p class="sub">Your professional offline architectural &amp; structural estimation suite.</p>
-<div class="out" style="margin-top:0">
-<div><span>Active Project</span><b id="homeProjName">Project 1</b></div>
-<div><span>Total Work Items</span><b id="homeItemCount">0 items</b></div>
-<div><span>Estimated Project Cost</span><b id="homeTotalCost">ETB 0.00</b></div>
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+  <div>
+    <h2>Dashboard Overview</h2>
+    <p class="sub">Advanced offline architectural, structural estimation &amp; BOQ studio.</p>
+  </div>
+  <span style="background:rgba(242,183,5,0.15);color:var(--gold);font-size:0.75rem;font-weight:700;padding:4px 10px;border-radius:20px;border:1px solid rgba(242,183,5,0.3)">OFFLINE READY</span>
 </div>
-<h3 class="ch">Quick Navigation</h3>
+
+<div class="hero-stats">
+  <div class="stat-item"><span>Active Project</span><b id="homeProjName">Project 1</b></div>
+  <div class="stat-item"><span>Work Items</span><b id="homeItemCount">0 items</b></div>
+  <div class="stat-item"><span>Project Cost</span><b id="homeTotalCost">ETB 0.00</b></div>
+</div>
+
+<h3 class="ch">Quick Navigation Modules</h3>
 <div class="card-grid">
-<div class="card" data-nav="el"><h3>Structural &amp; Concrete</h3><p>Slabs, ribbed slabs, lintels, footings, beams, columns &amp; masonry.</p></div>
-<div class="card" data-nav="rb"><h3>Rebar &amp; Bar Schedule</h3><p>Bar bending schedule with custom marks &amp; 12m stock optimization.</p></div>
-<div class="card" data-nav="mx"><h3>Concrete Mix</h3><p>C30, C25, C20, C15 ratios, cement bags, sand &amp; aggregate volumes.</p></div>
-<div class="card" data-nav="fn"><h3>Finishes, MEP &amp; Roof</h3><p>Plastering, tiling, painting, doors/windows, ceilings, MEP rough-ins &amp; roof trusses.</p></div>
-<div class="card" data-nav="pj"><h3>Cost &amp; BOQ</h3><p>Project rates, bills of quantities, Excel &amp; landscape PDF export.</p></div>
+  <div class="card" data-nav="el"><h3>Structural &amp; Concrete</h3><p>Slabs, ribbed slabs, lintels, footings, beams, columns &amp; masonry.</p></div>
+  <div class="card" data-nav="rb"><h3>Rebar &amp; Bar Schedule</h3><p>Bar bending schedule with custom marks &amp; 12m stock optimization.</p></div>
+  <div class="card" data-nav="mx"><h3>Concrete Mix</h3><p>C30, C25, C20, C15 ratios, cement bags, sand &amp; aggregate volumes.</p></div>
+  <div class="card" data-nav="fn"><h3>Finishes, MEP &amp; Roof</h3><p>Plastering, tiling, painting, doors/windows, ceilings, MEP rough-ins &amp; roof trusses.</p></div>
+  <div class="card" data-nav="pj"><h3>Cost &amp; BOQ Studio</h3><p>Project rates, bills of quantities, Excel &amp; landscape PDF executive reports.</p></div>
 </div>
-<p class="note" style="margin-top:16px">All calculations run locally on your device with complete offline support. Use the Cost tab or export buttons for professional client reporting.</p>
+<p class="note" style="margin-top:16px">All computations run locally with zero latency. Switch tabs above or tap any module card to start estimating immediately.</p>
 </section>
 
 <section class="panel" id="el" hidden>
@@ -895,7 +920,6 @@ function calcFn(){
  const downpipeM=n($("rfDp").value)*k;
  const trSp=Math.max(0.5,n($("rfTrSp").value)*k),prSp=Math.max(0.3,n($("rfPrSp").value)*k);
  const nTruss=planL>0?Math.floor(planL/trSp)+1:0;
- // Truss linear length approx: bottom chord + 2 rafters + internal web factor (2.65 * span)
  const trussLenM=nTruss*(planW*2.65);
  const slopedSpan=planW/cosP;
  const nPurlin=slopedSpan>0?Math.ceil(slopedSpan/prSp)+1:0;
@@ -918,7 +942,6 @@ function calcFn(){
  const plt=$("plSystem").value,plq=n($("plQty").value),plf=1+n($("plFitt").value)/100,plw=1+n($("plW").value)/100;
  const isPlLen=["drainPVC","waterPPR"].includes(plt);
  const plTotQty=isPlLen?plq*plf*plw:Math.ceil(plq*plw);
- // $("plTot").textContent// handled below
  const plMap={drainPVC:["drainPipe","m"],waterPPR:["waterPipe","m"],chamber:["inspectionChamber","nos"],wc:["waterCloset","nos"],basin:["washbasin","nos"],shower:["showerSet","nos"]};
  const [plKey,plUnit]=plMap[plt];
  $("plTot").textContent=f(plTotQty,isPlLen?1:0)+" "+plUnit;
@@ -1103,8 +1126,9 @@ function renderItems(){
  if($("homeItemCount"))$("homeItemCount").textContent=p.items.length+" items";
 }
 function costs(){
- let tot=0;const c=$("cur").value;
- document.querySelectorAll("[data-c]").forEach(td=>{const k=td.dataset.c,v=(PT[k]||0)*n(rates[k]);tot+=v;td.textContent=c+f(v);});
+ const c=$("cur").value;let tot=0;MC={};
+ curP().items.forEach(it=>{for(const k in it.m)MC[k]=(MC[k]||0)+it.m[k]*rt(it,k);});
+ document.querySelectorAll("[data-c]").forEach(td=>{const v=MC[td.dataset.c]||0;tot+=v;td.textContent=c+f(v);});
  const e=$("pTot");if(e)e.textContent=c+f(tot);
  if($("homeTotalCost"))$("homeTotalCost").textContent=c+f(tot);
  renderItems();}
@@ -1155,26 +1179,21 @@ function projRows(){
   MAT.forEach(([k,l,u])=>{const q=it.m[k];if(q>0)R.push([l,f(q,2)+" "+u,rates[k]||"",f(q*n(rates[k]))]);});
   const ic=itemCost(it);tot+=ic;R.push(["Cost of "+it.code,"","",f(ic)]);});
  R.push(["Project total","","",f(tot)]);return R;}
-$("pItems").before($("prSel").closest(".grid"));$("pjp").append($("pClr"));
-$("pItems").addEventListener("click",e=>{const b=e.target.closest("[data-del]");if(b){const p=curP();p.items=p.items.filter(i=>i.code!==b.dataset.del);saveP();renderProj();}});
-$("pjBtn").addEventListener("click",()=>{$("pjs").hidden=false;});
-$("pjClose").addEventListener("click",()=>{$("pjs").hidden=true;});
-let editing=null,MC={};
-const PL=["pl","ph","po","pf","pt","ps"],FL=["fL","fW","tl","tw","tj","fx","fSk","fSkDed"],PN=["pnType","pnL","pnH","pnO","pnF","pnC","pnCov","pnPr","wtL","wtW","pnX"],DW=["dwType","dwMark","dwQty","dwW","dwH"],CL=["clType","clL","clW","clSp","clX"],PLMEP=["plSystem","plQty","plSize","plFitt","plW"],ELMEP=["elType","elQty","elCirc","elX"],RF=["rfType","rfStr","rfTrSp","rfPrSp","rfL","rfW","rfP","rfE","rfSl","rfSh","rfRd","rfGt","rfDp","rfX"],BR=["bl","bw","bh","bj","bt","bo","bs","bPreset"],EXC=["exB","exR","exCustomToggle","exCustomBck","exCustomCrt"],MXI=["mix","cc","cs","ca","wc"];
-const fnMap={pl:PL,fl:FL,pn:PN,dw:DW,cl:CL,plmep:PLMEP,elmep:ELMEP,rf:RF};
-const snapFn=k=>({kind:k,u:IMP,lvl:getLvl(k+"Lvl",k+"Cust"),v:fnMap[k].map(id=>$(id).value)});
-const snapEl=()=>({kind:"el",u:IMP,lvl:getLvl("elLvl","elCust"),type:$("type").value,vals:{...vals},qty:$("qty").value,waste:$("waste").value,soffit:$("soffit").checked,sides:$("sides").checked,sl:$("sl").value,sh:$("sh").value,bBot:$("bBot").checked,bSide:$("bSide").checked,bK:$("bK").value,bT:$("bT").value,exB:$("exB").value,exR:$("exR").value,ex:EXC.map(id=>$(id).type==="checkbox"?$(id).checked:$(id).value),rb:["rbTop","rbW","rbH","rbSp","rbBl","rbBx"].map(id=>$(id).value),b:BR.map(id=>$(id).value),rows:JSON.parse(JSON.stringify(rows)),incR:$("incR").checked,incM:$("incM").checked,mx:MXI.map(id=>$(id).value)});
-function loadSnap(s){
- if(!!s.u!==IMP){$("unit").value=s.u?"ft":"m";$("unit").dispatchEvent(new Event("change"));}
- if(s.kind==="el"){$("type").value=s.type;vals={...s.vals};buildDims();$("qty").value=s.qty;$("waste").value=s.waste;$("soffit").checked=s.soffit;$("sides").checked=s.sides!==false;$("sl").value=s.sl||"";$("sh").value=s.sh||"";$("bBot").checked=s.bBot!==false;$("bSide").checked=s.bSide!==false;$("bK").value=s.bK||"0";$("bT").value=s.bT||"";if(s.exB!==undefined)$("exB").value=s.exB;if(s.exR!==undefined)$("exR").value=s.exR;
-  if(s.ex){EXC.forEach((id,i)=>{if(s.ex[i]!==undefined){if($(id).type==="checkbox")$(id).checked=s.ex[i];else $(id).value=s.ex[i];}});$("exCustomWrap").hidden=!$("exCustomToggle").checked;}
-  if(s.rb)["rbTop","rbW","rbH","rbSp","rbBl","rbBx"].forEach((id,i)=>{if(s.rb[i]!==undefined)$(id).value=s.rb[i];});
-  setLvl("elLvl","elCust","elCustWrap",s.lvl);
-  BR.forEach((id,i)=>{if(s.b[i]!==undefined)$(id).value=s.b[i];});rows=JSON.parse(JSON.stringify(s.rows));drawRows();
-  MXI.forEach((id,i)=>$(id).value=s.mx[i]);$("cust").hidden=$("mix").value!=="custom";calcMx();
-  $("incR").checked=s.incR;$("incM").checked=s.incM;calcEl();}
- else{(fnMap[s.kind]||PL).forEach((id,i)=>{if(s.v[i]!==undefined)$(id).value=s.v[i];});setLvl(s.kind+"Lvl",s.kind+"Cust",s.kind+"CustWrap",s.lvl);calcFn();}
- document.querySelector(`nav button[data-t="${s.kind==="el"?"el":"fn"}"]`).click();}
+proj=[];
+const CAT={excav:"Excavation",hardcore:"Hardcore",masonry:"StoneMasonry",lean:"LeanConcrete",slab:"Slab",ribbed:"RibbedSlab",footing:"Footing",trap:"TrapezoidalFooting",beam:"Beam",lintel:"LintelTieBeam",wall:"Wall",brick:"MasonryWall",col:"Column",round:"Column",stair:"Stair",landing:"Landing"};
+const STORY_ORDER=["Substructure","Ground Floor","First Floor","Second Floor","Third Floor","Roof Level"];
+const storyRank=st=>{const idx=STORY_ORDER.indexOf(st||"Ground Floor");return idx>=0?idx:99;};
+const getLvl=(selId,custId)=>{const v=$(selId).value;return v==="Custom"?($(custId).value.trim()||"Custom Level"):v;};
+const setLvl=(selId,custId,wrapId,val)=>{const v=val||"Ground Floor";if(STORY_ORDER.includes(v)){$(selId).value=v;$(wrapId).hidden=true;}else{$(selId).value="Custom";$(custId).value=v;$(wrapId).hidden=false;}};
+[["plLvl","plCust","plCustWrap"],["flLvl","flCust","flCustWrap"],["pnLvl","pnCust","pnCustWrap"],["dwLvl","dwCust","dwCustWrap"],["clLvl","clCust","clCustWrap"],["plmvlLvl","plmvlCust","plmvlCustWrap"],["elmvlLvl","elmvlCust","elmvlCustWrap"],["rfLvl","rfCust","rfCustWrap"]].forEach(([s,c,w])=>$(s).addEventListener("change",()=>{$(w).hidden=$(s).value!=="Custom";}));
+let PR=LS.get("sq_projects",null);
+if(!PR||!PR.list||!PR.list.length)PR={cur:"p1",list:[{id:"p1",name:"Project 1",items:[]}]};
+const saveP=()=>LS.set("sq_projects",PR);
+const curP=()=>PR.list.find(p=>p.id===PR.cur)||PR.list[0];
+const nextCode=cat=>cat+(1+Math.max(0,...curP().items.filter(i=>i.cat===cat).map(i=>+i.code.slice(cat.length)||0)));
+const rt=(it,k)=>it.r&&it.r[k]!==undefined&&it.r[k]!==""?n(it.r[k]):n(rates[k]);const itemCost=it=>{let s=0;for(const k in it.m)s+=it.m[k]*rt(it,k);return s;};
+function mixFor(v){const cu=$("mix").value==="custom",[c,s,a]=cu?[n($("cc").value),n($("cs").value),n($("ca").value)]:$("mix").value.split(",").map(Number),sum=(c+s+a)||1,dry=v*1.54,cm=dry*c/sum;
+ return{cement:cm*1440/50,sand:dry*s/sum,agg:dry*a/sum,water:cm*1440*n($("wc").value)};}
 function addItem(cat,desc,m,s,lvl){
  if(!m||!Object.values(m).some(v=>v>0)){$("xs").textContent="Nothing to save yet. Enter the dimensions first.";return;}
  const p=curP(),story=lvl||"Ground Floor";
@@ -1189,21 +1208,6 @@ function updAdd(){
  set("addPl","pl","Add plastering to project");set("addFl","fl","Add flooring & skirting to project");set("addPn","pn","Add wall finish to project");set("addDw","dw","Add door / window to project");set("addCl","cl","Add ceiling works to project");set("addPlMep","plmep","Add plumbing item to project");set("addElMep","elmep","Add electrical item to project");set("addRf","rf","Add roof system to project");}
 function renderPI(){const p=curP();$("pjBtn").textContent="Project: "+p.name;
  $("pItems").innerHTML=p.items.length?p.items.map(it=>`<div class="pi"><span><b>${esc(it.code)}</b> ${esc(it.d||"")}</span><span><button class="btn" data-dup="${esc(it.code)}" type="button" title="Duplicate item">Copy</button> <button class="btn" data-ed="${esc(it.code)}" type="button">Edit</button> <button class="btn" data-del="${esc(it.code)}" type="button" aria-label="Remove ${esc(it.code)}">✕</button></span></div>`).join(""):'<p class="note">No work items yet.</p>';}
-function costs(){
- const c=$("cur").value;let tot=0;MC={};
- curP().items.forEach(it=>{for(const k in it.m)MC[k]=(MC[k]||0)+it.m[k]*rt(it,k);});
- document.querySelectorAll("[data-c]").forEach(td=>{const v=MC[td.dataset.c]||0;tot+=v;td.textContent=c+f(v);});
- const e=$("pTot");if(e)e.textContent=c+f(tot);
- if($("homeTotalCost"))$("homeTotalCost").textContent=c+f(tot);
- renderItems();}
-function projRows(){
- const p=curP();if(!p.items.length)return[];
- const R=[[""],["Project: "+p.name+" (currency "+$("cur").value+")"],["Material","Quantity","Rate","Cost"]];let tot=0;
- p.items.slice().sort((a,b)=>a.cat.localeCompare(b.cat)).forEach(it=>{
-  R.push([it.code+(it.d?" - "+it.d:"")]);
-  MAT.forEach(([k,l,u])=>{const q=it.m[k];if(q>0)R.push([l,f(q,2)+" "+u,rt(it,k)||"",f(q*rt(it,k))]);});
-  const ic=itemCost(it);tot+=ic;R.push(["Cost of "+it.code,"","",f(ic)]);});
- R.push(["Project total","","",f(tot)]);return R;}
 const autoSet={};
 $("pList").addEventListener("input",e=>{const i=e.target;if(!i.classList.contains("ri"))return;
  const it=curP().items.find(x=>x.code===i.dataset.ic);if(!it)return;
@@ -1337,7 +1341,6 @@ function buildPdf(R){
  const doc=new window.jspdf.jsPDF(),m=meta(),ft=a=>{a.b=1;return a;};
  const brk=(y,need)=>{if(y+need>doc.internal.pageSize.getHeight()-18){doc.addPage("a4",doc.internal.pageSize.getWidth()>250?"landscape":"portrait");return 32;}return y;};
  let y=32;
- // Executive metadata & KPI summary box
  doc.setFillColor(247,246,243);doc.setDrawColor(218,214,206);doc.setLineWidth(0.3);
  doc.roundedRect(14,y,182,24,2,2,"FD");
  doc.setFillColor(242,183,5);doc.rect(14,y,2.2,24,"F");
@@ -1361,7 +1364,6 @@ function buildPdf(R){
  R.det.forEach(d=>{y=brk(y,28);doc.setFont(undefined,"bold");doc.setFontSize(9.2);doc.setTextColor(31,78,121);doc.text(d.t,14,y+4);doc.setTextColor(0);y+=5.2;y=pdfTable(doc,y,[62,20,32,32,36],H2,[...d.lines,ft(["Item Subtotal","","","",R.cur+d.cost])],A2);});
  H("4. Consolidated Material Schedule");
  y=pdfTable(doc,y,[62,20,32,32,36],H2,[...R.mats,ft(["TOTAL MATERIAL COST","","","",R.cur+R.grand])],A2);
- // Sign-off block
  y=brk(y+4,24);
  doc.setDrawColor(190,190,190);doc.setLineWidth(0.25);doc.line(14,y,196,y);y+=6;
  doc.setFontSize(8.5);doc.setFont(undefined,"bold");doc.setTextColor(31,42,54);
@@ -1387,9 +1389,7 @@ function buildPdf(R){
   doc.setFont(undefined,"normal");doc.setFontSize(8.5);doc.setTextColor(242,183,5);doc.text(R.name,30,16.8);
   doc.setTextColor(255);doc.setFont(undefined,"bold");doc.setFontSize(9.5);doc.text("Site Quantities",w-14,11.2,{align:"right"});
   doc.setFont(undefined,"normal");doc.setFontSize(7.5);doc.setTextColor(185,195,205);doc.text("By Biruk Belayneh",w-14,16.2,{align:"right"});
-  // Clean gold accent rule under header
   doc.setFillColor(242,183,5);doc.rect(0,21,w,1.8,"F");
-  // Footer
   doc.setTextColor(115,120,125);doc.setFontSize(7.5);doc.setDrawColor(210,210,210);doc.setLineWidth(0.25);doc.line(14,hh-12,w-14,hh-12);
   doc.text("Quantities are computed engineering estimates. Verify against approved structural & architectural drawings.",14,hh-7.5);
   doc.setFont(undefined,"bold");doc.text("Page "+i+" of "+N,w-14,hh-7.5,{align:"right"});}
@@ -1436,7 +1436,6 @@ async function buildXlsx(R){
  const wsM=wb.addWorksheet("Material Schedule",{properties:{tabColor:{argb:DK}}});
  setup(wsS,false,0);setup(wsD,false,2);setup(wsM,false,4);
 
- // 1. Detailed BOQ
  wsD.columns=[{width:34},{width:12},{width:16},{width:18},{width:20}];
  band(wsD,5,"Detailed Quantities & Cost Breakdown",R.name);
  let r=4;const tot={};
@@ -1446,11 +1445,11 @@ async function buildXlsx(R){
   const t=wsD.getCell(r,1);t.value=`[${it.lvl}] ${it.code}${it.d?" — "+it.d:""}`;t.font={name:"Calibri",bold:true,size:11,color:{argb:NV}};t.alignment={vertical:"middle",indent:1};wsD.getRow(r).height=22;r++;
   hdr(wsD,r,["Material / Work Description","Unit","Quantity","Unit Rate","Total Amount"],2);r++;const a=r;let s=0;
   it.lines.forEach((x,idx)=>{const amt=x.q*x.r;s+=amt;put(wsD,r,[x.l,x.u,x.q,x.r,{formula:`C${r}*D${r}`,result:amt}],[0,0,x.k==="brick"||x.k==="tile"?F0:F2,FC,FC],{f:idx%2===1?ZB:null});r++;});
+  tot[it.code]={row:r,v:s};
   put(wsD,r,["Subtotal — "+it.code,"","","",{formula:`SUM(E${a}:E${r-1})`,result:s}],[0,0,0,0,FC],{b:1,f:LT,tot:1,color:DK});r+=2;});
  const gv=Object.values(tot).reduce((a,x)=>a+x.v,0);
  put(wsD,r,["GRAND PROJECT TOTAL","","","",{formula:Object.values(tot).map(x=>"E"+x.row).join("+")||"0",result:gv}],[0,0,0,0,FC],{b:1,f:GD,tot:1,color:DK});
 
- // 2. Executive Summary (Grouped by Building Story / Level & Element Type)
  wsS.columns=[{width:16},{width:22},{width:32},{width:16},{width:16},{width:16},{width:20}];
  band(wsS,7,"Bill of Quantities — Executive Summary",R.name);
  r=4;
@@ -1480,14 +1479,12 @@ async function buildXlsx(R){
  wsS.getCell(r,1).value="Prepared By: ___________________________";wsS.getCell(r,1).font={name:"Calibri",bold:true,size:10,color:{argb:DK}};
  wsS.getCell(r,4).value="Approved By: ___________________________";wsS.getCell(r,4).font={name:"Calibri",bold:true,size:10,color:{argb:DK}};
 
- // 3. Consolidated Material Schedule
  wsM.columns=[{width:32},{width:12},{width:18},{width:18},{width:20}];
  band(wsM,5,"Consolidated Material Quantities & Cost",R.name);
  hdr(wsM,4,["Material","Unit","Total Quantity","Effective Rate","Total Cost"],2);r=5;const m0=r;
  MAT.filter(([k])=>PT[k]>0).forEach(([k,l,u],idx)=>{const c=MC[k]||0;put(wsM,r,[l,u,PT[k],PT[k]?c/PT[k]:0,c],[0,0,k==="brick"||k==="tile"?F0:F2,FC,FC],{f:idx%2===1?ZB:null});r++;});
  put(wsM,r,["TOTAL MATERIAL COST","","","",{formula:`SUM(E${m0}:E${r-1})`,result:gv}],[0,0,0,0,FC],{b:1,f:GD,tot:1,color:DK});
 
- // 4. Bar Bending Schedule
  const G=schedNum();
  if(G.length){const wsB=wb.addWorksheet("Bar Schedule",{properties:{tabColor:{argb:NV}}});setup(wsB,true,2);
   wsB.columns=[{width:14},{width:11},{width:16},{width:10},{width:18},{width:15},{width:13},{width:14},{width:18}];
@@ -1610,6 +1607,34 @@ function makePdfOld(){
   y+=7;});
  addSchedPdf(doc);save("site-quantities.pdf",doc.output("arraybuffer"));}
 $("pdf").addEventListener("click",showPreview);
+
+// --- Theme Toggle Logic ---
+const themeBtn = document.getElementById("themeToggle");
+const themeIcon = document.getElementById("themeIcon");
+
+function updateThemeIcon(isDark) {
+  themeIcon.innerHTML = isDark 
+    ? '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1.05 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>'
+    : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+}
+
+const savedTheme = localStorage.getItem("sq_theme");
+if (savedTheme) {
+  document.documentElement.setAttribute("data-theme", savedTheme);
+  updateThemeIcon(savedTheme === "dark");
+} else {
+  updateThemeIcon(window.matchMedia("(prefers-color-scheme: dark)").matches);
+}
+
+themeBtn.addEventListener("click", () => {
+  const currentTheme = document.documentElement.getAttribute("data-theme");
+  const isDark = currentTheme === "dark" || (!currentTheme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  const newTheme = isDark ? "light" : "dark";
+  
+  document.documentElement.setAttribute("data-theme", newTheme);
+  localStorage.setItem("sq_theme", newTheme);
+  updateThemeIcon(newTheme === "dark");
+});
 
 buildDims();drawRows();calcMx();
 </script>

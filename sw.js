@@ -1,4 +1,4 @@
-const V = "siteq-v11";
+const V = "siteq-v12";
 const CORE = ["./", "./index.html", "./manifest.webmanifest"];
 const CDN = [
   "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js",
