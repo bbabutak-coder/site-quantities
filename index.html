@@ -13,7 +13,7 @@
 <title>Site Quantities Calculator</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
---bg:#12161a;--surface:#1a2128;--surface-hover:#222c37;--ink:#e8eaec;--muted:#98a0a8;--line:#2c3540;--accent:#3182ce;--accent-ink:#fff;--result:#1b2a38;--gold:#f2b705}
+--bg:#12161a;--surface:#1a2128;--surface-hover:#222c37;--ink:#e8eaec;--muted:#98a0a8;--line:#2c3540;--accent:#3182ce;--accent-ink:#fff;--result:#1b2a38;--gold:#f2b705;color-scheme:dark}
 @media (prefers-color-scheme:light){:root:not([data-theme="dark"]){color-scheme:light;--bg:#f4f3f0;--surface:#ffffff;--surface-hover:#f7f6f3;--ink:#1f2328;--muted:#5d646c;--line:#d8d5ce;--accent:#1f4e79;--accent-ink:#fff;--result:#edf2f7;--gold:#d99b00}}
 :root[data-theme="light"]{color-scheme:light;--bg:#f4f3f0;--surface:#ffffff;--surface-hover:#f7f6f3;--ink:#1f2328;--muted:#5d646c;--line:#d8d5ce;--accent:#1f4e79;--accent-ink:#fff;--result:#edf2f7;--gold:#d99b00}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -125,6 +125,7 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 <button class="btn" id="edCx" type="button" hidden style="margin-bottom:10px">Cancel edit</button>
 <nav role="tablist">
 <button role="tab" aria-selected="true" data-t="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
+<button role="tab" aria-selected="false" data-t="pr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Projects</button>
 <button role="tab" aria-selected="false" data-t="el"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>Concrete &amp; formwork</button>
 <button role="tab" aria-selected="false" data-t="rb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/><path d="M7 5v4M13 5v4M10 10v4M16 10v4M7 15v4M13 15v4"/></svg>Rebar</button>
 <button role="tab" aria-selected="false" data-t="mx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>Mix</button>
@@ -149,6 +150,7 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 
 <h3 class="ch">Quick Navigation Modules</h3>
 <div class="card-grid">
+  <div class="card" data-nav="pr"><h3>Projects</h3><p>Create, rename &amp; switch projects, set currency, back up &amp; restore all your data.</p></div>
   <div class="card" data-nav="el"><h3>Structural &amp; Concrete</h3><p>Slabs, ribbed slabs, lintels, footings, beams, columns &amp; masonry.</p></div>
   <div class="card" data-nav="rb"><h3>Rebar &amp; Bar Schedule</h3><p>Bar bending schedule with custom marks &amp; 12m stock optimization.</p></div>
   <div class="card" data-nav="mx"><h3>Concrete Mix</h3><p>C30, C25, C20, C15 ratios, cement bags, sand &amp; aggregate volumes.</p></div>
@@ -187,7 +189,7 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 <div><label for="msnJ">Mortar joint (mm)</label><input id="msnJ" type="number" inputmode="decimal" value="15"></div>
 <div><label for="msnMo">Mortar volume ratio (%)</label><input id="msnMo" type="number" inputmode="decimal" min="20" max="50" value="35"></div>
 <div><label for="msnBs">Mortar 1 : sand</label><input id="msnBs" type="number" inputmode="decimal" value="4"></div>
-<div class="full"><label for="msnO">Openings deduction (m²)</label><input id="msnO" type="number" inputmode="decimal" value="0"></div>
+<div class="full"><label for="msnO">Openings deduction (<span class="ua">m²</span>)</label><input id="msnO" type="number" inputmode="decimal" value="0"></div>
 </div>
 <div class="out">
 <div><span>Blocks / stones (net)</span><b id="msnNet"></b></div>
@@ -233,8 +235,8 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 <div><label for="exR">Backfill ratio (% of net vol)</label><input id="exR" type="number" inputmode="decimal" min="0" max="100" value="70"></div>
 <div class="full"><label class="chk"><input type="checkbox" id="exCustomToggle"> Enable custom backfill &amp; cart-away amounts</label></div>
 <div id="exCustomWrap" hidden class="full grid" style="margin-top:0">
-<div><label for="exCustomBck">Custom Backfill Volume (<span class="u">m</span>³)</label><input id="exCustomBck" type="number" inputmode="decimal" min="0" value="0"></div>
-<div><label for="exCustomCrt">Custom Cart-Away Volume (<span class="u">m</span>³ bulked)</label><input id="exCustomCrt" type="number" inputmode="decimal" min="0" value="0"></div>
+<div><label for="exCustomBck">Custom Backfill Volume (<span class="uv">m³</span>)</label><input id="exCustomBck" type="number" inputmode="decimal" min="0" value="0"></div>
+<div><label for="exCustomCrt">Custom Cart-Away Volume (<span class="uv">m³</span> bulked)</label><input id="exCustomCrt" type="number" inputmode="decimal" min="0" value="0"></div>
 </div>
 </div>
 <div class="out">
@@ -580,16 +582,22 @@ input,select{width:100%;padding:10px;font:inherit;color:var(--ink);background:va
 <p class="note">Plaster dry volume = 1.3 × wet volume. Paint volume = (area × coats ÷ coverage) × (1 + wastage%). Sloped roof area = (length + 2×eaves) × (width + 2×eaves) ÷ cos(pitch°). Steel/timber roof framing estimates total truss chords/webs + purlin run length (m).</p>
 </section>
 
-<section class="panel" id="pj" hidden>
+<section class="panel" id="pr" hidden>
+<h2 style="margin:0 0 4px;font-size:1.15rem">Projects &amp; settings</h2>
+<p class="sub">Choose the active project, rename it, or start a new one.</p>
 <div class="grid">
 <div class="full"><label for="prSel">Project</label><select id="prSel"></select></div>
 <div class="full"><label for="prName">Project name</label><input id="prName" type="text"></div>
 <div><button class="btn" id="prNew" type="button">New project</button></div>
 <div><button class="btn" id="prRen" type="button">Rename</button></div>
 </div>
+<div class="grid"><div><label for="cur">Currency symbol</label><input id="cur" value="ETB "></div><div><label>&nbsp;</label><button class="btn" id="pClr" type="button">Delete project</button></div></div>
+<p class="note">Currency applies to every cost, report and export. Projects and rates are stored on this device only, so use Backup regularly.</p>
+</section>
+
+<section class="panel" id="pj" hidden>
 <div id="pList"></div>
 <div class="sumwrap"><table class="sum" id="pTab"></table></div>
-<div class="grid"><div><label for="cur">Currency symbol</label><input id="cur" value="ETB "></div><div><label>&nbsp;</label><button class="btn" id="pClr" type="button">Delete project</button></div></div>
 <p class="note">The first rate you type for a material, in any item or in the table below, becomes the project rate and every item follows it. Typing a different rate in another item changes only that item (amber box). Clear an amber box to follow the project rate again. Quantities are metric.</p>
 </section>
 </main>
@@ -606,7 +614,7 @@ const V=(x,d=3)=>IMP?f(x*M3,d)+" yd³":f(x,d)+" m³";
 const A=x=>IMP?f(x*M2)+" ft²":f(x)+" m²";
 const Ln=m=>IMP?f(m/FT,1)+" ft":f(m,1)+" m";
 const Wt=k=>IMP?f(k*KG,0)+" lb":f(k)+" kg";
-const RL=r=>n(r.l)*(IMP?FT:1);const CUR={};
+const RL=r=>n(r.l)*(IMP?FT:1);const CUR={};let editing=null,MC={};
 const beamForm=d=>{const k=IMP?FT:1;let a=$("bBot").checked?d.l*d.w:0;
  if($("bSide").checked){const ns=+$("bK").value,ts=n($("bT").value)*k;a+=d.l*((2-ns)*d.h+ns*Math.max(0,d.h-ts));}return a;};
 const slabForm=d=>{const k=IMP?FT:1;let a=$("soffit").checked?d.l*d.w:0;
@@ -623,7 +631,7 @@ const Q=v=>{v=String(v==null?"":v).trim();let r;
  return isFinite(r)&&r>0?Math.ceil(r-1e-9):0;};
 const f=(x,d=2)=>x.toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});
 const TYPES={
- excav:[["Pit / Trench Length (m)","l"],["Width (m)","w"],["Excavation Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
+ excav:{dims:[["Pit / Trench Length (m)","l"],["Width (m)","w"],["Excavation Depth (m)","h"]],vol:d=>d.l*d.w*d.h},
  hardcore:{dims:[["Length (m)","l"],["Width (m)","w"],["Compacted Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
  masonry:{dims:[["Length (m)","l"],["Thickness (m)","w"],["Height (m)","h"]],vol:d=>d.l*d.w*d.h},
  lean:{dims:[["Length (m)","l"],["Width (m)","w"],["Blinding Thickness (m)","h"]],vol:d=>d.l*d.w*d.h},
@@ -684,7 +692,9 @@ function calcEl(){
  if(bk){CUR.el=null;calcBrick(d,q,w);}
  else if(ex){
   const bf=n($("exB").value)/100,br=Math.min(1,n($("exR").value)/100);
-  const net=v,bulked=net*(1+bf),backfill=net*br,cartaway=Math.max(0,net-backfill)*(1+bf);
+  const net=v,bulked=net*(1+bf);let backfill=net*br,cartaway=Math.max(0,net-backfill)*(1+bf);
+  const cu=$("exCustomToggle").checked;$("exCustomWrap").hidden=!cu;
+  if(cu){backfill=n($("exCustomBck").value)/(IMP?M3:1);cartaway=n($("exCustomCrt").value)/(IMP?M3:1);}
   $("eNet").textContent=V(net);$("eBlk").textContent=V(bulked);$("eBck").textContent=V(backfill);$("eCrt").textContent=V(cartaway);
   CUR.el={excav:net,backfill:backfill,cartaway:cartaway};
  }else if(rb){
@@ -710,7 +720,7 @@ function calcEl(){
   const msnCement=dryMortar/(1+msnBs)*1440/50;
   const msnSand=dryMortar*msnBs/(1+msnBs);
   
-  $("msnNet").textContent=netStones.toLocaleString()+" pcs ("+V(stoneNetVol)+"; "+f(stoneNetVol/netVol*100,1)+"% vol)";
+  $("msnNet").textContent=netStones.toLocaleString()+" pcs ("+V(stoneNetVol)+"; "+f(netVol>0?stoneNetVol/netVol*100:0,1)+"% vol)";
   $("msnGross").textContent=grossStones.toLocaleString()+" pcs";
   $("msnMortar").textContent=V(mortarWet);
   $("msnCement").textContent=f(msnCement,1)+" bags ("+f(msnCement*50,0)+" kg)";
@@ -724,7 +734,7 @@ function calcEl(){
  }
 }
 ["type"].forEach(id=>$(id).addEventListener("change",buildDims));
-["qty","waste","soffit","sides","sl","sh","bBot","bSide","bK","bT","exB","exR","rbTop","rbW","rbH","rbSp","rbBl","rbBx","msnL","msnW","msnH","msnJ","msnMo","msnBs","msnO"].forEach(id=>$(id).addEventListener("input",calcEl));
+["qty","waste","soffit","sides","sl","sh","bBot","bSide","bK","bT","exB","exR","exCustomToggle","exCustomBck","exCustomCrt","rbTop","rbW","rbH","rbSp","rbBl","rbBx","msnL","msnW","msnH","msnJ","msnMo","msnBs","msnO"].forEach(id=>$(id).addEventListener("input",calcEl));
 
 const DIAS=[6,8,10,12,14,16,18,20,22,25,28,32,36,40,50];
 let rows=[{mk:"Top bar",d:12,n:"",l:""},{mk:"Stirrup",d:8,n:"",l:""}];
@@ -792,12 +802,12 @@ $("pull").addEventListener("click",()=>{$("mv").value=(IMP?lastGross*M3:lastGros
 
 document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{
  document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x===b));
- ["home","el","rb","mx","fn","pj"].forEach(id=>$(id).hidden=id!==b.dataset.t);
+ ["home","pr","el","rb","mx","fn","pj"].forEach(id=>$(id).hidden=id!==b.dataset.t);
 }));
 document.querySelectorAll(".card[data-nav]").forEach(c=>c.addEventListener("click",()=>{
  const t=c.dataset.nav;
  document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x.dataset.t===t));
- ["home","el","rb","mx","fn","pj"].forEach(id=>$(id).hidden=id!==t);
+ ["home","pr","el","rb","mx","fn","pj"].forEach(id=>$(id).hidden=id!==t);
  window.scrollTo({top:0,behavior:"smooth"});
 }));
 $("unit").addEventListener("change",()=>{
@@ -805,7 +815,11 @@ $("unit").addEventListener("change",()=>{
  for(const k in vals)if(k!=="ns"&&vals[k]!=="")vals[k]=+(vals[k]*c).toFixed(3);
  rows.forEach(r=>{if(r.l!=="")r.l=+(r.l*c).toFixed(3);});
  $("mv").value=+(n($("mv").value)*(IMP?M3:1/M3)).toFixed(3);
- ["sl","sh","bT","pl","ph","fL","fW","fSk","fSkDed","pnL","pnH","dwW","dwH","clL","clW","clSp","plQty","elQty","rfTrSp","rfPrSp","rfL","rfW","rfE","rfRd","rfGt","rfDp"].forEach(id=>{if($(id).value!=="")$(id).value=+(n($(id).value)*c).toFixed(3);});
+ ["sl","sh","bT","pl","ph","fL","fW","fSk","fSkDed","pnL","pnH","dwW","dwH","clL","clW","clSp","rfTrSp","rfPrSp","rfL","rfW","rfE","rfRd","rfGt","rfDp"].forEach(id=>{if($(id).value!=="")$(id).value=+(n($(id).value)*c).toFixed(3);});
+ if($("plQty").value!==""&&["drainPVC","waterPPR"].includes($("plSystem").value))$("plQty").value=+(n($("plQty").value)*c).toFixed(3);
+ if($("elQty").value!==""&&["condPVC","cable"].includes($("elType").value))$("elQty").value=+(n($("elQty").value)*c).toFixed(3);
+ ["bo","msnO","po","pnO"].forEach(id=>{if($(id).value!=="")$(id).value=+(n($(id).value)*(IMP?M2:1/M2)).toFixed(3);});
+ ["exCustomBck","exCustomCrt"].forEach(id=>{if($(id).value!=="")$(id).value=+(n($(id).value)*(IMP?M3:1/M3)).toFixed(3);});
  $("mvl").textContent="Concrete volume ("+(IMP?"yd³":"m³")+")";
  buildDims();drawRows();calcMx();calcFn();});
 
@@ -832,7 +846,7 @@ function calcBrick(d,q,w){
  $("bA").textContent=A(area);$("bN").textContent=Math.ceil(N).toLocaleString();
  $("bG").textContent=Math.ceil(N*(1+w/100)).toLocaleString();$("bM").textContent=V(wet);
  $("bC").textContent=f(dry/(1+s)*1440/50,1)+" bags ("+f(dry/(1+s)*1440,0)+" kg)";
- $("bS").textContent=V(dry*s/(1+s),2);CUR.el={brick:Math.ceil(N*(1+w/100)),cement:dry/(1+s)*1440/50,sand:dry*s/(1+s)};}
+ $("bS").textContent=V(dry*s/(1+s),2);CUR.el={wallArea:area,brick:Math.ceil(N*(1+w/100)),cement:dry/(1+s)*1440/50,sand:dry*s/(1+s)};}
 ["bl","bw","bh","bj","bt","bo","bs"].forEach(id=>$(id).addEventListener("input",()=>{
  if(["bl","bw","bh"].includes(id))$("bPreset").value="custom";
  calcEl();
@@ -840,6 +854,7 @@ function calcBrick(d,q,w){
 function calcFn(){
  document.querySelectorAll(".u").forEach(e=>e.textContent=LU());
  document.querySelectorAll(".ua").forEach(e=>e.textContent=IMP?"ft²":"m²");
+ document.querySelectorAll(".uv").forEach(e=>e.textContent=IMP?"yd³":"m³");
  const k=IMP?FT:1,s=n($("ps").value)||4;
  const pa=Math.max(0,n($("pl").value)*k*n($("ph").value)*k-n($("po").value)/(IMP?M2:1))*(+$("pf").value);
  const wet=pa*n($("pt").value)/1000,dry=wet*1.3,cm=dry/(1+s);
@@ -939,23 +954,21 @@ function calcFn(){
  if(rfStrType==="timber"&&totalFrameM>0)CUR.rf.timberTruss=totalFrameM;
 
  // Plumbing & Sanitary MEP
- const plt=$("plSystem").value,plq=n($("plQty").value),plf=1+n($("plFitt").value)/100,plw=1+n($("plW").value)/100;
- const isPlLen=["drainPVC","waterPPR"].includes(plt);
+ const plt=$("plSystem").value,isPlLen=["drainPVC","waterPPR"].includes(plt),plq=n($("plQty").value)*(isPlLen?k:1),plf=1+n($("plFitt").value)/100,plw=1+n($("plW").value)/100;
  const plTotQty=isPlLen?plq*plf*plw:Math.ceil(plq*plw);
- const plMap={drainPVC:["drainPipe","m"],waterPPR:["waterPipe","m"],chamber:["inspectionChamber","nos"],wc:["waterCloset","nos"],basin:["washbasin","nos"],shower:["showerSet","nos"]};
+ const plMap={drainPVC:["drainPipe","m"],waterPPR:["waterPipe","m"],chamber:["inspectionChamber","nos"],wc:["waterCloset","nos"],basin:["washbasin","nos"],shower:["shower","nos"]};
  const [plKey,plUnit]=plMap[plt];
- $("plTot").textContent=f(plTotQty,isPlLen?1:0)+" "+plUnit;
- $("plDesc").textContent=isPlLen?`${plq} ${LU()} net + ${n($("plFitt").value)}% fittings + ${n($("plW").value)}% waste`:`${plq} units + ${n($("plW").value)}% spare/wastage`;
+ $("plTot").textContent=isPlLen?Ln(plTotQty):f(plTotQty,0)+" "+plUnit;
+ $("plDesc").textContent=isPlLen?`${n($("plQty").value)} ${LU()} net + ${n($("plFitt").value)}% fittings + ${n($("plW").value)}% waste`:`${plq} units + ${n($("plW").value)}% spare/wastage`;
  CUR.plmep={[plKey]:plTotQty};
 
  // Electrical Conduiting & Distribution
- const elt=$("elType").value,elq=n($("elQty").value),elcirc=n($("elCirc").value),elx=1+n($("elX").value)/100;
- const isElLen=["condPVC","cable"].includes(elt);
+ const elt=$("elType").value,isElLen=["condPVC","cable"].includes(elt),elq=n($("elQty").value)*(isElLen?k:1),elcirc=n($("elCirc").value),elx=1+n($("elX").value)/100;
  const elTotQty=isElLen?elq*elx:Math.ceil(elq*elx);
  const elMap={condPVC:["pvcConduit","m"],swBox:["switchBox","nos"],db:["distBoard","nos"],cable:["cableWiring","m"]};
  const [elKey,elUnit]=elMap[elt];
- $("elTot").textContent=f(elTotQty,isElLen?1:0)+" "+elUnit;
- $("elDesc").textContent=isElLen?`${elq} ${LU()} net + ${n($("elX").value)}% slack/waste`:`${elq} units across ${elcirc} circuits`;
+ $("elTot").textContent=isElLen?Ln(elTotQty):f(elTotQty,0)+" "+elUnit;
+ $("elDesc").textContent=isElLen?`${n($("elQty").value)} ${LU()} net + ${n($("elX").value)}% slack/waste`:`${elq} units across ${elcirc} circuits`;
  CUR.elmep={[elKey]:elTotQty};
 }
 ["pl","ph","po","pf","pt","ps","fL","fW","tl","tw","tj","fx","fSk","fSkDed","pnL","pnH","pnO","pnF","pnC","pnCov","pnPr","wtL","wtW","pnX","dwQty","dwW","dwH","clL","clW","clSp","clX","plQty","plSize","plFitt","plW","elQty","elCirc","elX","rfTrSp","rfPrSp","rfL","rfW","rfP","rfE","rfSl","rfSh","rfRd","rfGt","rfDp","rfX"].forEach(id=>$(id).addEventListener("input",calcFn));
@@ -986,6 +999,7 @@ const MAT=[
  ["form","Formwork","m²"],
  ["steel","Reinforcement","kg"],
  ["ribBlock","Ribbed Slab Filler Blocks","nos"],
+ ["wallArea","Masonry Wall Area (HCB / Brick)","m²"],
  ["brick","Blocks / Bricks","nos"],
  ["stoneBlock","Stone Masonry Blocks / Stones","nos"],
  ["cement","Cement","bags"],
@@ -1035,30 +1049,9 @@ const MAT=[
 ];
 const LS={get(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let proj=LS.get("sq_proj",[]),rates=LS.get("sq_rates",{}),PT={};
-const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-function addP(name,m){
- if(!m||!Object.values(m).some(v=>v>0)){$("xs").textContent="Nothing to add yet. Enter the dimensions first.";return;}
- proj.push({n:name,m:{...m}});LS.set("sq_proj",proj);renderProj();$("xs").textContent="Added to project: "+name;}
-function costs(){
- let tot=0;const c=$("cur").value;
- document.querySelectorAll("[data-c]").forEach(td=>{const k=td.dataset.c,v=(PT[k]||0)*n(rates[k]);tot+=v;td.textContent=c+f(v);});
- const e=$("pTot");if(e)e.textContent=c+f(tot);
- if($("homeTotalCost"))$("homeTotalCost").textContent=c+f(tot);
-}
-function renderProj(){
- $("pList").innerHTML=proj.length?proj.map((p,i)=>`<div class="pi"><span>${esc(p.n)}</span><button class="btn" data-pd="${i}" type="button" aria-label="Remove">✕</button></div>`).join(""):'<p class="note">No items yet. Use Add to project on any tab.</p>';
- const T={};proj.forEach(p=>{for(const k in p.m)T[k]=(T[k]||0)+p.m[k];});PT=T;
- const rs=MAT.filter(([k])=>T[k]>0);
- $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Quantity</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Total</td><td id="pTot"></td></tr></tfoot>`:"";
- costs();
-}
-$("pList").addEventListener("click",e=>{const b=e.target.closest("[data-pd]");if(b){proj.splice(+b.dataset.pd,1);LS.set("sq_proj",proj);renderProj();}});
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 $("pTab").addEventListener("input",e=>{const k=e.target.dataset.r;if(k){rates[k]=e.target.value;saveP();costs();}});
 $("cur").addEventListener("input",costs);
-$("pClr").addEventListener("click",()=>{if(proj.length&&confirm("Remove all project items?")){proj=[];LS.set("sq_proj",proj);renderProj();}});
-[].forEach(([id,nm,get])=>{
- const b=document.createElement("button");b.type="button";b.className="btn main";b.textContent="Add to project";
- b.addEventListener("click",()=>addP(nm(),get()));$(id).appendChild(b);});
 $("addPl").addEventListener("click",()=>addItem("Plaster","",CUR.pl,snapFn("pl"),getLvl("plLvl","plCust")));
 $("addFl").addEventListener("click",()=>addItem("Floor","",CUR.fl,snapFn("fl"),getLvl("flLvl","flCust")));
 $("addPn").addEventListener("click",()=>{
@@ -1084,12 +1077,6 @@ $("addElMep").addEventListener("click",()=>{
  addItem(catMap[t],"",CUR.elmep,snapFn("elmep"),getLvl("elmvlLvl","elmvlCust"));
 });
 $("addRf").addEventListener("click",()=>addItem("Roofing","",CUR.rf,snapFn("rf"),getLvl("rfLvl","rfCust")));
-function projRows(){
- if(!proj.length)return[];
- return[[""],["Project items"],...proj.map(p=>[p.n]),["Project totals (metric)"],["Material","Quantity","Rate","Cost"],
-  ...[...document.querySelectorAll("#pTab tbody tr")].map(tr=>[tr.cells[0].textContent,tr.cells[1].textContent,tr.querySelector("input").value,tr.cells[3].textContent]),
-  ["Total","","",$("pTot")?$("pTot").textContent:""]];}
-proj=[];
 const CAT={excav:"Excavation",hardcore:"Hardcore",masonry:"StoneMasonry",lean:"LeanConcrete",slab:"Slab",ribbed:"RibbedSlab",footing:"Footing",trap:"TrapezoidalFooting",beam:"Beam",lintel:"LintelTieBeam",wall:"Wall",brick:"MasonryWall",col:"Column",round:"Column",stair:"Stair",landing:"Landing"};
 const STORY_ORDER=["Substructure","Ground Floor","First Floor","Second Floor","Third Floor","Roof Level"];
 const storyRank=st=>{const idx=STORY_ORDER.indexOf(st||"Ground Floor");return idx>=0?idx:99;};
@@ -1104,10 +1091,6 @@ const nextCode=cat=>cat+(1+Math.max(0,...curP().items.filter(i=>i.cat===cat).map
 const rt=(it,k)=>it.r&&it.r[k]!==undefined&&it.r[k]!==""?n(it.r[k]):n(rates[k]);const itemCost=it=>{let s=0;for(const k in it.m)s+=it.m[k]*rt(it,k);return s;};
 function mixFor(v){const cu=$("mix").value==="custom",[c,s,a]=cu?[n($("cc").value),n($("cs").value),n($("ca").value)]:$("mix").value.split(",").map(Number),sum=(c+s+a)||1,dry=v*1.54,cm=dry*c/sum;
  return{cement:cm*1440/50,sand:dry*s/sum,agg:dry*a/sum,water:cm*1440*n($("wc").value)};}
-function addItem(cat,desc,m){
- if(!m||!Object.values(m).some(v=>v>0)){$("xs").textContent="Nothing to save yet. Enter the dimensions first.";return;}
- const code=nextCode(cat),p=curP();p.items.push({code,cat,d:desc,m:{...m}});saveP();renderProj();$("xs").textContent="Saved "+code+" to "+p.name;}
-function updAdd(){const b=$("addEl");if(b)b.textContent="Save as "+nextCode(CAT[$("type").value])+" to "+curP().name;}
 function renderItems(){
  const p=curP(),c=$("cur").value;
  const stories=[...new Set(p.items.map(i=>i.lvl||"Ground Floor"))].sort((a,b)=>storyRank(a)-storyRank(b)||a.localeCompare(b));
@@ -1142,7 +1125,6 @@ function renderProj(){
  costs();updAdd();renderPI();}
 function renderPI(){const p=curP();$("pjBtn").textContent="Project: "+p.name;
  $("pItems").innerHTML=p.items.length?p.items.map(it=>`<div class="pi"><span><b>${esc(it.code)}</b> ${esc(it.d||"")}</span><span><button class="btn" data-dup="${esc(it.code)}" type="button" title="Duplicate item">Copy</button> <button class="btn" data-ed="${esc(it.code)}" type="button">Edit</button> <button class="btn" data-del="${esc(it.code)}" type="button" aria-label="Remove ${esc(it.code)}">✕</button></span></div>`).join(""):'<p class="note">No work items yet.</p>';}
-$("pList").addEventListener("click",e=>{const b=e.target.closest("[data-del]");if(b){const p=curP();p.items=p.items.filter(i=>i.code!==b.dataset.del);saveP();renderProj();}});
 $("prSel").addEventListener("change",()=>{PR.cur=$("prSel").value;saveP();renderProj();});
 $("prNew").addEventListener("click",()=>{const id="p"+Date.now();PR.list.push({id,name:"Project "+(PR.list.length+1),items:[],rates:{...rates}});PR.cur=id;saveP();renderProj();});
 $("prRen").addEventListener("click",()=>{const v=$("prName").value.trim();if(v){curP().name=v;saveP();renderProj();}});
@@ -1179,35 +1161,49 @@ function projRows(){
   MAT.forEach(([k,l,u])=>{const q=it.m[k];if(q>0)R.push([l,f(q,2)+" "+u,rates[k]||"",f(q*n(rates[k]))]);});
   const ic=itemCost(it);tot+=ic;R.push(["Cost of "+it.code,"","",f(ic)]);});
  R.push(["Project total","","",f(tot)]);return R;}
-proj=[];
-const CAT={excav:"Excavation",hardcore:"Hardcore",masonry:"StoneMasonry",lean:"LeanConcrete",slab:"Slab",ribbed:"RibbedSlab",footing:"Footing",trap:"TrapezoidalFooting",beam:"Beam",lintel:"LintelTieBeam",wall:"Wall",brick:"MasonryWall",col:"Column",round:"Column",stair:"Stair",landing:"Landing"};
-const STORY_ORDER=["Substructure","Ground Floor","First Floor","Second Floor","Third Floor","Roof Level"];
-const storyRank=st=>{const idx=STORY_ORDER.indexOf(st||"Ground Floor");return idx>=0?idx:99;};
-const getLvl=(selId,custId)=>{const v=$(selId).value;return v==="Custom"?($(custId).value.trim()||"Custom Level"):v;};
-const setLvl=(selId,custId,wrapId,val)=>{const v=val||"Ground Floor";if(STORY_ORDER.includes(v)){$(selId).value=v;$(wrapId).hidden=true;}else{$(selId).value="Custom";$(custId).value=v;$(wrapId).hidden=false;}};
-[["plLvl","plCust","plCustWrap"],["flLvl","flCust","flCustWrap"],["pnLvl","pnCust","pnCustWrap"],["dwLvl","dwCust","dwCustWrap"],["clLvl","clCust","clCustWrap"],["plmvlLvl","plmvlCust","plmvlCustWrap"],["elmvlLvl","elmvlCust","elmvlCustWrap"],["rfLvl","rfCust","rfCustWrap"]].forEach(([s,c,w])=>$(s).addEventListener("change",()=>{$(w).hidden=$(s).value!=="Custom";}));
-let PR=LS.get("sq_projects",null);
-if(!PR||!PR.list||!PR.list.length)PR={cur:"p1",list:[{id:"p1",name:"Project 1",items:[]}]};
-const saveP=()=>LS.set("sq_projects",PR);
-const curP=()=>PR.list.find(p=>p.id===PR.cur)||PR.list[0];
-const nextCode=cat=>cat+(1+Math.max(0,...curP().items.filter(i=>i.cat===cat).map(i=>+i.code.slice(cat.length)||0)));
-const rt=(it,k)=>it.r&&it.r[k]!==undefined&&it.r[k]!==""?n(it.r[k]):n(rates[k]);const itemCost=it=>{let s=0;for(const k in it.m)s+=it.m[k]*rt(it,k);return s;};
-function mixFor(v){const cu=$("mix").value==="custom",[c,s,a]=cu?[n($("cc").value),n($("cs").value),n($("ca").value)]:$("mix").value.split(",").map(Number),sum=(c+s+a)||1,dry=v*1.54,cm=dry*c/sum;
- return{cement:cm*1440/50,sand:dry*s/sum,agg:dry*a/sum,water:cm*1440*n($("wc").value)};}
 function addItem(cat,desc,m,s,lvl){
  if(!m||!Object.values(m).some(v=>v>0)){$("xs").textContent="Nothing to save yet. Enter the dimensions first.";return;}
  const p=curP(),story=lvl||"Ground Floor";
- const customCode=$("icode")?$("icode").value.trim():"";
+ let customCode=(s&&s.kind==="el"&&$("icode"))?$("icode").value.trim():"";
+ if(customCode&&p.items.some(i=>i.code===customCode&&!(editing&&i.code===editing.code))){let k=2;while(p.items.some(i=>i.code===customCode+"-"+k))k++;customCode+="-"+k;}
  if(editing&&s&&editing.kind===s.kind){const it=p.items.find(i=>i.code===editing.code);
   if(it){if(customCode)it.code=customCode;else if(it.cat!==cat){it.cat=cat;it.code=nextCode(cat);}it.d=desc;it.lvl=story;it.m={...m};it.s=s;saveP();
    $("xs").textContent="Updated "+it.code+" ("+story+")";editing=null;if($("icode"))$("icode").value="";$("edCx").hidden=true;renderProj();return;}}
- const code=customCode||nextCode(cat);p.items.push({code,cat,lvl:story,d:desc,m:{...m},s});if($("icode"))$("icode").value="";saveP();renderProj();$("xs").textContent="Saved "+code+" ("+story+") to "+p.name;}
+ const code=customCode||nextCode(cat);p.items.push({code,cat,lvl:story,d:desc,m:{...m},s});if($("icode"))$("icode").value="";editing=null;$("edCx").hidden=true;saveP();renderProj();$("xs").textContent="Saved "+code+" ("+story+") to "+p.name;}
 function updAdd(){
  const e=editing,P=curP().name,set=(id,kind,idle)=>{const b=$(id);if(b)b.textContent=e&&e.kind===kind?"Update "+e.code:idle;};
  set("addEl","el","Save as "+nextCode(CAT[$("type").value])+" to "+P);
  set("addPl","pl","Add plastering to project");set("addFl","fl","Add flooring & skirting to project");set("addPn","pn","Add wall finish to project");set("addDw","dw","Add door / window to project");set("addCl","cl","Add ceiling works to project");set("addPlMep","plmep","Add plumbing item to project");set("addElMep","elmep","Add electrical item to project");set("addRf","rf","Add roof system to project");}
-function renderPI(){const p=curP();$("pjBtn").textContent="Project: "+p.name;
- $("pItems").innerHTML=p.items.length?p.items.map(it=>`<div class="pi"><span><b>${esc(it.code)}</b> ${esc(it.d||"")}</span><span><button class="btn" data-dup="${esc(it.code)}" type="button" title="Duplicate item">Copy</button> <button class="btn" data-ed="${esc(it.code)}" type="button">Edit</button> <button class="btn" data-del="${esc(it.code)}" type="button" aria-label="Remove ${esc(it.code)}">✕</button></span></div>`).join(""):'<p class="note">No work items yet.</p>';}
+const catKind=c=>c==="Plaster"?"pl":c==="Floor"?"fl":(c==="Painting"||c==="WallTile"||c==="StoneCladding")?"pn":(c==="AluminumWindow"||c==="WoodenDoor"||c==="SteelDoor"||c==="GlassPartition")?"dw":c==="Ceiling"?"cl":["DrainagePVC","WaterSupplyPPR","InspectionChamber","SanitaryWC","SanitaryBasin","SanitaryShower"].includes(c)?"plmep":["ElectricalConduit","ElectricalSwitchBox","DistributionBoard","ElectricalCabling"].includes(c)?"elmep":c==="Roofing"?"rf":"el";
+const FNS={
+ pl:["pl","ph","po","pf","pt","ps","plLvl","plCust"],
+ fl:["fL","fW","tl","tw","tj","fx","fSk","fSkDed","flLvl","flCust"],
+ pn:["pnType","pnL","pnH","pnO","pnF","pnC","pnCov","pnPr","wtL","wtW","pnX","pnLvl","pnCust"],
+ dw:["dwType","dwMark","dwQty","dwW","dwH","dwLvl","dwCust"],
+ cl:["clType","clL","clW","clSp","clX","clLvl","clCust"],
+ plmep:["plSystem","plQty","plSize","plFitt","plW","plmvlLvl","plmvlCust"],
+ elmep:["elType","elQty","elCirc","elX","elmvlLvl","elmvlCust"],
+ rf:["rfType","rfStr","rfTrSp","rfPrSp","rfL","rfW","rfP","rfE","rfSl","rfSh","rfRd","rfGt","rfDp","rfX","rfLvl","rfCust"]};
+const getV=e=>e.type==="checkbox"?e.checked:e.value;
+const setIds=o=>{for(const id in o){const e=$(id);if(!e)continue;if(e.type==="checkbox")e.checked=!!o[id];else e.value=o[id];}};
+function snapFn(kind){const ids={};FNS[kind].forEach(id=>{const e=$(id);if(e)ids[id]=getV(e);});return{kind,u:IMP,ids};}
+function snapEl(){const ids={};
+ document.querySelectorAll("#el input[id],#el select[id]").forEach(e=>{if(e.id==="icode"||e.id==="idesc"||e.id.startsWith("d_"))return;ids[e.id]=getV(e);});
+ return{kind:"el",u:IMP,type:$("type").value,vals:{...vals},ids,rows:rows.map(r=>({...r})),incR:$("incR").checked,incM:$("incM").checked};}
+function syncLvl(){[["elLvl","elCust","elCustWrap"],["plLvl","plCust","plCustWrap"],["flLvl","flCust","flCustWrap"],["pnLvl","pnCust","pnCustWrap"],["dwLvl","dwCust","dwCustWrap"],["clLvl","clCust","clCustWrap"],["plmvlLvl","plmvlCust","plmvlCustWrap"],["elmvlLvl","elmvlCust","elmvlCustWrap"],["rfLvl","rfCust","rfCustWrap"]].forEach(([s,c,w])=>{if($(s)&&$(w))$(w).hidden=$(s).value!=="Custom";});}
+function loadSnap(s){
+ if(s.u!==undefined&&s.u!==IMP){$("unit").value=s.u?"ft":"m";$("unit").dispatchEvent(new Event("change"));}
+ if(s.kind==="el"){
+  document.querySelector('nav button[data-t="el"]').click();
+  $("type").value=s.type;vals={...s.vals};buildDims();
+  setIds(s.ids);rows=s.rows.map(r=>({...r}));drawRows();syncLvl();calcEl();
+ }else{
+  document.querySelector('nav button[data-t="fn"]').click();
+  setIds(s.ids);syncLvl();calcFn();
+ }
+ updAdd();}
+$("pjBtn").addEventListener("click",()=>{renderPI();$("pjs").hidden=false;});
+$("pjClose").addEventListener("click",()=>{$("pjs").hidden=true;});
 const autoSet={};
 $("pList").addEventListener("input",e=>{const i=e.target;if(!i.classList.contains("ri"))return;
  const it=curP().items.find(x=>x.code===i.dataset.ic);if(!it)return;
@@ -1216,15 +1212,16 @@ $("pList").addEventListener("input",e=>{const i=e.target;if(!i.classList.contain
   const ti=document.querySelector(`#pTab input[data-r="${k}"]`);if(ti)ti.value=v;}
  else(it.r=it.r||{})[k]=v;
  saveP();costs();
- const x=document.querySelector(`.ri[data-ic="${i.dataset.ic}"][data-k="${k}"]`);if(x)x.focus();});
+ const x=document.querySelector(`.ri[data-ic="${CSS.escape(i.dataset.ic)}"][data-k="${k}"]`);if(x)x.focus();});
 $("pItems").addEventListener("click",e=>{
+ const del=e.target.closest("[data-del]");
+ if(del){const p=curP();p.items=p.items.filter(i=>i.code!==del.dataset.del);if(editing&&editing.code===del.dataset.del){editing=null;$("edCx").hidden=true;}saveP();renderProj();return;}
  const dup=e.target.closest("[data-dup]");
  if(dup){
   const p=curP(),orig=p.items.find(i=>i.code===dup.dataset.dup);if(!orig)return;
   const copy=JSON.parse(JSON.stringify(orig));
   copy.code=nextCode(orig.cat);
   p.items.push(copy);saveP();renderProj();
-  const catKind=c=>c==="Plaster"?"pl":c==="Floor"?"fl":(c==="Painting"||c==="WallTile"||c==="StoneCladding")?"pn":(c==="AluminumWindow"||c==="WoodenDoor"||c==="SteelDoor"||c==="GlassPartition")?"dw":c==="Ceiling"?"cl":["DrainagePVC","WaterSupplyPPR","InspectionChamber","SanitaryWC","SanitaryBasin","SanitaryShower"].includes(c)?"plmep":["ElectricalConduit","ElectricalSwitchBox","DistributionBoard","ElectricalCabling"].includes(c)?"elmep":c==="Roofing"?"rf":"el";
   const sn=copy.s||{kind:catKind(copy.cat)};
   editing={code:copy.code,kind:sn.kind};
   if(copy.s)loadSnap(copy.s);else document.querySelector(`nav button[data-t="${sn.kind==="el"?"el":"fn"}"]`).click();
@@ -1376,7 +1373,7 @@ function buildPdf(R){
  if(R.S.length){doc.addPage("a4","landscape");y=32;
   doc.setFillColor(242,183,5);doc.rect(14,y-4,2.5,5.5,"F");
   doc.setFont(undefined,"bold");doc.setFontSize(12);doc.setTextColor(31,42,54);
-  doc.text("4. BAR BENDING SCHEDULE (METRIC, 12 M STOCK BARS)",19,y);doc.setTextColor(0);y+=4;
+  doc.text("5. BAR BENDING SCHEDULE (METRIC, 12 M STOCK BARS)",19,y);doc.setTextColor(0);y+=4;
   schedGroups(R.S).forEach(g=>{y=brk(y,26);doc.setFont(undefined,"bold");doc.setFontSize(9.5);doc.setTextColor(31,78,121);doc.text(g.t,14,y+4);doc.setTextColor(0);y+=5.2;y=pdfTable(doc,y,[22,22,32,24,36,32,30,32,39],g.h,g.r,A3);});}
 
  const N=doc.getNumberOfPages();
@@ -1506,9 +1503,9 @@ async function buildXlsx(R){
  const slug=(R.name||"site-quantities").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"site-quantities";
  save(slug+"-BOQ.xlsx",buf instanceof ArrayBuffer?buf:buf.buffer.slice(buf.byteOffset,buf.byteOffset+buf.byteLength));}
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
-{const b=document.createElement("div");b.style.cssText="display:flex;gap:8px;margin-top:12px";
+{const b=document.createElement("div");b.style.cssText="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap";
  b.innerHTML='<button class="btn" id="bkp" type="button">Backup all projects</button><button class="btn" id="rst" type="button">Restore</button><input id="rstf" type="file" accept=".json,application/json" hidden>';
- $("pjp").append(b);
+ $("pr").append(b);
  $("bkp").addEventListener("click",()=>save("site-projects-backup.json",JSON.stringify({PR,rates})));
  $("rst").addEventListener("click",()=>$("rstf").click());
  $("rstf").addEventListener("change",async e=>{const fl=e.target.files[0];if(!fl)return;
@@ -1526,15 +1523,31 @@ function report(){
  const pr=projRows();
  if(pr.length)return[["Site quantities"],...pr.slice(1),[""],["Total quantity of all items"],["Material","Quantity","Rate","Cost"],...MAT.filter(([k])=>PT[k]>0).map(([k,l,u])=>[l,f(PT[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)+" "+u,rates[k]||"",f(MC[k]||0)])];
  return R;}
-async function save(name,data){
- const st=$("xs");st.textContent="";
- const ext=name.split(".").pop(),type={pdf:"application/pdf",xlsx:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",csv:"text/csv;charset=utf-8",json:"application/json"}[ext]||"application/octet-stream";
+function save(name,data){
+ $("xs").textContent="";
+ const ext=name.split(".").pop(),type={pdf:"application/pdf",xlsx:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",xls:"application/vnd.ms-excel",csv:"text/csv;charset=utf-8",json:"application/json"}[ext]||"application/octet-stream";
  const blob=new Blob([data],{type});
- try{const fl=new File([blob],name,{type});
-  if(navigator.canShare&&navigator.canShare({files:[fl]})){await navigator.share({files:[fl]});return;}}
- catch(e){if(e&&e.name==="AbortError")return;}
- try{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();}
- catch(e){st.textContent="Could not save the file on this device.";}}
+ let d=$("sv");
+ if(!d){d=document.createElement("div");d.id="sv";d.setAttribute("role","dialog");d.setAttribute("aria-label","Save file");
+  d.style.cssText="position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:16px";
+  d.innerHTML='<div style="background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:18px;max-width:420px;width:100%"><b>File ready</b><p id="svn" style="word-break:break-all;margin:6px 0 4px"></p><p class="note" id="svm" style="margin:0 0 12px"></p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn main" id="svGo" type="button" style="margin-top:0">Choose location &amp; save</button><button class="btn" id="svX" type="button">Cancel</button></div></div>';
+  document.body.appendChild(d);$("svX").addEventListener("click",()=>{d.hidden=true;});}
+ const fl=(()=>{try{return new File([blob],name,{type});}catch(e){return null;}})();
+ const canShare=!!(fl&&navigator.canShare&&navigator.canShare({files:[fl]}));
+ $("svn").textContent=name;
+ $("svm").textContent=window.showSaveFilePicker?"Tap the button, then pick the folder and file name.":canShare?"Tap the button, then choose Save to Files to pick the folder.":"Your browser will save it to its downloads folder. Turn on Ask where to save in browser settings to choose each time.";
+ d.hidden=false;
+ $("svGo").onclick=async()=>{
+  try{
+   if(window.showSaveFilePicker){
+    const h=await window.showSaveFilePicker({suggestedName:name,types:[{description:ext.toUpperCase()+" file",accept:{[type.split(";")[0]]:["."+ext]}}]});
+    const w=await h.createWritable();await w.write(blob);await w.close();
+    d.hidden=true;$("xs").textContent="Saved "+(h.name||name);return;}
+   if(canShare){await navigator.share({files:[fl]});d.hidden=true;return;}
+  }catch(e){if(e&&e.name==="AbortError")return;}
+  try{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();d.hidden=true;$("xs").textContent="Downloaded "+name;}
+  catch(e){$("xs").textContent="Could not save the file on this device.";}};
+}
 function loadScript(urls){
  return new Promise(async resolve=>{
   for(const u of urls){
@@ -1590,7 +1603,6 @@ $("xl").addEventListener("click",async()=>{
 });
 function showPreview(){
  const D=docHtml();if(D){$("pvp").innerHTML=D;$("pv").hidden=false;$("pvp").scrollTop=0;return;}
- if(!window.jspdf){$("xs").textContent="PDF export did not load.";return;}
  $("pvp").innerHTML=report().map((r,i)=>i===0?`<h2>${esc(r[0])}</h2>`:r.length===1?(r[0]===""?"<br>":`<h3>${esc(r[0])}</h3>`):`<div class="pvr${r.length===2?" pv2":""}">${r.map(c=>`<span>${esc(c)}</span>`).join("")}</div>`).join("");
  $("pvp").insertAdjacentHTML("beforeend",schedHtml());$("pv").hidden=false;$("pvp").scrollTop=0;}
 $("pvClose").addEventListener("click",()=>{$("pv").hidden=true;});
@@ -1618,7 +1630,7 @@ function updateThemeIcon(isDark) {
     : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
 }
 
-const savedTheme = localStorage.getItem("sq_theme");
+let savedTheme=null;try{savedTheme=localStorage.getItem("sq_theme");}catch(e){}
 if (savedTheme) {
   document.documentElement.setAttribute("data-theme", savedTheme);
   updateThemeIcon(savedTheme === "dark");
@@ -1632,7 +1644,7 @@ themeBtn.addEventListener("click", () => {
   const newTheme = isDark ? "light" : "dark";
   
   document.documentElement.setAttribute("data-theme", newTheme);
-  localStorage.setItem("sq_theme", newTheme);
+  try{localStorage.setItem("sq_theme", newTheme);}catch(e){}
   updateThemeIcon(newTheme === "dark");
 });
 

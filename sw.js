@@ -1,4 +1,4 @@
-const V = "siteq-v12";
+const V = "siteq-v13";
 const CORE = ["./", "./index.html", "./manifest.webmanifest"];
 const CDN = [
   "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js",
@@ -8,7 +8,8 @@ const CDN = [
 self.addEventListener("install", e => {
   e.waitUntil((async () => {
     const c = await caches.open(V);
-    await c.addAll(CORE);
+    // One missing file (e.g. manifest) must not abort the whole install
+    await Promise.allSettled(CORE.map(u => c.add(u)));
     await Promise.allSettled(CDN.map(async u => {
       const req = new Request(u, { mode: "no-cors" });
       await c.put(req, await fetch(req));
@@ -24,14 +25,17 @@ self.addEventListener("activate", e => {
 });
 self.addEventListener("fetch", e => {
   const r = e.request;
-  if (r.method !== "GET") return;
+  if (r.method !== "GET" || !r.url.startsWith("http")) return;
   e.respondWith((async () => {
     const c = await caches.open(V);
     const hit = await c.match(r, { ignoreSearch: true });
     const net = fetch(r).then(res => {
-      if (res && (res.ok || res.type === "opaque")) c.put(r, res.clone());
+      if (res && (res.ok || res.type === "opaque")) c.put(r, res.clone()).catch(() => {});
       return res;
     }).catch(() => null);
-    return hit || (await net) || new Response("Offline", { status: 503 });
+    if (hit) { e.waitUntil(net); return hit; }
+    return (await net)
+      || (r.mode === "navigate" && await c.match("./index.html"))
+      || new Response("Offline", { status: 503 });
   })());
 });
