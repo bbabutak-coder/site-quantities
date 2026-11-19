@@ -79,6 +79,7 @@ textarea{resize:vertical;min-height:84px;line-height:1.45}
 .rhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;background:#1f2a36;color:#fff;padding:16px 20px;border-radius:8px 8px 0 0;border-bottom:4px solid var(--gold);margin-bottom:12px}
 .rt1{font-size:1.25rem;font-weight:800;letter-spacing:-.01em;color:#fff}.rt2{font-size:.92rem;color:var(--gold);font-weight:600;margin-top:2px}.rm{font-size:.76rem;text-align:right;color:#d0d7de;line-height:1.5}
 .kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 14px}
+@media(max-width:560px){.kpi-strip{grid-template-columns:repeat(2,1fr)}}
 .kpi-card{background:var(--bg);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:10px 12px}
 .kpi-card.gold{border-top-color:var(--gold);background:rgba(242,183,5,0.05)}
 .kpi-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700}
@@ -694,7 +695,7 @@ const TYPES={
 const AREA={
  excav:d=>0,
  hardcore:d=>0,
- masonry:d=>2*d.l*d.h,
+ masonry:d=>0,
  lean:d=>0,
  slab:d=>slabForm(d),
  ribbed:d=>d.l*d.w,
@@ -728,6 +729,7 @@ function calcEl(){
  lastGross=v*(1+w/100);
  $("vNet").textContent=V(v);
  $("vGross").textContent=V(lastGross);
+ $("fArea").parentElement.hidden=t==="masonry";
  $("fAreaL").textContent=t==="lean"?"Lean concrete area":"Formwork area";
  $("fArea").textContent=A(t==="lean"?d.l*d.w*q:AREA[t](d,$("soffit").checked)*q);
  $("sideDims").hidden=!$("sides").checked;$("beamWrap").hidden=t!=="beam";$("bSideDims").hidden=!$("bSide").checked;
@@ -770,7 +772,7 @@ function calcEl(){
   $("msnCement").textContent=f(msnCement,1)+" bags ("+f(msnCement*50,0)+" kg)";
   $("msnSand").textContent=V(msnSand);
   
-  CUR.el={masonry:lastGross,stoneBlock:grossStones,cement:msnCement,sand:msnSand,form:AREA[t](d)*q};
+  CUR.el={masonry:lastGross,stoneBlock:grossStones,cement:msnCement,sand:msnSand};
  }else if(ln){
   CUR.el={lean:d.l*d.w*q};
  }else{
@@ -1252,6 +1254,7 @@ $("pjBtn").addEventListener("click",()=>{renderPI();$("pjs").hidden=false;});
 $("pjClose").addEventListener("click",()=>{$("pjs").hidden=true;});
 function migrateLean(){let ch=false;
  PR.list.forEach(p=>p.items.forEach(it=>{
+  if(it.cat==="StoneMasonry"&&it.m&&it.m.form){delete it.m.form;ch=true;}
   if(it.cat!=="LeanConcrete"||it.la)return;
   const s=it.s;
   if(s&&s.vals&&s.ids){const k=s.u?FT:1;it.m.lean=n(s.vals.l)*k*n(s.vals.w)*k*(n(s.ids.qty)||0);it.la=1;ch=true;}
@@ -1587,7 +1590,7 @@ async function buildXlsx(R){
   const rowsK=[["Substructure share of total cost",mr("SUBSTRUCTURE")?{formula:`IF(F${gR}=0,0,F${mr("SUBSTRUCTURE").row}/F${gR})`,result:pct(I.sub,I.tot)/100}:0,"0.0%"],
    ["Superstructure share of total cost",mr("SUPERSTRUCTURE")?{formula:`IF(F${gR}=0,0,F${mr("SUPERSTRUCTURE").row}/F${gR})`,result:pct(I.sup,I.tot)/100}:0,"0.0%"],
    ["Largest cost driver",I.top&&I.tot>0?I.top.name+" ("+f(pct(I.top.cost,I.tot),0)+"%)":"-",0],
-   ["Reinforcement density (kg per m³ of concrete)",Math.round(I.density*10)/10,"0.0"]];
+   ["Reinforcement density (kg per m³ of concrete)",I.density>0?Math.round(I.density*10)/10:"-","0.0"]];
   rowsK.forEach(([k,v,fm])=>{put(wsS,r,[k,"","","","",v],[0,0,0,0,0,fm],{});r++;});}
  r+=2;
  wsS.getCell(r,1).value="Prepared By: ___________________________";wsS.getCell(r,1).font={name:"Calibri",bold:true,size:10,color:{argb:DK}};
@@ -1687,7 +1690,7 @@ $("rstf").addEventListener("change",async e=>{const fl=e.target.files[0];if(!fl)
 /* folder autosave (desktop Chrome / Edge) */
 const FSOK=typeof window.showDirectoryPicker==="function";
 const idb=(m,k,v)=>new Promise((res,rej)=>{const q=indexedDB.open("sq_fs",1);q.onupgradeneeded=()=>q.result.createObjectStore("kv");q.onerror=()=>rej(q.error);
- q.onsuccess=()=>{const s=q.result.transaction("kv",m==="get"?"readonly":"readwrite").objectStore("kv"),r=m==="get"?s.get(k):m==="set"?s.put(v,k):s.delete(k);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);};});
+ q.onsuccess=()=>{try{const s=q.result.transaction("kv",m==="get"?"readonly":"readwrite").objectStore("kv"),r=m==="get"?s.get(k):m==="set"?s.put(v,k):s.delete(k);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);}catch(x){rej(x);}};});
 function fsUi(){
  $("fsBox").hidden=!FSOK;$("fsNote").hidden=FSOK;if(!FSOK)return;
  const nm=FS.h?FS.h.name:"";
