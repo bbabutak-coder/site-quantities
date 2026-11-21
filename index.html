@@ -716,7 +716,7 @@ function buildDims(){
  if(t==="lean"&&!vals.h)vals.h=IMP?"0.164":"0.05";
  $("dims").innerHTML=TYPES[t].dims.map(([lab,k],i)=>`<div><label for="d_${k}">${lab.replace("(m)","("+LU()+")")}</label><input id="d_${k}" data-k="${k}" type="number" inputmode="decimal" min="0" value="${vals[k]||""}"></div>`).join("");
  $("soffitWrap").hidden=t!=="slab";
- const lv=$("elLvl");if(lv&&!editing){lv.value=(t==="excav"||t==="lean"||t==="footing"||t==="trap")?"Substructure":"Ground Floor";if($("elCustWrap"))$("elCustWrap").hidden=true;}
+ const lv=$("elLvl");if(lv&&!editing){lv.value=(t==="excav"||t==="lean"||t==="footing"||t==="trap"||t==="masonry")?"Substructure":"Ground Floor";if($("elCustWrap"))$("elCustWrap").hidden=true;}
  $("dims").querySelectorAll("input").forEach(i=>i.addEventListener("input",calcEl));
  calcEl();
 }
@@ -1264,6 +1264,7 @@ $("pjClose").addEventListener("click",()=>{$("pjs").hidden=true;});
 function migrateLean(){let ch=false;
  PR.list.forEach(p=>p.items.forEach(it=>{
   if(it.cat==="StoneMasonry"&&it.m&&it.m.form){delete it.m.form;ch=true;}
+  if(it.cat==="StoneMasonry"&&!it.sm){it.sm=1;ch=true;if((it.lvl||"Ground Floor")==="Ground Floor"){it.lvl="Substructure";if(it.s&&it.s.ids&&it.s.ids.elLvl==="Ground Floor")it.s.ids.elLvl="Substructure";}}
   if(it.m&&it.m.cement>0&&it.m.cement%1!==0){it.m.cement=Math.ceil(it.m.cement-1e-9);ch=true;}
   if(it.cat!=="LeanConcrete"||it.la)return;
   const s=it.s;
