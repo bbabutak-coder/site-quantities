@@ -1146,21 +1146,29 @@ function renderItems(){
   const cats=[...new Set(lvlItems.map(i=>i.cat))];
   const catHtml=cats.map(cat=>{let sub=0;
    const h=lvlItems.filter(i=>i.cat===cat).map(it=>{const ic=itemCost(it);sub+=ic;
-    return `<div class="it"><div class="pi"><b>${esc(it.code)}</b><span>${esc(it.d||"")}</span></div>${MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>`<div class="pvr"><span>${l}</span><span>${f(it.m[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</span><span><input class="ri${it.r&&it.r[k]!==undefined&&it.r[k]!==""?" ov":""}" type="number" inputmode="decimal" min="0" data-ic="${esc(it.code)}" data-k="${k}" value="${it.r&&it.r[k]!==undefined?it.r[k]:""}" placeholder="${rates[k]||"rate"}" style="width:64px;padding:4px" aria-label="Rate for ${l}"></span><span>${rt(it,k)?c+f(it.m[k]*rt(it,k)):""}</span></div>`).join("")}<div class="pvr"><b>Cost of ${esc(it.code)}</b><b>${c}${f(ic)}</b></div></div>`;}).join("");
-   return `<h4 style="margin:10px 0 4px;color:var(--accent)">${esc(cat)} — ${c}${f(sub)}</h4>${h}`;
+    return `<div class="it"><div class="pi"><b>${esc(it.code)}</b><span>${esc(it.d||"")}</span></div>${MAT.filter(([k])=>it.m[k]>0).map(([k,l,u])=>`<div class="pvr"><span>${l}</span><span>${f(it.m[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard","cement"].includes(k)?0:2)} ${u}</span><span><input class="ri${it.r&&it.r[k]!==undefined&&it.r[k]!==""?" ov":""}" type="number" inputmode="decimal" min="0" data-ic="${esc(it.code)}" data-k="${k}" value="${it.r&&it.r[k]!==undefined?it.r[k]:""}" placeholder="${rates[k]||"rate"}" style="width:64px;padding:4px" aria-label="Rate for ${l}"></span><span data-ac="${esc(it.code)}" data-ak="${k}">${rt(it,k)?c+f(it.m[k]*rt(it,k)):""}</span></div>`).join("")}<div class="pvr"><b>Cost of ${esc(it.code)}</b><b data-ico="${esc(it.code)}">${c}${f(ic)}</b></div></div>`;}).join("");
+   return `<h4 style="margin:10px 0 4px;color:var(--accent)" data-cs="1" data-lvl="${esc(lvl)}" data-cat="${esc(cat)}">${esc(cat)} — ${c}${f(sub)}</h4>${h}`;
   }).join("");
-  return `<div style="border-top:2px solid var(--line);margin-top:14px;padding-top:6px"><h3 class="ch" style="margin-top:4px">${esc(lvl)} (Subtotal: ${c}${f(lvlTot)})</h3>${catHtml}</div>`;
+  return `<div style="border-top:2px solid var(--line);margin-top:14px;padding-top:6px"><h3 class="ch" style="margin-top:4px" data-ls="${esc(lvl)}">${esc(lvl)} (Subtotal: ${c}${f(lvlTot)})</h3>${catHtml}</div>`;
  }).join(""):'<p class="note">No work items yet. Calculate an element, then use Save to project.</p>';
  if($("homeProjName"))$("homeProjName").textContent=p.name;
  if($("homeItemCount"))$("homeItemCount").textContent=p.items.length+" items";
 }
-function costs(){
+function updateListNums(){
+ const p=curP(),c=$("cur").value,by=code=>p.items.find(i=>i.code===code);
+ document.querySelectorAll("[data-ac]").forEach(s=>{const it=by(s.dataset.ac),k=s.dataset.ak;if(it)s.textContent=rt(it,k)?c+f(it.m[k]*rt(it,k)):"";});
+ document.querySelectorAll("[data-ico]").forEach(s=>{const it=by(s.dataset.ico);if(it)s.textContent=c+f(itemCost(it));});
+ document.querySelectorAll("[data-cs]").forEach(h=>{const lv=h.dataset.lvl,ct=h.dataset.cat;h.textContent=ct+" — "+c+f(p.items.filter(i=>(i.lvl||"Ground Floor")===lv&&i.cat===ct).reduce((a,i)=>a+itemCost(i),0));});
+ document.querySelectorAll("[data-ls]").forEach(h=>{const lv=h.dataset.ls;h.textContent=lv+" (Subtotal: "+c+f(p.items.filter(i=>(i.lvl||"Ground Floor")===lv).reduce((a,i)=>a+itemCost(i),0))+")";});
+ document.querySelectorAll("#pList .ri").forEach(inp=>{const it=by(inp.dataset.ic);if(!it)return;const k=inp.dataset.k;
+  inp.placeholder=rates[k]||"rate";inp.classList.toggle("ov",!!(it.r&&it.r[k]!==undefined&&it.r[k]!==""));});}
+function costs(keep){
  const c=$("cur").value;let tot=0;MC={};
  curP().items.forEach(it=>{for(const k in it.m)MC[k]=(MC[k]||0)+it.m[k]*rt(it,k);});
  document.querySelectorAll("[data-c]").forEach(td=>{const v=MC[td.dataset.c]||0;tot+=v;td.textContent=c+f(v);});
  const e=$("pTot");if(e)e.textContent=c+f(tot);
  if($("homeTotalCost"))$("homeTotalCost").textContent=c+f(tot);
- renderItems();refreshDash();}
+ if(keep===true)updateListNums();else renderItems();refreshDash();}
 function renderProj(){
  migrateLean();
  if(!curP().info){curP().info={};if(!PR.mig2){PR.mig2=1;const o=LS.get("sq_meta",null);if(o&&PR.list.length===1){curP().info.by=o.by||"";curP().info.site=o.site||"";}}}
@@ -1169,7 +1177,7 @@ function renderProj(){
  $("prName").value=curP().name;fillInfo();
  const T={};curP().items.forEach(i=>{for(const k in i.m)T[k]=(T[k]||0)+i.m[k];});PT=T;
  const rs=MAT.filter(([k])=>T[k]>0);
- $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Total qty</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Project total</td><td id="pTot"></td></tr></tfoot>`:"";
+ $("pTab").innerHTML=rs.length?`<thead><tr><th>Material</th><th>Total qty</th><th>Rate</th><th>Cost</th></tr></thead><tbody>${rs.map(([k,l,u])=>`<tr><td>${l}</td><td>${f(T[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard","cement"].includes(k)?0:2)} ${u}</td><td><input data-r="${k}" type="number" inputmode="decimal" min="0" value="${rates[k]||""}" style="width:72px;padding:6px"></td><td data-c="${k}"></td></tr>`).join("")}</tbody><tfoot><tr><td colspan="3">Project total</td><td id="pTot"></td></tr></tfoot>`:"";
  costs();updAdd();renderPI();}
 function renderPI(){const p=curP();$("pjBtn").textContent="Project: "+p.name;
  $("pItems").innerHTML=p.items.length?p.items.map(it=>`<div class="pi"><span><b>${esc(it.code)}</b> ${esc(it.d||"")}</span><span><button class="btn" data-dup="${esc(it.code)}" type="button" title="Duplicate item">Copy</button> <button class="btn" data-ed="${esc(it.code)}" type="button">Edit</button> <button class="btn" data-del="${esc(it.code)}" type="button" aria-label="Remove ${esc(it.code)}">✕</button></span></div>`).join(""):'<p class="note">No work items yet.</p>';}
@@ -1211,6 +1219,7 @@ function projRows(){
  R.push(["Project total","","",f(tot)]);return R;}
 function addItem(cat,desc,m,s,lvl){
  if(!m||!Object.values(m).some(v=>v>0)){$("xs").textContent="Nothing to save yet. Enter the dimensions first.";return;}
+ m={...m};if(m.cement>0)m.cement=Math.ceil(m.cement-1e-9);
  const p=curP(),story=lvl||"Ground Floor";
  let customCode=(s&&s.kind==="el"&&$("icode"))?$("icode").value.trim():"";
  if(customCode&&p.items.some(i=>i.code===customCode&&!(editing&&i.code===editing.code))){let k=2;while(p.items.some(i=>i.code===customCode+"-"+k))k++;customCode+="-"+k;}
@@ -1255,6 +1264,7 @@ $("pjClose").addEventListener("click",()=>{$("pjs").hidden=true;});
 function migrateLean(){let ch=false;
  PR.list.forEach(p=>p.items.forEach(it=>{
   if(it.cat==="StoneMasonry"&&it.m&&it.m.form){delete it.m.form;ch=true;}
+  if(it.m&&it.m.cement>0&&it.m.cement%1!==0){it.m.cement=Math.ceil(it.m.cement-1e-9);ch=true;}
   if(it.cat!=="LeanConcrete"||it.la)return;
   const s=it.s;
   if(s&&s.vals&&s.ids){const k=s.u?FT:1;it.m.lean=n(s.vals.l)*k*n(s.vals.w)*k*(n(s.ids.qty)||0);it.la=1;ch=true;}
@@ -1267,8 +1277,7 @@ $("pList").addEventListener("input",e=>{const i=e.target;if(!i.classList.contain
  if(n(rates[k])===0||autoSet[k]===it.code){rates[k]=v;autoSet[k]=it.code;if(it.r)delete it.r[k];
   const ti=document.querySelector(`#pTab input[data-r="${k}"]`);if(ti)ti.value=v;}
  else(it.r=it.r||{})[k]=v;
- saveP();costs();
- const x=document.querySelector(`.ri[data-ic="${CSS.escape(i.dataset.ic)}"][data-k="${k}"]`);if(x)x.focus();});
+ saveP();costs(true);});
 $("pItems").addEventListener("click",e=>{
  const del=e.target.closest("[data-del]");
  if(del){const p=curP();p.items=p.items.filter(i=>i.code!==del.dataset.del);if(editing&&editing.code===del.dataset.del){editing=null;$("edCx").hidden=true;}saveP();renderProj();return;}
@@ -1328,10 +1337,10 @@ function schedHtml(){
  const S=schedRows();if(!S.length)return"";
  return '<h3 style="margin-top:22px">Bar schedule (separate landscape page)</h3><div style="overflow-x:auto"><div style="min-width:620px">'+S.slice(1).map(r=>r.length===1?`<h3>${esc(r[0])}</h3>`:`<div class="pvr"${r.b?' style="font-weight:700"':""}>${r.map(c=>`<span>${esc(c)}</span>`).join("")}</div>`).join("")+'</div></div>';}
 const meta=()=>{const i=(curP().info)||{},g=k=>String(i[k]||"").trim();return{client:g("client"),site:g("site"),ref:g("ref"),rev:g("rev"),by:g("by"),role:g("role"),appr:g("appr"),desc:g("desc")};};
-const QD=k=>["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2;
+const QD=k=>["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard","cement"].includes(k)?0:2;
 const WORK={Excavation:"Excavation Work",Hardcore:"Hardcore Filling Work",LeanConcrete:"Lean Concrete Work",StoneMasonry:"Stone Masonry Work",Footing:"Footing Work",TrapezoidalFooting:"Sloped Footing Work",Column:"Column Work",Beam:"Beam Work",LintelTieBeam:"Lintel / Tie Beam Work",Wall:"Concrete Wall Work",Slab:"Slab Work",RibbedSlab:"Ribbed Slab Work",Stair:"Staircase Work",Landing:"Landing Work",MasonryWall:"Masonry Wall Work",Roofing:"Roofing Work",Plaster:"Plastering Work",Ceiling:"Ceiling Work",Floor:"Flooring & Skirting Work",Painting:"Painting Work",WallTile:"Wall Tiling Work",StoneCladding:"Stone Cladding Work",AluminumWindow:"Aluminum Window Work",WoodenDoor:"Wooden Door Work",SteelDoor:"Steel Door Work",GlassPartition:"Glass Partition Work",DrainagePVC:"Drainage Work",WaterSupplyPPR:"Water Supply Work",InspectionChamber:"Inspection Chamber Work",SanitaryWC:"Water Closet Work",SanitaryBasin:"Washbasin Work",SanitaryShower:"Shower Work",ElectricalConduit:"Electrical Conduit Work",ElectricalSwitchBox:"Switch & Socket Work",DistributionBoard:"Distribution Board Work",ElectricalCabling:"Cabling Work"};
 const WORK_ORDER=Object.keys(WORK);
-const PRIM={Excavation:["excav"],Hardcore:["hardcore"],LeanConcrete:["lean"],StoneMasonry:["masonry"],Footing:["conc"],TrapezoidalFooting:["conc"],Column:["conc"],Beam:["conc"],LintelTieBeam:["conc"],Wall:["conc"],Slab:["conc"],RibbedSlab:["conc"],Stair:["conc"],Landing:["conc"],MasonryWall:["wallArea"],Roofing:["roofArea"],Plaster:["plas"],Ceiling:["ceilingArea"],Floor:["floor"],Painting:["paintArea","glossArea"],WallTile:["wtile"],StoneCladding:["cladding"],AluminumWindow:["winAl"],WoodenDoor:["doorWd"],SteelDoor:["doorSt"],GlassPartition:["glassPart"],DrainagePVC:["drainPipe"],WaterSupplyPPR:["waterPipe"],InspectionChamber:["inspectionChamber"],SanitaryWC:["waterCloset"],SanitaryBasin:["washbasin"],SanitaryShower:["shower"],ElectricalConduit:["pvcConduit"],ElectricalSwitchBox:["switchBox"],DistributionBoard:["distBoard"],ElectricalCabling:["cableWiring"]};
+const PRIM={Excavation:["excav"],Hardcore:["hardcore"],LeanConcrete:["lean"],StoneMasonry:["masonry"],Footing:["conc"],TrapezoidalFooting:["conc"],Column:["conc"],Beam:["conc"],LintelTieBeam:["conc"],Wall:["conc"],Slab:["conc"],RibbedSlab:["conc"],Stair:["conc"],Landing:["conc"],MasonryWall:["wallArea"],Roofing:["roofArea"],Plaster:["plas"],Ceiling:["ceilingArea"],Floor:["floor"],Painting:["paintArea","glossArea"],WallTile:["wtile"],StoneCladding:["cladding"],AluminumWindow:["winAl"],WoodenDoor:["doorWd"],SteelDoor:["doorSt"],GlassPartition:["glassPart"],DrainagePVC:["drainPipe"],WaterSupplyPPR:["waterPipe"],InspectionChamber:["inspectionChamber"],SanitaryWC:["waterCloset"],SanitaryBasin:["washbasin"],SanitaryShower:["shower"],ElectricalConduit:["pvcConduit"],ElectricalSwitchBox:["switchBox"],DistributionBoard:["distBoard","cement"],ElectricalCabling:["cableWiring"]};
 const wcmp=(a,b)=>{const x=WORK_ORDER.indexOf(a),y=WORK_ORDER.indexOf(b);return(x<0?999:x)-(y<0?999:y)||a.localeCompare(b);};
 function execList(items){
  const L=[],lv=it=>it.lvl||"Ground Floor",CK=["conc","lean","cement","sand","agg","water"];
@@ -1344,6 +1353,9 @@ function execList(items){
   if(qC>0||cC>0)w.subs.push({t:"sub",d:d+1,name:"Concrete work",qn:qC,u:"m³",k:"conc",cost:cC});
   if(qF>0||cF>0)w.subs.push({t:"sub",d:d+1,name:"Formwork",qn:qF,u:"m²",k:"form",cost:cF});
   if(qS>0||cS>0)w.subs.push({t:"sub",d:d+1,name:"Reinforcement (bar)",qn:qS,u:"kg",k:"steel",cost:cS});
+  const MS={StoneMasonry:["masonry","stoneBlock","cement","sand"],MasonryWall:["wallArea","brick","cement","sand"]}[cat];
+  if(MS){MS.forEach(k=>{const mt=MAT.find(x=>x[0]===k)||[k,k,""];let q=0,c=0;its.forEach(it=>{q+=it.m[k]||0;c+=(it.m[k]||0)*rt(it,k);});
+   if(q>0||c>0)w.subs.push({t:"sub",d:d+1,name:mt[1].replace(/ \(HCB \/ Brick\)$/,""),qn:q,u:mt[2],k,cost:c});});}
   if(w.subs.length){const o=w.cost-w.subs.reduce((a,s)=>a+s.cost,0);if(Math.abs(o)>0.005)w.subs.push({t:"sub",d:d+1,name:"Other items",qn:0,u:"",k:"",cost:o});}
   return w;};
  const group=(its,d)=>{const by={};its.forEach(i=>(by[i.cat]=by[i.cat]||[]).push(i));return Object.keys(by).sort(wcmp).map(c=>work(c,by[c],d));};
@@ -1554,7 +1566,7 @@ async function buildXlsx(R){
   for(let c=1;c<=5;c++){const x=wsD.getCell(r,c);x.fill=fill(LT);x.border={top:medDk,left:th,bottom:th,right:th};}
   const t=wsD.getCell(r,1);t.value=`[${it.lvl}] ${it.code}${it.d?" — "+it.d:""}`;t.font={name:"Calibri",bold:true,size:11,color:{argb:NV}};t.alignment={vertical:"middle",indent:1};wsD.getRow(r).height=22;r++;
   hdr(wsD,r,["Material / Work Description","Unit","Quantity","Unit Rate","Total Amount"],2);r++;const a=r;let s=0;
-  it.lines.forEach((x,idx)=>{const amt=x.q*x.r;s+=amt;put(wsD,r,[x.l,x.u,x.q,x.r,{formula:`C${r}*D${r}`,result:amt}],[0,0,x.k==="brick"||x.k==="tile"?F0:F2,FC,FC],{f:idx%2===1?ZB:null});r++;});
+  it.lines.forEach((x,idx)=>{const amt=x.q*x.r;s+=amt;put(wsD,r,[x.l,x.u,x.q,x.r,{formula:`C${r}*D${r}`,result:amt}],[0,0,x.k==="brick"||x.k==="tile"||x.k==="cement"?F0:F2,FC,FC],{f:idx%2===1?ZB:null});r++;});
   tot[it.code]={row:r,v:s};
   put(wsD,r,["Subtotal — "+it.code,"","","",{formula:`SUM(E${a}:E${r-1})`,result:s}],[0,0,0,0,FC],{b:1,f:LT,tot:1,color:DK});r+=2;});
  const gv=Object.values(tot).reduce((a,x)=>a+x.v,0);
@@ -1599,7 +1611,7 @@ async function buildXlsx(R){
  wsM.columns=[{width:32},{width:12},{width:18},{width:18},{width:20}];
  band(wsM,5,"Consolidated Material Quantities & Cost",R.name);
  hdr(wsM,4,["Material","Unit","Total Quantity","Effective Rate","Total Cost"],2);r=5;const m0=r;
- MAT.filter(([k])=>PT[k]>0).forEach(([k,l,u],idx)=>{const c=MC[k]||0;put(wsM,r,[l,u,PT[k],PT[k]?c/PT[k]:0,c],[0,0,k==="brick"||k==="tile"?F0:F2,FC,FC],{f:idx%2===1?ZB:null});r++;});
+ MAT.filter(([k])=>PT[k]>0).forEach(([k,l,u],idx)=>{const c=MC[k]||0;put(wsM,r,[l,u,PT[k],PT[k]?c/PT[k]:0,c],[0,0,k==="brick"||k==="tile"||k==="cement"?F0:F2,FC,FC],{f:idx%2===1?ZB:null});r++;});
  put(wsM,r,["TOTAL MATERIAL COST","","","",{formula:`SUM(E${m0}:E${r-1})`,result:gv}],[0,0,0,0,FC],{b:1,f:GD,tot:1,color:DK});
 
  const G=schedNum();
@@ -1721,7 +1733,7 @@ function report(){
  document.querySelectorAll("#rOff p").forEach(p=>R.push(["Offcut",p.innerText]));
  R.push([""],["Mix"],["Concrete volume",$("mv").value+" "+(IMP?"yd³":"m³")],["Mix ratio",$("mix").options[$("mix").selectedIndex].text],["Water-cement ratio",$("wc").value],["Cement",$("mC").textContent],["Sand",$("mS").textContent],["Aggregate",$("mA").textContent],["Water",$("mW").textContent]);
  const pr=projRows();
- if(pr.length)return[["Site quantities"],...pr.slice(1),[""],["Total quantity of all items"],["Material","Quantity","Rate","Cost"],...MAT.filter(([k])=>PT[k]>0).map(([k,l,u])=>[l,f(PT[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard"].includes(k)?0:2)+" "+u,rates[k]||"",f(MC[k]||0)])];
+ if(pr.length)return[["Site quantities"],...pr.slice(1),[""],["Total quantity of all items"],["Material","Quantity","Rate","Cost"],...MAT.filter(([k])=>PT[k]>0).map(([k,l,u])=>[l,f(PT[k],["brick","stoneBlock","ribBlock","tile","wtile","winAl","doorWd","doorSt","glassPart","gypBoard","pvcBoard","roofSheet","inspectionChamber","waterCloset","washbasin","shower","switchBox","distBoard","cement"].includes(k)?0:2)+" "+u,rates[k]||"",f(MC[k]||0)])];
  return R;}
 function save(name,data){
  $("xs").textContent="";
